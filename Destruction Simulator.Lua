@@ -1,27 +1,3 @@
-Shortcuts simplify My Drive … 
-In the coming weeks, items in more than one folder will be replaced by shortcuts. Access to files and folders won't change.Learn more
-Destruction Simulator.txt
-Who has access
-J
-System properties
-Type
-Text
-Size
-16 KB
-Storage used
-16 KB
-Location
-roblox hacks
-Owner
-me
-Modified
-Dec 30, 2021 by me
-Opened
-2:28 PM by me
-Created
-Dec 30, 2021 with Google Drive Web
-Add a description
-Viewers can download
 local col = nil
 local clickon = false
 local deleteon = false
