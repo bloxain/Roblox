@@ -6,7 +6,8 @@ discord: https://discord.gg/cjP6mnDT
 
 
 suported games:
-tower of hell
-destuction simulator
+
+1. tower of hell
+2. destuction simulator
 
 almost every other because of universal GUI
