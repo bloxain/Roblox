@@ -7,6 +7,7 @@ suported games:
 
 1. tower of hell
 2. destuction simulator
+3. tower simulator
 
 almost every other because of universal GUI
 
