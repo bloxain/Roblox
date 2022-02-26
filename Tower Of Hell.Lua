@@ -41,6 +41,16 @@ function LoadData()
 		UseDisplayNames = data.usedisplayNames
 		Hideplayers = data.Hideplayers
 		AntiINVall = data.showAPlayers
+		AntiKill = data.AntiKill
+		AntiBunny = data.AntiBunny
+		AntiAFK = data.AntiAFK
+		AntiFog = data.AntiFog
+		AntiNeg = data.AntiNeg
+		Antiinv = data.Antiinv
+		Infjump = data.Infjump
+		clickon = data.clickon
+		deleteon = data.deleteon
+		platform = data.platform
 	end
 end
 
@@ -75,7 +85,7 @@ function DissableINV(char, amount)
 	if char == nil then
 		return nil
 	end
-	
+
 	for i, v in pairs(char:GetChildren()) do
 		if v.Name ~= "HumanoidRootPart" then
 			if v:IsA("Part") then
@@ -83,7 +93,7 @@ function DissableINV(char, amount)
 					v.Transparency = amount
 				end
 			end
-			
+
 			if v:IsA("Accessory") then
 				v.Handle.Transparency = amount
 			end
@@ -117,6 +127,14 @@ function Teleport(pos)
 		local Char = GetCharacter()
 		if Char then
 			Char:MoveTo(pos)
+		end
+	end
+end
+
+function clearplatforms()
+	for i, v in pairs(workspace:GetChildren()) do
+		if v.Name == "falksjdhflkjasdhflkjasdhflkjasdfhj" then
+			v:Destroy()
 		end
 	end
 end
@@ -161,6 +179,27 @@ end
 --Hold CLTR and click to delete parts (you need to rejoin if you delete something wrong)
 local Plr = game:GetService("Players").LocalPlayer
 local Mouse = Plr:GetMouse()
+
+function SaveData()
+	local datatosave = {
+		["PSize"] = Size;
+		["usedisplayNames"] = UseDisplayNames;
+		["Hideplayers"] = Hideplayers;
+		["showAPlayers"] = AntiINVall;
+		["AntiKill"] = AntiKill;
+		["AntiBunny"] = AntiBunny;
+		["AntiAFK"] = AntiAFK;
+		["AntiFog"] = AntiFog;
+		["AntiNeg"] = AntiNeg;
+		["Antiinv"] = Antiinv;
+		["Infjump"] = Infjump;
+		["platform"] = platform;
+		["clickon"] = clickon;
+		["deleteon"] = deleteon
+
+	}
+	writefile("Tower_of_hell#832917.lua", game:GetService("HttpService"):JSONEncode(datatosave))
+end
 
 Mouse.Button1Down:connect(function()
 	if deleteon == true then
@@ -217,7 +256,7 @@ game:GetService('RunService').Stepped:connect(function()
 	if AntiBunny then
 		game.Players.LocalPlayer.Character.bunnyJump.Disabled = true
 	end
-	
+
 	if Hideplayers then
 		for i, v in  pairs(game.Players:GetChildren()) do
 			if v ~= game.Players.LocalPlayer then
@@ -225,7 +264,7 @@ game:GetService('RunService').Stepped:connect(function()
 			end
 		end
 	end
-	
+
 	if autofarm.Enabeld then
 		if game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "5:00" then
 			if autofarm["First Time"] == false then
@@ -238,12 +277,12 @@ game:GetService('RunService').Stepped:connect(function()
 				end
 			end
 		end
-		
+
 		if game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "0:01" or game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "0:02" or game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "0:03" or game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "0:04" or game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "0:05" then
 			autofarm["First Time"] = false
 		end
 	end
-	
+
 	if UserInput:IsKeyDown(Enum.KeyCode.Space) then
 		if Infjump == true then
 			if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
@@ -358,13 +397,13 @@ AD:addButton("Load Dark Dex", function() game:HttpGet('https://raw.githubusercon
 
 AD:addToggle("noclip", false, function(value) noclip = value end)
 
-AD:addToggle("Inf jump", false,function(value) Infjump = value end)
+AD:addToggle("Inf jump", Infjump,function(value) Infjump = value end)
 
-AD:addToggle("cntrl click teleport", false, function(value) clickon = value end)
+AD:addToggle("cntrl click teleport", clickon, function(value) clickon = value end)
 
-AD:addToggle("alt click delete", false, function(value) deleteon = value end)
+AD:addToggle("alt click delete", deleteon, function(value) deleteon = value end)
 
-AD:addToggle("spawn platform", false, function(value) platform = value end)
+AD:addToggle("spawn platform", platform, function(value) platform = value end)
 
 AD:addToggle("Anti AFK", AntiAFK, function(value) AntiAFK = value end)
 
@@ -380,15 +419,15 @@ Splayer:addButton("Bring Player", function() BringPlayer() end)
 
 --Splayer:addButton("Give Player Tool", function() GiveTool() end)
 
-TOHS:addToggle("Anti bunny jump", false, function(value) AntiBunny = value if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("bunny") then game.Players.LocalPlayer.Character.bunnyJump.Disabled = false end end end)
+TOHS:addToggle("Anti bunny jump", AntiBunny, function(value) AntiBunny = value if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("bunny") then game.Players.LocalPlayer.Character.bunnyJump.Disabled = false end end end)
 
-TOHS:addToggle("Anti Kill", false, function(value) AntiKill = value end)
+TOHS:addToggle("Anti Kill", AntiKill, function(value) AntiKill = value end)
 
-TOHS:addToggle("Anti Fog", false, function(value) AntiFog = value if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("fog") then game.Lighting.FogEnd = 50 end end end)
+TOHS:addToggle("Anti Fog", AntiFog, function(value) AntiFog = value if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("fog") then game.Lighting.FogEnd = 50 end end end)
 
-TOHS:addToggle("Anti invisible", false, function(value) Antiinv = value if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("invisibility") then for i, v in  pairs(game.Players:GetChildren()) do DissableINV(v.Character, 1) end end end end)
+TOHS:addToggle("Anti invisible", Antiinv, function(value) Antiinv = value if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("invisibility") then for i, v in  pairs(game.Players:GetChildren()) do DissableINV(v.Character, 1) end end end end)
 
-TOHS:addToggle("Anti Negitive", false, function(value) AntiNeg = value  if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("negative") then game.Lighting.Negative.Saturation = -2 end end  end)
+TOHS:addToggle("Anti Negitive", AntiNeg, function(value) AntiNeg = value  if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("negative") then game.Lighting.Negative.Saturation = -2 end end  end)
 
 TOHS:addButton("Insant win(WARNING may ban do later in round)", function() local endzone = game.Workspace.tower.sections.finish.exit.ParticleBrick.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone end)
 
@@ -424,14 +463,6 @@ UI:SelectPage("main")
 
 --             functions
 ---------------------------------------
-
-function clearplatforms()
-	for i, v in pairs(workspace:GetChildren()) do
-		if v.Name == "falksjdhflkjasdhflkjasdhflkjasdfhj" then
-			v:Destroy()
-		end
-	end
-end
 
 
 
@@ -534,14 +565,4 @@ function GiveTool()
 	end
 	v.Parent = player.Character
 	v.Parent = player.Character.HumanoidRootPart
-end
-
-function SaveData()
-	local datatosave = {
-		PSize = Size;
-		usedisplayNames = UseDisplayNames;
-		Hideplayers = Hideplayers;
-		showAPlayers = AntiINVall;
-	}
-	writefile("Tower_of_hell#832917.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
