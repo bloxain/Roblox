@@ -24,35 +24,37 @@ local autobuild = false
 -----------------------------------IMPORTENT FUNCS------------------------------------------------------------------------------------------
 
 function LoadData()
-	if not isfile("Universal_19872.lua") then
+	if not isfile("Tower#7756.lua") then
 		return
 	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Universal_19872.lua"))
+		local data = game:GetService("HttpService"):JSONDecode(readfile("Tower#7756.lua"))
 		Size = data.PSize
 		UseDisplayNames = data.usedisplayNames
 		AntiAFK = data.anti_afk
-
+		deleteon = data.deleteon
+		platform = data.platform
+		autobuild = data.autobuild
+		unlockzoom = data.unlockzoom
+		clickon = data.clickon
+		Infjump = data.Infjump
 	end
 end
 
 LoadData()
 
-function Fixcamera()
-	for i, v in pairs(workspace:GetChildren()) do
-		if v:IsA("Camera") then
-			v.HeadScale = 1
-			v.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
-			v.CameraType = Enum.CameraType.Custom
-			v.DiagonalFieldOfView = 143.882
-			v.FieldOfView = 70
-			v.FieldOfViewMode = Enum.FieldOfViewMode.Vertical
-			v.MaxAxisFieldOfView = 116.156
-			game.Players.LocalPlayer.CameraMaxZoomDistance = 128
-			game.Players.LocalPlayer.CameraMinZoomDistance = 0.5
-			game.Players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
-			game.Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
-		end 
-	end
+
+function SaveData()
+	local datatosave = {
+		["PSize"] = Size;
+		["usedisplayNames"] = UseDisplayNames;
+		["anti_afk"] = AntiAFK;
+		["clickon"] = clickon;
+		["deleteon"] = deleteon;
+		["autobuild"] = autobuild;
+		["unlockzoom"] = unlockzoom;
+		["Infjump"] = Infjump
+	}
+	writefile("Tower#7756.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
 
 -----------------------------------EXTRA----------------------------------------------------------------------------------------------------
@@ -160,27 +162,27 @@ game:GetService('RunService').Stepped:connect(function()
 			end
 		end
 	end
-	
+
 	if shiftlock then
 		game.Players.LocalPlayer.DevEnableMouseLock = true
 	end
-	
+
 	if unlockzoom then
 		game.Players.LocalPlayer.CameraMaxZoomDistance = 99999
 	end
-	
+
 	if jumpPower ~= 50 or jumpPower ~= 7 then
 		game.Players.LocalPlayer.Character.Humanoid.JumpPower = jumpPower
 	end
-	
+
 	if walkspeed ~= 16 then
 		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
 	end
-	
+
 	if autobuild then
 		fireclickdetector(game.Players.LocalPlayer.MyTower.Value.ClickDetector)
 	end
-	
+
 	if UserInput:IsKeyDown(Enum.KeyCode.Space) then
 		if Infjump == true then
 			if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
@@ -284,29 +286,31 @@ AD:addButton("Load location", function() workspace[game.Players.LocalPlayer.Name
 
 AD:addButton("Clear Platforms", function() clearplatforms() end)
 
-AD:addButton("Reset Camera", function() Fixcamera() end)
-
 AD:addToggle("noclip", false, function(value) noclip = value end)
 
-AD:addToggle("Inf jump", false,function(value) Infjump = value end)
+AD:addToggle("Inf jump", Infjump ,function(value) Infjump = value end)
 
-AD:addToggle("cntrl click teleport", false, function(value) clickon = value end)
+AD:addToggle("cntrl click teleport", clickon, function(value) clickon = value end)
 
-AD:addToggle("alt click delete", false, function(value) deleteon = value end)
+AD:addToggle("alt click delete", deleteon, function(value) deleteon = value end)
 
-AD:addToggle("spawn platform", false, function(value) platform = value end)
+AD:addToggle("spawn platform", platform, function(value) platform = value end)
 
 AD:addToggle("awalys enable shiftlock", false, function(value) shiftlock = value end)
 
 AD:addToggle("Anti AFK", AntiAFK, function(value) AntiAFK = value end)
 
-AD:addToggle("Unlock Zomm Distance", false, function(value) if value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = value end)
+AD:addToggle("Unlock Zomm Distance", unlockzoom, function(value) if value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = value end)
 
 Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
 
 Splayer:addButton("teleport to player", function() game.Players.LocalPlayer.character:MoveTo(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end)
 
-TSM:addToggle("Auto Build", false, function(value) autobuild = value end)
+TSM:addToggle("Auto Build", autobuild, function(value) autobuild = value end)
+
+TSM:addButton("Teleport to rebirth place", function() game.Players.LocalPlayer.Character:MoveTo(workspace.System.RebirthPlatform.TowerLogo.Logo.Position) end)
+
+TSM:addButton("Teleport to Tower", function() game.Players.LocalPlayer.Character:MoveTo(game.Players.LocalPlayer.MyTower.Value.Base.Base.Position) end)
 
 Confic:addTextbox("Platform size", "", function(value) Size = value end)
 
@@ -327,14 +331,6 @@ end
 Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() end)
 
 Colors:addButton("Kill GUI", function() game.CoreGui["universal Gui"]:Destroy() script:Destroy()end)
-
-function epicgames()
-	UI:Notify("Warning!", "would you like to dissable the Anti Cheat? IT MAY BREAK SOME PARTS OF THE GAME!!! if it dose not work dissable it again in settings.", function(value) if value == true then DissableAntiCheat() end end)
-	local COSTOM = UI:addPage("Epic Games")
-	local EPIC = COSTOM:addSection("Epic minigames")
-	Confic:addButton("Dissable Anti Cheat", function() DissableAntiCheat() end)
-
-end
 
 --             functions
 ---------------------------------------
@@ -363,13 +359,4 @@ function FindPlayer(target)
 			end
 		end
 	end
-end
-
-function SaveData()
-	local datatosave = {
-		PSize = Size;
-		usedisplayNames = UseDisplayNames;
-		anti_afk = AntiAFK
-	}
-	writefile("Universal_19872.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
