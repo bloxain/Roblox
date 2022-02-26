@@ -459,7 +459,7 @@ Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() e
 
 Colors:addButton("Kill GUI", function() game.CoreGui["Tower Of Hell GUI"]:Destroy() script:Destroy()end)
 
-UI:SelectPage("main")
+UI:SelectPage(main)
 
 --             functions
 ---------------------------------------
