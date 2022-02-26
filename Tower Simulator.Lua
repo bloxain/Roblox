@@ -278,8 +278,6 @@ localplayer:addSlider("Player Speed", 16, 16, 300, function(value) game.Players.
 
 localplayer:addSlider("Player jumpPower", jumpPower, jumpPower, 300, function(value) game.Players.LocalPlayer.Character.Humanoid.JumpPower = value jumpPower = value end)
 
-MainGame:addSlider("Gravity", 196.2, 0, 196.2, function(value) workspace.Gravity = value end)
-
 AD:addButton("save location", function() col = workspace[game.Players.LocalPlayer.Name].HumanoidRootPart.Position end)
 
 AD:addButton("Load location", function() workspace[game.Players.LocalPlayer.Name]:MoveTo(col) end)
