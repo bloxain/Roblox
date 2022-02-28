@@ -11,6 +11,10 @@ suported games:
 
 almost every other because of universal GUI
 
+# execute code here
+
+loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Bloxhub.Lua"))()
+
 
 
 
