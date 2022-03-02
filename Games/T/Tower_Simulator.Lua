@@ -20,6 +20,7 @@ local unlockzoom = false
 local walkspeed = 16
 local jumpPower = 50
 local autobuild = false
+local autoTouch = false
 
 -----------------------------------IMPORTENT FUNCS------------------------------------------------------------------------------------------
 
@@ -37,6 +38,7 @@ function LoadData()
 		unlockzoom = data.unlockzoom
 		clickon = data.clickon
 		Infjump = data.Infjump
+		autoTouch = data.autoTouch
 	end
 end
 
@@ -53,6 +55,7 @@ function SaveData()
 		["autobuild"] = autobuild;
 		["unlockzoom"] = unlockzoom;
 		["Infjump"] = Infjump
+		["autoTouch"} = autoTouch
 	}
 	writefile("Tower#7756.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
@@ -182,6 +185,14 @@ game:GetService('RunService').Stepped:connect(function()
 	if autobuild then
 		fireclickdetector(game.Players.LocalPlayer.MyTower.Value.ClickDetector)
 	end
+	
+	if autoTouch then
+		firetouchinterest(Workspace.Tower.PurchaseUpgradeButtonRight.Head, game.Players.LocalPlayer.Character.LeftFoot, 1)
+		firetouchinterest(Workspace.Tower.PurchaseUpgradeButtonLeft.Head, game.Players.LocalPlayer.Character.LeftFoot, 1)
+		firetouchinterest(Workspace.Tower.PurchaseUpgradeButtonRight.Head, game.Players.LocalPlayer.Character.LeftFoot, 0)
+		firetouchinterest(Workspace.Tower.PurchaseUpgradeButtonLeft.Head, game.Players.LocalPlayer.Character.LeftFoot, 0)
+
+	end
 
 	if UserInput:IsKeyDown(Enum.KeyCode.Space) then
 		if Infjump == true then
@@ -305,6 +316,8 @@ Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
 Splayer:addButton("teleport to player", function() game.Players.LocalPlayer.character:MoveTo(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end)
 
 TSM:addToggle("Auto Build", autobuild, function(value) autobuild = value end)
+
+TSM:addToggle("Auto Touch", autoTouch, function(value) autoTouch = value end)
 
 TSM:addButton("Teleport to rebirth place", function() game.Players.LocalPlayer.Character:MoveTo(workspace.System.RebirthPlatform.TowerLogo.Logo.Position) end)
 
