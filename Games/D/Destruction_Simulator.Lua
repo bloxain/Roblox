@@ -196,13 +196,13 @@ game:GetService('RunService').Stepped:connect(function()
 	end
 
 	if PlayerSpeed ~= 16 then
-		workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = PlayerSpeed
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = PlayerSpeed
 	end
 
 	if UnlockZoom == true then game.Players.LocalPlayer.CameraMaxZoomDistance = 99999 else game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end
 
 	if PlayerJump ~= 50 then
-		workspace[game.Players.LocalPlayer.Name].Humanoid.JumpPower = PlayerJump
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = PlayerJump
 	end
 	
 	if AddCoins then
@@ -307,9 +307,9 @@ local Colors = theme:addSection("Colors")
 
 
 
-localplayer:addSlider("Player Speed", 16, 16, 300, function(value) PlayerSpeed = value game:GetService("ReplicatedStorage").globalSpeed.Value = value end)
+localplayer:addSlider("Player Speed", 16, 16, 300, function(value) PlayerSpeed = value end)
 
-localplayer:addSlider("Player jumpPower", 50, 50, 300, function(value) PlayerJump = value workspace[game.Players.LocalPlayer.Name].Humanoid.JumpPower = value end)
+localplayer:addSlider("Player jumpPower", 50, 50, 300, function(value) PlayerJump = value end)
 
 MainGame:addSlider("Gravity", 196.2, 0, 196.2, function(value) workspace.Gravity = value end)
 
