@@ -1,4 +1,3 @@
-
 local col = nil
 local clickon = false
 local deleteon = false
@@ -54,8 +53,8 @@ function SaveData()
 		["deleteon"] = deleteon;
 		["autobuild"] = autobuild;
 		["unlockzoom"] = unlockzoom;
-		["Infjump"] = Infjump
-		["autoTouch"} = autoTouch
+		["Infjump"] = Infjump;
+		["autoTouch"] = autoTouch
 	}
 	writefile("Tower#7756.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
@@ -185,13 +184,12 @@ game:GetService('RunService').Stepped:connect(function()
 	if autobuild then
 		fireclickdetector(game.Players.LocalPlayer.MyTower.Value.ClickDetector)
 	end
-	
-	if autoTouch then
-		firetouchinterest(Workspace.Tower.PurchaseUpgradeButtonRight.Head, game.Players.LocalPlayer.Character.LeftFoot, 1)
-		firetouchinterest(Workspace.Tower.PurchaseUpgradeButtonLeft.Head, game.Players.LocalPlayer.Character.LeftFoot, 1)
-		firetouchinterest(Workspace.Tower.PurchaseUpgradeButtonRight.Head, game.Players.LocalPlayer.Character.LeftFoot, 0)
-		firetouchinterest(Workspace.Tower.PurchaseUpgradeButtonLeft.Head, game.Players.LocalPlayer.Character.LeftFoot, 0)
 
+	if autoTouch then
+		firetouchinterest(game.Players.LocalPlayer.MyTower.Value.PurchaseUpgradeButtonRight.Head, game.Players.LocalPlayer.Character.LeftFoot, 1)
+		firetouchinterest(game.Players.LocalPlayer.MyTower.Value.PurchaseUpgradeButtonLeft.Head, game.Players.LocalPlayer.Character.LeftFoot, 1)
+		firetouchinterest(game.Players.LocalPlayer.MyTower.Value.PurchaseUpgradeButtonRight.Head, game.Players.LocalPlayer.Character.LeftFoot, 0)
+		firetouchinterest(game.Players.LocalPlayer.MyTower.Value.PurchaseUpgradeButtonLeft.Head, game.Players.LocalPlayer.Character.LeftFoot, 0)
 	end
 
 	if UserInput:IsKeyDown(Enum.KeyCode.Space) then
