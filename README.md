@@ -2,6 +2,7 @@ this is where loadstrings are downloaded and executed feel free off learn of it!
 
 discord: https://discord.gg/cjP6mnDT join to talk
 
+i have got synapse x to make this project better
 
 suported games:
 
