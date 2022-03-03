@@ -25,7 +25,9 @@ local themes = {
 do
 	function utility:Create(instance, properties, children)
 		local object = Instance.new(instance)
-		syn.protect_gui(object)
+		if syn then
+			syn.protect_gui(object)
+		end
 
 		for i, v in pairs(properties or {}) do
 			object[i] = v
@@ -2208,6 +2210,9 @@ do
 		end
 	end
 end
-
-rconsoleprint("dino and steffei was here :)")
+if syn then
+	rconsoleprint("dino and steffei was here :)")
+	else
+	print("dino and steffei was here :)")
+end
 return library
