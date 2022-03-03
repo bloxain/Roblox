@@ -9,6 +9,7 @@ suported games:
 1. tower of hell
 2. destuction simulator
 3. tower simulator
+4. Press the button -- work in progress
 
 almost every other because of universal GUI
 
