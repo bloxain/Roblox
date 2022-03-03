@@ -31,37 +31,10 @@ local autofarm = {
 }
 
 -----------------------------------IMPORTENT FUNCS------------------------------------------------------------------------------------------
-
-function LoadData()
-	if not isfile("Tower_of_hell#832917.lua") then
-		return
-	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Tower_of_hell#832917.lua"))
-		Size = data.PSize
-		UseDisplayNames = data.usedisplayNames
-		Hideplayers = data.Hideplayers
-		AntiINVall = data.showAPlayers
-		AntiKill = data.AntiKill
-		AntiBunny = data.AntiBunny
-		AntiAFK = data.AntiAFK
-		AntiFog = data.AntiFog
-		AntiNeg = data.AntiNeg
-		Antiinv = data.Antiinv
-		Infjump = data.Infjump
-		clickon = data.clickon
-		deleteon = data.deleteon
-		platform = data.platform
-	end
-end
-
-LoadData()
-
-
 -----------------------------------EXTRA----------------------------------------------------------------------------------------------------
 local mt = getrawmetatable(game)
 local old = mt.__namecall
 local protect = newcclosure or protect_function
-
 if not protect then
 	notify("Incompatible Exploit Warning", "Your exploit does not support protection against stack trace errors, resulting to fallback function")
 	protect = function(f) return f end
@@ -339,14 +312,13 @@ UserInput.InputBegan:Connect(function(input , gameProccesedevent)
 			end
 		end		
 	end
-
 end)
 
 
 -- https://raw.githubusercontent.com/Stefanuk12/Venyx-UI-Library/main/source.lua
 -- https://raw.githubusercontent.com/zxciaz/VenyxUI/main/Reuploaded
 -- // Initialising the UI
-local Venyx = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/Venyx-UI-Library/main/source.lua"))()
+local Venyx = loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Venyx_UI.Lua"))()
 local UI = Venyx.new("Tower Of Hell GUI")
 local Themes = {
 	Background = Color3.fromRGB(24, 24, 24),
@@ -566,3 +538,27 @@ function GiveTool()
 	v.Parent = player.Character
 	v.Parent = player.Character.HumanoidRootPart
 end
+
+function LoadData()
+	if not isfile("Tower_of_hell#832917.lua") then
+		return
+	else
+		local data = game:GetService("HttpService"):JSONDecode(readfile("Tower_of_hell#832917.lua"))
+		Size = data.PSize
+		UseDisplayNames = data.usedisplayNames
+		Hideplayers = data.Hideplayers
+		AntiINVall = data.showAPlayers
+		AntiKill = data.AntiKill
+		AntiBunny = data.AntiBunny
+		AntiAFK = data.AntiAFK
+		AntiFog = data.AntiFog
+		AntiNeg = data.AntiNeg
+		Antiinv = data.Antiinv
+		Infjump = data.Infjump
+		clickon = data.clickon
+		deleteon = data.deleteon
+		platform = data.platform
+	end
+end
+
+LoadData()
