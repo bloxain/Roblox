@@ -14,7 +14,9 @@ almost every other because of universal GUI
 
 # execute code here
 
+```bash
 loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Bloxhub.Lua"))()
+```
 
 
 
