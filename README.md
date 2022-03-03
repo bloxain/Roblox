@@ -31,10 +31,10 @@ the GUI is part of another github https://raw.githubusercontent.com/Stefanuk12/V
 
 to use clone the universal GUI and check its compatable with and remove things that dont work or get flaged by the anti cheat
 first create a page or use current ones
-
+```bash
 local Testpage = UI:addPage("Test")
 local Testsection = main:addSection("Test")
-
+```
 and buttons and toggels to make a good GUI 
 
 why use this?
