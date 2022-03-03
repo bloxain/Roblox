@@ -20,230 +20,21 @@ local unlockzoom = false
 local walkspeed = 16
 local jumpPower = 50
 
------------------------------------IMPORTENT FUNCS------------------------------------------------------------------------------------------
-
-function LoadData()
-	if not isfile("Universal_19872.lua") then
-		return
-	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Universal_19872.lua"))
-		Size = data.PSize
-		UseDisplayNames = data.usedisplayNames
-		AntiAFK = data.anti_afk
-
-	end
-end
-
-LoadData()
-
-function Fixcamera()
-	for i, v in pairs(workspace:GetChildren()) do
-		if v:IsA("Camera") then
-			v.HeadScale = 1
-			v.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
-			v.CameraType = Enum.CameraType.Custom
-			v.DiagonalFieldOfView = 143.882
-			v.FieldOfView = 70
-			v.FieldOfViewMode = Enum.FieldOfViewMode.Vertical
-			v.MaxAxisFieldOfView = 116.156
-			game.Players.LocalPlayer.CameraMaxZoomDistance = 128
-			game.Players.LocalPlayer.CameraMinZoomDistance = 0.5
-			game.Players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
-			game.Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
-		end 
-	end
-end
-
------------------------------------EXTRA----------------------------------------------------------------------------------------------------
-
 if game.Players.LocalPlayer.Character.Humanoid.UseJumpPower == false then
 	jumpPower = 7
 end
 
-function DissableAntiCheat()
-	local thingtodestory = "Ill"
-	for i,v in pairs(game.Players.LocalPlayer.PlayerScripts:GetChildren()) do 
-		if v.Name:lower():sub(1,#thingtodestory) == thingtodestory:lower() then
-			Selectedplayer = v
-		end
-	end
-end
-
-
-game:GetService('RunService').RenderStepped:connect(function()
-	if hitboxenabled then
-		for i,v in next, game:GetService('Players'):GetPlayers() do
-			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
-				pcall(function()
-					v.Character.HumanoidRootPart.Size = Vector3.new(HeadSize,HeadSize,HeadSize)
-					v.Character.HumanoidRootPart.Transparency = 0.8
-					v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")
-					v.Character.HumanoidRootPart.Material = "Neon"
-					v.Character.HumanoidRootPart.CanCollide = false
-				end)
-			end
-		end
-	end
-end)
-
-function GetCharacter()
-	return game.Players.LocalPlayer.Character
-end
-
-function Teleport(pos)
-	if clickon == true then
-		local Char = GetCharacter()
-		if Char then
-			Char:MoveTo(pos)
-		end
-	end
-end
-
-
-local VirtualUser=game:service'VirtualUser'
-game:service'Players'.LocalPlayer.Idled:connect(function()
-	if AntiAFK == true then
-		VirtualUser:CaptureController()
-		VirtualUser:ClickButton2(Vector2.new())
-	end
-end)
-
-
-UIS.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
-		Teleport(Mouse.Hit.p)
-	end
-end)
-
 UserInput = game:GetService("UserInputService")
 
-function Spawnplatform()
-	if platform == true then
-		if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
-			local Clone = Instance.new("Part")
-			Clone.Parent = workspace
-			Clone.Anchored = true
-			Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
-			Clone.Size = Vector3.new(Size, 1, Size)
-			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
-		else
-			local Clone = Instance.new("Part")
-			Clone.Parent = workspace
-			Clone.Anchored = true
-			Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
-			Clone.Size = Vector3.new(Size, 1, Size)
-			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
-		end
-	end
-end
 --Hold CLTR and click to delete parts (you need to rejoin if you delete something wrong)
 local Plr = game:GetService("Players").LocalPlayer
 local Mouse = Plr:GetMouse()
-
-Mouse.Button1Down:connect(function()
-	if deleteon == true then
-		if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
-		if not Mouse.Target then return end
-		Mouse.Target:Destroy()
-	end 
-end)
-
-game:GetService('RunService').Stepped:connect(function()
-
-	if noclip then
-		if game:GetService("Players").LocalPlayer.Character ~= nil then
-			for _, child in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-				if child:IsA("BasePart") and child.CanCollide == true then
-					child.CanCollide = false
-				end
-			end
-		end
-	end
-	
-	if shiftlock then
-		game.Players.LocalPlayer.DevEnableMouseLock = true
-	end
-	
-	if unlockzoom then
-		game.Players.LocalPlayer.CameraMaxZoomDistance = 99999
-	end
-	
-	if jumpPower ~= 50 or jumpPower ~= 7 then
-		game.Players.LocalPlayer.Character.Humanoid.JumpPower = jumpPower
-	end
-	
-	if walkspeed ~= 16 then
-		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
-	end
-	
-	if shiftlock == true then
-		game.Players.LocalPlayer.DevEnableMouseLock = true
-	end
-
-	if UserInput:IsKeyDown(Enum.KeyCode.Space) then
-		if Infjump == true then
-			if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
-				local Clone = Instance.new("Part")
-				Clone.Parent = workspace
-				Clone.Anchored = true
-				Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
-				Clone.Size = Vector3.new(6, 1, 6)
-				Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
-				Clone.Transparency = 1
-				wait()
-				Clone:Destroy()
-			else
-				local Clone = Instance.new("Part")
-				Clone.Parent = workspace
-				Clone.Anchored = true
-				Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
-				Clone.Size = Vector3.new(6, 1, 6)
-				Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
-				Clone.Transparency = 1
-				wait()
-				Clone:Destroy()
-			end
-		end
-	end
-end)
-
-UserInput.InputBegan:Connect(function(input , gameProccesedevent)
-	if gameProccesedevent then
-	else
-		if input.KeyCode == Enum.KeyCode.Space then
-			if Infjump == true then
-				if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
-					local Clone = Instance.new("Part")
-					Clone.Parent = workspace
-					Clone.Anchored = true
-					Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
-					Clone.Size = Vector3.new(6, 1, 6)
-					Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
-					Clone.Transparency = 1
-					wait(0.1)
-					Clone:Destroy()
-				else
-					local Clone = Instance.new("Part")
-					Clone.Parent = workspace
-					Clone.Anchored = true
-					Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
-					Clone.Size = Vector3.new(6, 1, 6)
-					Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
-					Clone.Transparency = 1
-					wait(0.1)
-					Clone:Destroy()
-				end
-			end
-		end		
-	end
-
-end)
 
 
 -- https://raw.githubusercontent.com/Stefanuk12/Venyx-UI-Library/main/source.lua
 -- https://raw.githubusercontent.com/zxciaz/VenyxUI/main/Reuploaded
 -- // Initialising the UI
-local Venyx = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/Venyx-UI-Library/main/source.lua"))()
+local Venyx = loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Venyx_UI.Lua"))()
 local UI = Venyx.new("universal Gui")
 local Themes = {
 	Background = Color3.fromRGB(24, 24, 24),
@@ -351,6 +142,38 @@ function clearplatforms()
 end
 
 
+function Fixcamera()
+	for i, v in pairs(workspace:GetChildren()) do
+		if v:IsA("Camera") then
+			v.HeadScale = 1
+			v.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+			v.CameraType = Enum.CameraType.Custom
+			v.DiagonalFieldOfView = 143.882
+			v.FieldOfView = 70
+			v.FieldOfViewMode = Enum.FieldOfViewMode.Vertical
+			v.MaxAxisFieldOfView = 116.156
+			game.Players.LocalPlayer.CameraMaxZoomDistance = 128
+			game.Players.LocalPlayer.CameraMinZoomDistance = 0.5
+			game.Players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
+			game.Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
+		end 
+	end
+end
+
+
+function GetCharacter()
+	return game.Players.LocalPlayer.Character
+end
+
+function Teleport(pos)
+	if clickon == true then
+		local Char = GetCharacter()
+		if Char then
+			Char:MoveTo(pos)
+		end
+	end
+end
+
 
 function FindPlayer(target)
 	if UseDisplayNames == true then
@@ -367,6 +190,159 @@ function FindPlayer(target)
 		end
 	end
 end
+
+function Spawnplatform()
+	if platform == true then
+		if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
+			local Clone = Instance.new("Part")
+			Clone.Parent = workspace
+			Clone.Anchored = true
+			Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
+			Clone.Size = Vector3.new(Size, 1, Size)
+			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
+		else
+			local Clone = Instance.new("Part")
+			Clone.Parent = workspace
+			Clone.Anchored = true
+			Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
+			Clone.Size = Vector3.new(Size, 1, Size)
+			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
+		end
+	end
+end
+
+-----------------------------------EVENTS----------------------------------------------------------------------------------------------------
+
+Mouse.Button1Down:connect(function()
+	if deleteon == true then
+		if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
+		if not Mouse.Target then return end
+		Mouse.Target:Destroy()
+	end 
+end)
+
+local VirtualUser=game:service'VirtualUser'
+game:service'Players'.LocalPlayer.Idled:connect(function()
+	if AntiAFK == true then
+		VirtualUser:CaptureController()
+		VirtualUser:ClickButton2(Vector2.new())
+	end
+end)
+
+
+UIS.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
+		Teleport(Mouse.Hit.p)
+	end
+end)
+
+-----------------------------------Run service----------------------------------------------------------------------------------------------------
+game:GetService('RunService').RenderStepped:connect(function()
+	if hitboxenabled then
+		for i,v in next, game:GetService('Players'):GetPlayers() do
+			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+				pcall(function()
+					v.Character.HumanoidRootPart.Size = Vector3.new(HeadSize,HeadSize,HeadSize)
+					v.Character.HumanoidRootPart.Transparency = 0.8
+					v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")
+					v.Character.HumanoidRootPart.Material = "Neon"
+					v.Character.HumanoidRootPart.CanCollide = false
+				end)
+			end
+		end
+	end
+end)
+
+game:GetService('RunService').Stepped:connect(function()
+
+	if noclip then
+		if game:GetService("Players").LocalPlayer.Character ~= nil then
+			for _, child in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
+				if child:IsA("BasePart") and child.CanCollide == true then
+					child.CanCollide = false
+				end
+			end
+		end
+	end
+	
+	if shiftlock then
+		game.Players.LocalPlayer.DevEnableMouseLock = true
+	end
+	
+	if unlockzoom then
+		game.Players.LocalPlayer.CameraMaxZoomDistance = 99999
+	end
+	
+	if jumpPower ~= 50 or jumpPower ~= 7 then
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = jumpPower
+	end
+	
+	if walkspeed ~= 16 then
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
+	end
+	
+	if shiftlock == true then
+		game.Players.LocalPlayer.DevEnableMouseLock = true
+	end
+
+	if UserInput:IsKeyDown(Enum.KeyCode.Space) then
+		if Infjump == true then
+			if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
+				local Clone = Instance.new("Part")
+				Clone.Parent = workspace
+				Clone.Anchored = true
+				Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
+				Clone.Size = Vector3.new(6, 1, 6)
+				Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
+				Clone.Transparency = 1
+				wait()
+				Clone:Destroy()
+			else
+				local Clone = Instance.new("Part")
+				Clone.Parent = workspace
+				Clone.Anchored = true
+				Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
+				Clone.Size = Vector3.new(6, 1, 6)
+				Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
+				Clone.Transparency = 1
+				wait()
+				Clone:Destroy()
+			end
+		end
+	end
+end)
+
+UserInput.InputBegan:Connect(function(input , gameProccesedevent)
+	if gameProccesedevent then
+	else
+		if input.KeyCode == Enum.KeyCode.Space then
+			if Infjump == true then
+				if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
+					local Clone = Instance.new("Part")
+					Clone.Parent = workspace
+					Clone.Anchored = true
+					Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
+					Clone.Size = Vector3.new(6, 1, 6)
+					Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
+					Clone.Transparency = 1
+					wait(0.1)
+					Clone:Destroy()
+				else
+					local Clone = Instance.new("Part")
+					Clone.Parent = workspace
+					Clone.Anchored = true
+					Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
+					Clone.Size = Vector3.new(6, 1, 6)
+					Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
+					Clone.Transparency = 1
+					wait(0.1)
+					Clone:Destroy()
+				end
+			end
+		end		
+	end
+
+end)
 
 function KillPlayer()
 	local player = game.Players.LocalPlayer
@@ -461,3 +437,18 @@ function SaveData()
 	}
 	writefile("Universal_19872.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
+
+
+function LoadData()
+	if not isfile("Universal_19872.lua") then
+		return
+	else
+		local data = game:GetService("HttpService"):JSONDecode(readfile("Universal_19872.lua"))
+		Size = data.PSize
+		UseDisplayNames = data.usedisplayNames
+		AntiAFK = data.anti_afk
+
+	end
+end
+
+LoadData()
