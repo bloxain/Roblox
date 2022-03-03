@@ -307,9 +307,9 @@ local Colors = theme:addSection("Colors")
 
 
 
-localplayer:addSlider("Player Speed", 16, 16, 300, function(value) PlayerSpeed = value end)
+localplayer:addSlider("Player Speed", 16, 16, 300, function(value) PlayerSpeed = value game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value end)
 
-localplayer:addSlider("Player jumpPower", 50, 50, 300, function(value) PlayerJump = value end)
+localplayer:addSlider("Player jumpPower", 50, 50, 300, function(value) PlayerJump = value game.Players.LocalPlayer.Character.Humanoid.JumpPower = value end)
 
 MainGame:addSlider("Gravity", 196.2, 0, 196.2, function(value) workspace.Gravity = value end)
 
