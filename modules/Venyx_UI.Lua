@@ -2211,7 +2211,7 @@ do
 	end
 end
 if syn then
-	rconsoleprint("dino and steffei was here :)")
+	printconsole("dino and steffei was here :)")
 	else
 	print("dino and steffei was here :)")
 end
