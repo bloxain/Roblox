@@ -381,6 +381,8 @@ AD:addToggle("Anti AFK", AntiAFK, function(value) AntiAFK = value end)
 
 AD:addToggle("Unlock Zoom Distance", false, function(value) if value == true then game.Players.LocalPlayer.CameraMaxZoomDistance = 99999 else game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end end)
 
+AD:addKeybind("Hide UI", nil, function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end)
+
 Splayer:addTextbox("Player", "", function(text) FindPlayer(text) end)
 
 Splayer:addButton("teleport to player", function() game.Players.LocalPlayer.character:MoveTo(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end)
@@ -436,7 +438,14 @@ UI:SelectPage(main)
 --             functions
 ---------------------------------------
 
-
+function toggleUI(show)
+	for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
+		if v:IsA("ScreenGui") then
+			v.Enabled = show
+		end
+	end
+	game.CoreGui.ThemeProvider.Enabled = show
+end
 
 function FindPlayer(target)
 	if UseDisplayNames == true then
