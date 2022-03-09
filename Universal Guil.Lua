@@ -1,4 +1,3 @@
-
 local col = nil
 local clickon = false
 local deleteon = false
@@ -19,6 +18,22 @@ local shiftlock = false
 local unlockzoom = false
 local walkspeed = 16
 local jumpPower = 50
+--local HideUIs = nil
+local HideUItoggle = false
+
+function LoadData()
+	if not isfile("Universal_19872.lua") then
+		return
+	else
+		local data = game:GetService("HttpService"):JSONDecode(readfile("Universal_19872.lua"))
+		Size = data.PSize
+		UseDisplayNames = data.usedisplayNames
+		AntiAFK = data.anti_afk
+		--HideUIs = data.HideUI
+	end
+end
+
+LoadData()
 
 if game.Players.LocalPlayer.Character.Humanoid.UseJumpPower == false then
 	jumpPower = 7
@@ -88,7 +103,11 @@ AD:addToggle("awalys enable shiftlock", false, function(value) shiftlock = value
 
 AD:addToggle("Anti AFK", AntiAFK, function(value) AntiAFK = value end)
 
+AD:addToggle("Hide UI", HideUIs, function(value) AntiAFK = value end)
+
 AD:addToggle("Unlock Zomm Distance", false, function(value) if value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = value end)
+
+AD:addKeybind("Hide UI", nil, function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end)
 
 Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
 
@@ -108,8 +127,6 @@ Confic:addTextbox("Hitbox size", "20", function(value) HeadSize = tonumber(value
 
 Confic:addToggle("Use Display Names", UseDisplayNames, function(value) UseDisplayNames = value end)
 
-Confic:addKeybind("Noclip key", nil, function() noclip = not noclip end)
-
 Confic:addKeybind("spawn platform key", Enum.KeyCode.Q, function() Spawnplatform()() end)
 
 Confic:addButton("Save", function() SaveData() end)
@@ -122,14 +139,6 @@ Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() e
 
 Colors:addButton("Kill GUI", function() game.CoreGui["universal Gui"]:Destroy() script:Destroy()end)
 
-function epicgames()
-	UI:Notify("Warning!", "would you like to dissable the Anti Cheat? IT MAY BREAK SOME PARTS OF THE GAME!!! if it dose not work dissable it again in settings.", function(value) if value == true then DissableAntiCheat() end end)
-	local COSTOM = UI:addPage("Epic Games")
-	local EPIC = COSTOM:addSection("Epic minigames")
-	Confic:addButton("Dissable Anti Cheat", function() DissableAntiCheat() end)
-
-end
-
 --             functions
 ---------------------------------------
 
@@ -141,6 +150,14 @@ function clearplatforms()
 	end
 end
 
+function toggleUI(show)
+	for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
+		if v:IsA("ScreenGui") then
+			v.Enabled = show
+		end
+	end
+	game.CoreGui.ThemeProvider.Enabled = show
+end
 
 function Fixcamera()
 	for i, v in pairs(workspace:GetChildren()) do
@@ -264,23 +281,23 @@ game:GetService('RunService').Stepped:connect(function()
 			end
 		end
 	end
-	
+
 	if shiftlock then
 		game.Players.LocalPlayer.DevEnableMouseLock = true
 	end
-	
+
 	if unlockzoom then
 		game.Players.LocalPlayer.CameraMaxZoomDistance = 99999
 	end
-	
+
 	if jumpPower ~= 50 or jumpPower ~= 7 then
 		game.Players.LocalPlayer.Character.Humanoid.JumpPower = jumpPower
 	end
-	
+
 	if walkspeed ~= 16 then
 		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
 	end
-	
+
 	if shiftlock == true then
 		game.Players.LocalPlayer.DevEnableMouseLock = true
 	end
@@ -437,18 +454,3 @@ function SaveData()
 	}
 	writefile("Universal_19872.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
-
-
-function LoadData()
-	if not isfile("Universal_19872.lua") then
-		return
-	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Universal_19872.lua"))
-		Size = data.PSize
-		UseDisplayNames = data.usedisplayNames
-		AntiAFK = data.anti_afk
-
-	end
-end
-
-LoadData()
