@@ -2212,7 +2212,5 @@ do
 end
 if syn then
 	printconsole("dino and steffei was here :)")
-	else
-	print("dino and steffei was here :)")
 end
 return library
