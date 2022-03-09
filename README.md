@@ -4,6 +4,8 @@ discord: https://discord.gg/cjP6mnDT join to talk
 
 i have got synapse x to make this project better
 
+supported executors like krnl, trigon, synapse x ect
+
 suported games:
 
 1. tower of hell
