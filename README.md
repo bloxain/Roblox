@@ -33,9 +33,3 @@ to use copy and execute the universal GUI and check its compatable with and remo
 
 why use this?
 it has a lot of working premade things for games the tower of hell and destuction simulator script where made from the universal GUI
-
-
-# Update log
-2022
-
-mar 8 - made a show UI toggle
