@@ -36,7 +36,7 @@ local mt = getrawmetatable(game)
 local old = mt.__namecall
 local protect = newcclosure or protect_function
 if not protect then
-	notify("Incompatible Exploit Warning", "Your exploit does not support protection against stack trace errors, resulting to fallback function")
+	print("Incompatible Exploit Warning", "Your exploit does not support protection against stack trace errors, resulting to fallback function")
 	protect = function(f) return f end
 end
 
@@ -53,6 +53,30 @@ hookfunction(game.Players.LocalPlayer.Kick,protect(function() wait(9e9) end))
 
 game.Players.LocalPlayer.PlayerScripts.LocalScript.Disabled = true
 game.Players.LocalPlayer.PlayerScripts.LocalScript2.Disabled = true
+
+function LoadData()
+	if not isfile("Tower_of_hell#832917.lua") then
+		return
+	else
+		local data = game:GetService("HttpService"):JSONDecode(readfile("Tower_of_hell#832917.lua"))
+		Size = data.PSize
+		UseDisplayNames = data.usedisplayNames
+		Hideplayers = data.Hideplayers
+		AntiINVall = data.showAPlayers
+		AntiKill = data.AntiKill
+		AntiBunny = data.AntiBunny
+		AntiAFK = data.AntiAFK
+		AntiFog = data.AntiFog
+		AntiNeg = data.AntiNeg
+		Antiinv = data.Antiinv
+		Infjump = data.Infjump
+		clickon = data.clickon
+		deleteon = data.deleteon
+		platform = data.platform
+	end
+end
+
+LoadData()
 
 function DissableINV(char, amount)
 	if char == nil then
@@ -405,6 +429,8 @@ TOHS:addToggle("Anti Negitive", AntiNeg, function(value) AntiNeg = value  if val
 
 TOHS:addButton("Insant win(WARNING may ban do later in round)", function() local endzone = game.Workspace.tower.sections.finish.exit.ParticleBrick.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone end)
 
+TOHS:addButton("Give All Tools(local and some dont work)", function() for i, v in pairs(game.ReplicatedStorage.Gear:GetChildren()) do local clone = v:Clone() v.Parent = game.Players.LocalPlayer.Backpack end end)
+
 TOHS:addKeybind("Time Freeze Key", Enum.KeyCode.E, function() game.Players.LocalPlayer.PlayerScripts.timefreeze.Value = not game.Players.LocalPlayer.PlayerScripts.timefreeze.Value end)
 
 TowerSettings:addToggle("ShowPlayers(for anti inv)", AntiINVall, function(value) AntiINVall = value if value == false then 	for i, v in  pairs(game.Players:GetChildren()) do if v ~= game.Players.LocalPlayer then DissableINV(v.Character, 0) end end end end)
@@ -441,7 +467,9 @@ UI:SelectPage(main)
 function toggleUI(show)
 	for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
 		if v:IsA("ScreenGui") then
-			v.Enabled = show
+			if v.Name ~= "inputPopup" and v.Name ~= "admin" then
+				v.Enabled = show
+			end
 		end
 	end
 	game.CoreGui.ThemeProvider.Enabled = show
@@ -547,27 +575,3 @@ function GiveTool()
 	v.Parent = player.Character
 	v.Parent = player.Character.HumanoidRootPart
 end
-
-function LoadData()
-	if not isfile("Tower_of_hell#832917.lua") then
-		return
-	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Tower_of_hell#832917.lua"))
-		Size = data.PSize
-		UseDisplayNames = data.usedisplayNames
-		Hideplayers = data.Hideplayers
-		AntiINVall = data.showAPlayers
-		AntiKill = data.AntiKill
-		AntiBunny = data.AntiBunny
-		AntiAFK = data.AntiAFK
-		AntiFog = data.AntiFog
-		AntiNeg = data.AntiNeg
-		Antiinv = data.Antiinv
-		Infjump = data.Infjump
-		clickon = data.clickon
-		deleteon = data.deleteon
-		platform = data.platform
-	end
-end
-
-LoadData()
