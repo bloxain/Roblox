@@ -21,6 +21,7 @@ local AddCoins = false
 local remote = game:GetService("ReplicatedStorage").Remotes.sellBricks
 local FireServer = Instance.new("RemoteEvent").FireServer
 local autoSell = false
+local HideUItoggle = false
 local hideUIData = {}
 
 -----------------------------------IMPORTENT FUNCS------------------------------------------------------------------------------------------
@@ -335,6 +336,8 @@ AD:addToggle("spawn platform", false, function(value) platform = value end)
 AD:addToggle("Anti AFK", AntiAFK, function(value) AntiAFK = value end)
 
 AD:addToggle("Unlock Zomm Distance", false, function(value) UnlockZoom = value end)
+
+AD:addKeybind("Hide UI", nil, function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end)
 
 Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
 
