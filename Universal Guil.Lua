@@ -18,8 +18,8 @@ local shiftlock = false
 local unlockzoom = false
 local walkspeed = 16
 local jumpPower = 50
---local HideUIs = nil
 local HideUItoggle = false
+local hideUIData = {}
 
 function LoadData()
 	if not isfile("Universal_19872.lua") then
@@ -151,9 +151,31 @@ function clearplatforms()
 end
 
 function toggleUI(show)
-	for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
-		if v:IsA("ScreenGui") then
-			v.Enabled = show
+	if not hideUIData then
+		for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
+			if v:IsA("ScreenGui") then
+				if v.Enabled then
+					hideUIData = {}
+					table.insert(hideUIData, 1, v.Name)
+				end
+			end
+		end
+	end
+	
+	for i = 1, #hideUIData do
+		if game.Players.LocalPlayer.PlayerGui:FindFirstChild(hideUIData[i]) then
+			game.Players.LocalPlayer.PlayerGui[hideUIData[i]].Enabled = show
+		end
+	end
+	
+	for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do		
+		if v:IsA("ScreenGui") and show then
+			if v.Enabled then
+				for i = 1, #hideUIData do
+					table.remove(hideUIData, 1)
+				end
+				table.insert(hideUIData, 1, v.Name)
+			end
 		end
 	end
 	game.CoreGui.ThemeProvider.Enabled = show
@@ -361,90 +383,90 @@ UserInput.InputBegan:Connect(function(input , gameProccesedevent)
 
 end)
 
-function KillPlayer()
-	local player = game.Players.LocalPlayer
-	if not firetouchinterest then
-		UI:Notify("Upgrade exploit.", "Your exploit requires firetouchinterest!")
-		return
-	end
-	local target = Selectedplayer
-	player.Character.Humanoid.Name = 1
-	local l = player.Character["1"]:Clone()
-	l.Parent = player.Character
-	l.Name = "Humanoid"
-	wait(.2)
-	player.Character["1"]:Destroy()
-	workspace.CurrentCamera.CameraSubject = player.Character
-	player.Character.Humanoid.DisplayDistanceType = "None"
-	player.Character.Humanoid:UnequipTools()
-	local v = player.Backpack:FindFirstChildOfClass("Tool")
-	if not v then
-		UI:Notify("Please get a tool.", "Tool not found!")
-		return
-	end
-	v.Parent = player.Character
-	v.Parent = player.Character.HumanoidRootPart
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 0)
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 1)
-	pcall(function() player.Character.HumanoidRootPart.CFrame = CFrame.new(0, workspace.FallenPartsDestroyHeight + 5, 0) end)
-	wait(.3)
-	player.Character:Remove()
-	player.CharacterAdded:Wait()
-end
+--function KillPlayer()
+--	local player = game.Players.LocalPlayer
+--	if not firetouchinterest then
+--		UI:Notify("Upgrade exploit.", "Your exploit requires firetouchinterest!")
+--		return
+--	end
+--	local target = Selectedplayer
+--	player.Character.Humanoid.Name = 1
+--	local l = player.Character["1"]:Clone()
+--	l.Parent = player.Character
+--	l.Name = "Humanoid"
+--	wait(.2)
+--	player.Character["1"]:Destroy()
+--	workspace.CurrentCamera.CameraSubject = player.Character
+--	player.Character.Humanoid.DisplayDistanceType = "None"
+--	player.Character.Humanoid:UnequipTools()
+--	local v = player.Backpack:FindFirstChildOfClass("Tool")
+--	if not v then
+--		UI:Notify("Please get a tool.", "Tool not found!")
+--		return
+--	end
+--	v.Parent = player.Character
+--	v.Parent = player.Character.HumanoidRootPart
+--	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 0)
+--	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 1)
+--	pcall(function() player.Character.HumanoidRootPart.CFrame = CFrame.new(0, workspace.FallenPartsDestroyHeight + 5, 0) end)
+--	wait(.3)
+--	player.Character:Remove()
+--	player.CharacterAdded:Wait()
+--end
 
 
-function BringPlayer()
-	local savepos = workspace[game.Players.LocalPlayer.Name].HumanoidRootPart.Position
-	local player = game.Players.LocalPlayer
-	if not firetouchinterest then
-		UI:Notify("Upgrade exploit.", "Your exploit requires firetouchinterest!")
-		return
-	end
-	local target = Selectedplayer
-	player.Character.Humanoid.Name = 1
-	local l = player.Character["1"]:Clone()
-	l.Parent = player.Character
-	l.Name = "Humanoid"
-	wait(.2)
-	player.Character["1"]:Destroy()
-	workspace.CurrentCamera.CameraSubject = player.Character
-	player.Character.Humanoid.DisplayDistanceType = "None"
-	player.Character.Humanoid:UnequipTools()
-	local v = player.Backpack:FindFirstChildOfClass("Tool")
-	if not v then
-		UI:Notify("Please get a tool.", "Tool not found!")
-		return
-	end
-	v.Parent = player.Character
-	v.Parent = player.Character.HumanoidRootPart
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 0)
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 1)
-	pcall(function() player.Character.HumanoidRootPart.CFrame = NormPos end)
-	wait(.3)
-	player.Character:Remove()
-	player.CharacterAdded:Wait()
-	workspace[game.Players.LocalPlayer.Name]:MoveTo(savepos)
-end
+--function BringPlayer()
+--	local savepos = workspace[game.Players.LocalPlayer.Name].HumanoidRootPart.Position
+--	local player = game.Players.LocalPlayer
+--	if not firetouchinterest then
+--		UI:Notify("Upgrade exploit.", "Your exploit requires firetouchinterest!")
+--		return
+--	end
+--	local target = Selectedplayer
+--	player.Character.Humanoid.Name = 1
+--	local l = player.Character["1"]:Clone()
+--	l.Parent = player.Character
+--	l.Name = "Humanoid"
+--	wait(.2)
+--	player.Character["1"]:Destroy()
+--	workspace.CurrentCamera.CameraSubject = player.Character
+--	player.Character.Humanoid.DisplayDistanceType = "None"
+--	player.Character.Humanoid:UnequipTools()
+--	local v = player.Backpack:FindFirstChildOfClass("Tool")
+--	if not v then
+--		UI:Notify("Please get a tool.", "Tool not found!")
+--		return
+--	end
+--	v.Parent = player.Character
+--	v.Parent = player.Character.HumanoidRootPart
+--	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 0)
+--	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 1)
+--	pcall(function() player.Character.HumanoidRootPart.CFrame = NormPos end)
+--	wait(.3)
+--	player.Character:Remove()
+--	player.CharacterAdded:Wait()
+--	workspace[game.Players.LocalPlayer.Name]:MoveTo(savepos)
+--end
 
-function GiveTool()
-	local player = game.Players.LocalPlayer
-	local target = Selectedplayer
-	player.Character.Humanoid.Name = 1
-	local l = player.Character["1"]:Clone()
-	l.Parent = player.Character
-	l.Name = "Humanoid"
-	wait(.2)
-	player.Character["1"]:Destroy()
-	player.Character.Humanoid.DisplayDistanceType = "None"
-	player.Character.Humanoid:UnequipTools()
-	local v = player.Backpack:FindFirstChildOfClass("Tool")
-	if not v then
-		UI:Notify("Please get a tool.", "Tool not found!")
-		return
-	end
-	v.Parent = player.Character
-	v.Parent = player.Character.HumanoidRootPart
-end
+--function GiveTool()
+--	local player = game.Players.LocalPlayer
+--	local target = Selectedplayer
+--	player.Character.Humanoid.Name = 1
+--	local l = player.Character["1"]:Clone()
+--	l.Parent = player.Character
+--	l.Name = "Humanoid"
+--	wait(.2)
+--	player.Character["1"]:Destroy()
+--	player.Character.Humanoid.DisplayDistanceType = "None"
+--	player.Character.Humanoid:UnequipTools()
+--	local v = player.Backpack:FindFirstChildOfClass("Tool")
+--	if not v then
+--		UI:Notify("Please get a tool.", "Tool not found!")
+--		return
+--	end
+--	v.Parent = player.Character
+--	v.Parent = player.Character.HumanoidRootPart
+--end
 
 function SaveData()
 	local datatosave = {
