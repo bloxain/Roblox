@@ -2,7 +2,7 @@ this is where loadstrings are downloaded and executed feel free off learn of it!
 
 discord: https://discord.gg/cjP6mnDT join to talk
 
-YT: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
+YouTube: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
 
 i have got synapse x to make this project better - BTW synapse x has to FIX THERE ARRAYS 
 
