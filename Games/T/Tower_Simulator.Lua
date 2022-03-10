@@ -366,12 +366,15 @@ function toggleUI(show)
 		end
 	end
 
+	if show then
+		for i = 1, #hideUIData do
+			table.remove(hideUIData, 1)
+		end
+	end
+
 	for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do		
 		if v:IsA("ScreenGui") and show then
 			if v.Enabled then
-				for i = 1, #hideUIData do
-					table.remove(hideUIData, 1)
-				end
 				table.insert(hideUIData, 1, v.Name)
 			end
 		end
