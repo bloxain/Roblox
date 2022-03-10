@@ -4,7 +4,9 @@ discord: https://discord.gg/cjP6mnDT join to talk
 
 YouTube: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
 
-i have got synapse x to make this project better - BTW synapse x has to FIX THERE ARRAYS 
+i have got synapse x to make this project better
+
+L synapse x dose not work only free i guess...
 
 supported executors like krnl, trigon, synapse x ect
 
