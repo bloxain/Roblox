@@ -20,6 +20,8 @@ local walkspeed = 16
 local jumpPower = 50
 local autobuild = false
 local autoTouch = false
+local HideUItoggle = false
+local hideUIData = {}
 
 -----------------------------------IMPORTENT FUNCS------------------------------------------------------------------------------------------
 
@@ -307,6 +309,8 @@ AD:addToggle("awalys enable shiftlock", false, function(value) shiftlock = value
 
 AD:addToggle("Anti AFK", AntiAFK, function(value) AntiAFK = value end)
 
+AD:addKeybind("Hide UI", nil, function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end)
+
 AD:addToggle("Unlock Zomm Distance", unlockzoom, function(value) if value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = value end)
 
 Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
@@ -343,6 +347,38 @@ Colors:addButton("Kill GUI", function() game.CoreGui["Tower Simulator GUI"]:Dest
 
 --             functions
 ---------------------------------------
+
+function toggleUI(show)
+	if not hideUIData then
+		for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
+			if v:IsA("ScreenGui") then
+				if v.Enabled then
+					hideUIData = {}
+					table.insert(hideUIData, 1, v.Name)
+				end
+			end
+		end
+	end
+
+	for i = 1, #hideUIData do
+		if game.Players.LocalPlayer.PlayerGui:FindFirstChild(hideUIData[i]) then
+			game.Players.LocalPlayer.PlayerGui[hideUIData[i]].Enabled = show
+		end
+	end
+
+	for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do		
+		if v:IsA("ScreenGui") and show then
+			if v.Enabled then
+				for i = 1, #hideUIData do
+					table.remove(hideUIData, 1)
+				end
+				table.insert(hideUIData, 1, v.Name)
+			end
+		end
+	end
+	game.CoreGui.ThemeProvider.Enabled = show
+end
+
 
 function clearplatforms()
 	for i, v in pairs(workspace:GetChildren()) do
