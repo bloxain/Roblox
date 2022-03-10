@@ -21,6 +21,7 @@ local AddCoins = false
 local remote = game:GetService("ReplicatedStorage").Remotes.sellBricks
 local FireServer = Instance.new("RemoteEvent").FireServer
 local autoSell = false
+local hideUIData = {}
 
 -----------------------------------IMPORTENT FUNCS------------------------------------------------------------------------------------------
 
@@ -204,11 +205,11 @@ game:GetService('RunService').Stepped:connect(function()
 	if PlayerJump ~= 50 then
 		game.Players.LocalPlayer.Character.Humanoid.JumpPower = PlayerJump
 	end
-	
+
 	if AddCoins then
 		game:GetService("ReplicatedStorage").Remotes.generateBoost:FireServer("Coins", 999999, 99999999)
 	end
-	
+
 	if autoSell then
 		FireServer(remote)
 	end
@@ -377,16 +378,40 @@ Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() e
 
 Colors:addButton("Kill GUI", function() game.CoreGui["universal Gui"]:Destroy() script:Destroy()end)
 
-function epicgames()
-	UI:Notify("Warning!", "would you like to dissable the Anti Cheat? IT MAY BREAK SOME PARTS OF THE GAME!!! if it dose not work dissable it again in settings.", function(value) if value == true then DissableAntiCheat() end end)
-	local COSTOM = UI:addPage("Epic Games")
-	local EPIC = COSTOM:addSection("Epic minigames")
-	Confic:addButton("Dissable Anti Cheat", function() DissableAntiCheat() end)
-
-end
 
 --             functions
----------------------------------------
+--------------------------------------
+
+function toggleUI(show)
+	if not hideUIData then
+		for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
+			if v:IsA("ScreenGui") then
+				if v.Enabled then
+					hideUIData = {}
+					table.insert(hideUIData, 1, v.Name)
+				end
+			end
+		end
+	end
+
+	for i = 1, #hideUIData do
+		if game.Players.LocalPlayer.PlayerGui:FindFirstChild(hideUIData[i]) then
+			game.Players.LocalPlayer.PlayerGui[hideUIData[i]].Enabled = show
+		end
+	end
+
+	for i, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do		
+		if v:IsA("ScreenGui") and show then
+			if v.Enabled then
+				for i = 1, #hideUIData do
+					table.remove(hideUIData, 1)
+				end
+				table.insert(hideUIData, 1, v.Name)
+			end
+		end
+	end
+	game.CoreGui.ThemeProvider.Enabled = show
+end
 
 function clearplatforms()
 	for i, v in pairs(workspace:GetChildren()) do
