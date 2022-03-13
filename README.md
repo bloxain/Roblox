@@ -23,7 +23,9 @@ almost every other because of universal GUI
 loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Bloxhub.Lua"))()
 ```
 
+# upcomeing
 
+I will be testing a Executor that can be executed use krnl synapse ect too give some executors better UIs
 
 
 
