@@ -2,7 +2,7 @@ this is where i will work on things as school and since i cant test them dont re
 
 
 to be added
-1. A executor that has a better UI  than krnl or synapse 
+1.
 
 might be added
 1. press the button
