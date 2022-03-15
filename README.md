@@ -15,7 +15,10 @@ suported games:
 3. tower simulator
 4. Press the button -- work in progress
 
-almost every other because of universal GUI
+universal:
+
+1. Universal GUI
+2. Executor
 
 # execute code here
 
