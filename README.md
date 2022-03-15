@@ -25,14 +25,6 @@ universal:
 ```lua
 loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Bloxhub.Lua"))()
 ```
-
-# upcomeing
-
-I will be testing a Executor that can be executed use krnl synapse ect too give some executors better UIs update: saveing, UI, and most buttons done
-
-
-
-
 # How to make your own GUI
 
 
