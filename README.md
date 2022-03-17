@@ -6,7 +6,7 @@ YouTube: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
 
 i have got synapse x to make this project better
 
-supported executors like krnl, trigon, synapse x ect
+supported executors like krnl, trigon, synapse x ect -- as of march 16 It Is Reqiured that file funcs are on you executors
 
 suported games:
 
