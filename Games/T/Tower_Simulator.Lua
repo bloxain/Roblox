@@ -14,68 +14,91 @@ local UseDisplayNames = false
 local AntiAFK = false
 local HeadSize = 20
 local hitboxenabled = false
-local shiftlock = false
-local unlockzoom = false
-local walkspeed = 16
-local jumpPower = 50
-local autobuild = false
-local autoTouch = false
-local HideUItoggle = false
+local PlayerSpeed = 16
+local PlayerJump = 50
+local AntiBunny = false
+local AntiKill = false
+local AntiFog = false
+local Antiinv = false
+local AntiNeg = false
+local AntiINVall = false
+local Hideplayers = false
 local hideUIData = {}
 
+local autofarm = {
+	["Enabeld"] = false,
+	["Speed"] = false,
+	["First Time"] = true
+}
+
 -----------------------------------IMPORTENT FUNCS------------------------------------------------------------------------------------------
+-----------------------------------EXTRA----------------------------------------------------------------------------------------------------
+local mt = getrawmetatable(game)
+local old = mt.__namecall
+local protect = newcclosure or protect_function
+if not protect then
+	print("Incompatible Exploit Warning", "Your exploit does not support protection against stack trace errors, resulting to fallback function")
+	protect = function(f) return f end
+end
+
+setreadonly(mt, false)
+mt.__namecall = protect(function(self, ...)
+	local method = getnamecallmethod()
+	if method == "Kick" then
+		wait(9e9)
+		return
+	end
+	return old(self, ...)
+end)
+hookfunction(game.Players.LocalPlayer.Kick,protect(function() wait(9e9) end))
+
+game.Players.LocalPlayer.PlayerScripts.LocalScript.Disabled = true
+game.Players.LocalPlayer.PlayerScripts.LocalScript2.Disabled = true
 
 function LoadData()
-	if not isfile("Tower#7756.lua") then
+	if not isfile("Tower_of_hell#832917.lua") then
 		return
 	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Tower#7756.lua"))
+		local data = game:GetService("HttpService"):JSONDecode(readfile("Tower_of_hell#832917.lua"))
 		Size = data.PSize
 		UseDisplayNames = data.usedisplayNames
-		AntiAFK = data.anti_afk
+		Hideplayers = data.Hideplayers
+		AntiINVall = data.showAPlayers
+		AntiKill = data.AntiKill
+		AntiBunny = data.AntiBunny
+		AntiAFK = data.AntiAFK
+		AntiFog = data.AntiFog
+		AntiNeg = data.AntiNeg
+		Antiinv = data.Antiinv
+		Infjump = data.Infjump
+		clickon = data.clickon
 		deleteon = data.deleteon
 		platform = data.platform
-		autobuild = data.autobuild
-		unlockzoom = data.unlockzoom
-		clickon = data.clickon
-		Infjump = data.Infjump
-		autoTouch = data.autoTouch
 	end
 end
 
 LoadData()
 
+function DissableINV(char, amount)
+	if char == nil then
+		return nil
+	end
 
-function SaveData()
-	local datatosave = {
-		["PSize"] = Size;
-		["usedisplayNames"] = UseDisplayNames;
-		["anti_afk"] = AntiAFK;
-		["clickon"] = clickon;
-		["deleteon"] = deleteon;
-		["autobuild"] = autobuild;
-		["unlockzoom"] = unlockzoom;
-		["Infjump"] = Infjump;
-		["autoTouch"] = autoTouch
-	}
-	writefile("Tower#7756.lua", game:GetService("HttpService"):JSONEncode(datatosave))
-end
+	for i, v in pairs(char:GetChildren()) do
+		if v.Name ~= "HumanoidRootPart" then
+			if v:IsA("Part") then
+				if v.Name ~= "hitbox" and v.Name ~= "hitboxInvincible" then
+					v.Transparency = amount
+				end
+			end
 
------------------------------------EXTRA----------------------------------------------------------------------------------------------------
-
-if game.Players.LocalPlayer.Character.Humanoid.UseJumpPower == false then
-	jumpPower = 7
-end
-
-function DissableAntiCheat()
-	local thingtodestory = "Ill"
-	for i,v in pairs(game.Players.LocalPlayer.PlayerScripts:GetChildren()) do 
-		if v.Name:lower():sub(1,#thingtodestory) == thingtodestory:lower() then
-			Selectedplayer = v
+			if v:IsA("Accessory") then
+				v.Handle.Transparency = amount
+			end
 		end
 	end
+	char.Head.face.Transparency = 0
 end
-
 
 game:GetService('RunService').RenderStepped:connect(function()
 	if hitboxenabled then
@@ -102,6 +125,14 @@ function Teleport(pos)
 		local Char = GetCharacter()
 		if Char then
 			Char:MoveTo(pos)
+		end
+	end
+end
+
+function clearplatforms()
+	for i, v in pairs(workspace:GetChildren()) do
+		if v.Name == "falksjdhflkjasdhflkjasdhflkjasdfhj" then
+			v:Destroy()
 		end
 	end
 end
@@ -147,6 +178,27 @@ end
 local Plr = game:GetService("Players").LocalPlayer
 local Mouse = Plr:GetMouse()
 
+function SaveData()
+	local datatosave = {
+		["PSize"] = Size;
+		["usedisplayNames"] = UseDisplayNames;
+		["Hideplayers"] = Hideplayers;
+		["showAPlayers"] = AntiINVall;
+		["AntiKill"] = AntiKill;
+		["AntiBunny"] = AntiBunny;
+		["AntiAFK"] = AntiAFK;
+		["AntiFog"] = AntiFog;
+		["AntiNeg"] = AntiNeg;
+		["Antiinv"] = Antiinv;
+		["Infjump"] = Infjump;
+		["platform"] = platform;
+		["clickon"] = clickon;
+		["deleteon"] = deleteon
+
+	}
+	writefile("Tower_of_hell#832917.lua", game:GetService("HttpService"):JSONEncode(datatosave))
+end
+
 Mouse.Button1Down:connect(function()
 	if deleteon == true then
 		if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
@@ -155,8 +207,8 @@ Mouse.Button1Down:connect(function()
 	end 
 end)
 
-game:GetService('RunService').Stepped:connect(function()
 
+game:GetService('RunService').Stepped:connect(function()
 	if noclip then
 		if game:GetService("Players").LocalPlayer.Character ~= nil then
 			for _, child in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
@@ -167,31 +219,66 @@ game:GetService('RunService').Stepped:connect(function()
 		end
 	end
 
-	if shiftlock then
-		game.Players.LocalPlayer.DevEnableMouseLock = true
+	if workspace:FindFirstChild(game.Players.LocalPlayer.Name) then
+		workspace[game.Players.LocalPlayer.Name].KillScript.Disabled = AntiKill
 	end
 
-	if unlockzoom then
-		game.Players.LocalPlayer.CameraMaxZoomDistance = 99999
+	if PlayerSpeed ~= 16 then
+		game:GetService("ReplicatedStorage").globalSpeed.Value = PlayerSpeed
 	end
 
-	if jumpPower ~= 50 or jumpPower ~= 7 then
-		game.Players.LocalPlayer.Character.Humanoid.JumpPower = jumpPower
+	if PlayerJump ~= 50 then
+		workspace[game.Players.LocalPlayer.Name].Humanoid.JumpPower = PlayerJump
 	end
 
-	if walkspeed ~= 16 then
-		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
+	if AntiNeg then
+		game:GetService("Lighting").Negative.Enabled = false
 	end
 
-	if autobuild then
-		fireclickdetector(game.Players.LocalPlayer.MyTower.Value.ClickDetector)
+	if workspace:FindFirstChild(game.Players.LocalPlayer.Name) then
+		if Antiinv then
+			if AntiINVall then
+				for i, v in  pairs(game.Players:GetChildren()) do
+					DissableINV(v.Character, 0)
+				end
+			else
+				DissableINV(game.Players.LocalPlayer.Character, 0)				
+			end
+		end
 	end
 
-	if autoTouch then
-		firetouchinterest(game.Players.LocalPlayer.MyTower.Value.PurchaseUpgradeButtonRight.Head, game.Players.LocalPlayer.Character.LeftFoot, 1)
-		firetouchinterest(game.Players.LocalPlayer.MyTower.Value.PurchaseUpgradeButtonLeft.Head, game.Players.LocalPlayer.Character.LeftFoot, 1)
-		firetouchinterest(game.Players.LocalPlayer.MyTower.Value.PurchaseUpgradeButtonRight.Head, game.Players.LocalPlayer.Character.LeftFoot, 0)
-		firetouchinterest(game.Players.LocalPlayer.MyTower.Value.PurchaseUpgradeButtonLeft.Head, game.Players.LocalPlayer.Character.LeftFoot, 0)
+	if AntiFog then
+		game.Lighting.FogEnd = 1200
+	end
+
+	if AntiBunny then
+		game.Players.LocalPlayer.Character.bunnyJump.Disabled = true
+	end
+
+	if Hideplayers then
+		for i, v in  pairs(game.Players:GetChildren()) do
+			if v ~= game.Players.LocalPlayer then
+				DissableINV(v.Character, 1)
+			end
+		end
+	end
+
+	if autofarm.Enabeld then
+		if game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "5:00" then
+			if autofarm["First Time"] == false then
+				if autofarm.Speed == true then
+					local endzone = workspace.tower.sections.finish.FinishGlow.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone
+					autofarm["First Time"] = true
+				else
+					local endzone = game.Workspace.tower.sections.finish.exit.ParticleBrick.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone
+					autofarm["First Time"] = true
+				end
+			end
+		end
+
+		if game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "0:01" or game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "0:02" or game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "0:03" or game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "0:04" or game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "0:05" then
+			autofarm["First Time"] = false
+		end
 	end
 
 	if UserInput:IsKeyDown(Enum.KeyCode.Space) then
@@ -250,15 +337,14 @@ UserInput.InputBegan:Connect(function(input , gameProccesedevent)
 			end
 		end		
 	end
-
 end)
 
 
 -- https://raw.githubusercontent.com/Stefanuk12/Venyx-UI-Library/main/source.lua
 -- https://raw.githubusercontent.com/zxciaz/VenyxUI/main/Reuploaded
 -- // Initialising the UI
-local Venyx = loadstring(game:HttpGet(readfile("Bloxhub#7364/Venyx_UI.Lua"))()
-local UI = Venyx.new("Tower Simulator GUI")
+local Venyx = loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Venyx_UI.Lua"))()
+local UI = Venyx.new("Tower Of Hell GUI")
 local Themes = {
 	Background = Color3.fromRGB(24, 24, 24),
 	Glow = Color3.fromRGB(0, 0, 0),
@@ -272,22 +358,31 @@ local Themes = {
 
 local main = UI:addPage("Main")
 local AD = main:addSection("additional features")
-local server = UI:addPage("Server")
-local Splayer = server:addSection("Players")
-local TS = UI:addPage("Tower Simulator")
-local TSM = TS:addSection("Main")
-local theme = UI:addPage("Settings")
 local MainGame = main:addSection("Game")
 local localplayer = main:addSection("localplayer")
+
+local server = UI:addPage("Server")
+local Splayer = server:addSection("Players")
+
+local TOHP = UI:addPage("TOH")
+local TOHS = TOHP:addSection("TOH settings")
+
+local AutoP = UI:addPage("atuo Farm")
+local AutoS = AutoP:addSection("Settings(beta you will most likey get banned USE ALT)")
+
+local theme = UI:addPage("Settings")
+local TowerSettings = theme:addSection("Config")
 local Confic = theme:addSection("Config")
 local Colors = theme:addSection("Colors")
 
 
 
 
-localplayer:addSlider("Player Speed", 16, 16, 300, function(value) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value walkspeed = value end)
+localplayer:addSlider("Player Speed", 16, 16, 300, function(value) PlayerSpeed = value game:GetService("ReplicatedStorage").globalSpeed.Value = value end)
 
-localplayer:addSlider("Player jumpPower", jumpPower, jumpPower, 300, function(value) game.Players.LocalPlayer.Character.Humanoid.JumpPower = value jumpPower = value end)
+localplayer:addSlider("Player jumpPower", 50, 50, 300, function(value) PlayerJump = value workspace[game.Players.LocalPlayer.Name].Humanoid.JumpPower = value end)
+
+MainGame:addSlider("Gravity", 196.2, 0, 196.2, function(value) workspace.Gravity = value end)
 
 AD:addButton("save location", function() col = workspace[game.Players.LocalPlayer.Name].HumanoidRootPart.Position end)
 
@@ -295,9 +390,11 @@ AD:addButton("Load location", function() workspace[game.Players.LocalPlayer.Name
 
 AD:addButton("Clear Platforms", function() clearplatforms() end)
 
+AD:addButton("Load Dark Dex", function() game:HttpGet('https://raw.githubusercontent.com/SpeedSterKawaii/Dark-Dex/main/dex.lua', true) end)
+
 AD:addToggle("noclip", false, function(value) noclip = value end)
 
-AD:addToggle("Inf jump", Infjump ,function(value) Infjump = value end)
+AD:addToggle("Inf jump", Infjump,function(value) Infjump = value end)
 
 AD:addToggle("cntrl click teleport", clickon, function(value) clickon = value end)
 
@@ -305,29 +402,47 @@ AD:addToggle("alt click delete", deleteon, function(value) deleteon = value end)
 
 AD:addToggle("spawn platform", platform, function(value) platform = value end)
 
-AD:addToggle("awalys enable shiftlock", false, function(value) shiftlock = value end)
-
 AD:addToggle("Anti AFK", AntiAFK, function(value) AntiAFK = value end)
+
+AD:addToggle("Unlock Zoom Distance", false, function(value) if value == true then game.Players.LocalPlayer.CameraMaxZoomDistance = 99999 else game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end end)
 
 AD:addKeybind("Hide UI", nil, function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end)
 
-AD:addToggle("Unlock Zomm Distance", unlockzoom, function(value) if value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = value end)
-
-Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
+Splayer:addTextbox("Player", "", function(text) FindPlayer(text) end)
 
 Splayer:addButton("teleport to player", function() game.Players.LocalPlayer.character:MoveTo(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end)
 
-TSM:addToggle("Auto Build", autobuild, function(value) autobuild = value end)
+Splayer:addButton("Kill Player", function() KillPlayer() end)
 
-TSM:addToggle("Auto Touch", autoTouch, function(value) autoTouch = value end)
+Splayer:addButton("Bring Player", function() BringPlayer() end)
 
-TSM:addButton("Teleport to rebirth place", function() game.Players.LocalPlayer.Character:MoveTo(workspace.System.RebirthPlatform.TowerLogo.Logo.Position) end)
+--Splayer:addButton("Give Player Tool", function() GiveTool() end)
 
-TSM:addButton("Teleport to Tower", function() game.Players.LocalPlayer.Character:MoveTo(game.Players.LocalPlayer.MyTower.Value.Base.Base.Position) end)
+TOHS:addToggle("Anti bunny jump", AntiBunny, function(value) AntiBunny = value if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("bunny") then game.Players.LocalPlayer.Character.bunnyJump.Disabled = false end end end)
 
-Confic:addTextbox("Platform size", "", function(value) Size = value end)
+TOHS:addToggle("Anti Kill", AntiKill, function(value) AntiKill = value end)
 
-Confic:addTextbox("Hitbox size", "20", function(value) HeadSize = tonumber(value) end)
+TOHS:addToggle("Anti Fog", AntiFog, function(value) AntiFog = value if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("fog") then game.Lighting.FogEnd = 50 end end end)
+
+TOHS:addToggle("Anti invisible", Antiinv, function(value) Antiinv = value if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("invisibility") then for i, v in  pairs(game.Players:GetChildren()) do DissableINV(v.Character, 1) end end end end)
+
+TOHS:addToggle("Anti Negitive", AntiNeg, function(value) AntiNeg = value  if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("negative") then game.Lighting.Negative.Saturation = -2 end end  end)
+
+TOHS:addButton("Insant win(WARNING may ban do later in round)", function() local endzone = game.Workspace.tower.sections.finish.exit.ParticleBrick.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone end)
+
+TOHS:addButton("Give All Tools(local and some dont work)", function() for i, v in pairs(game.ReplicatedStorage.Gear:GetChildren()) do local clone = v:Clone() clone.Parent = game.Players.LocalPlayer.Backpack end end)
+
+TOHS:addKeybind("Time Freeze Key", Enum.KeyCode.E, function() game.Players.LocalPlayer.PlayerScripts.timefreeze.Value = not game.Players.LocalPlayer.PlayerScripts.timefreeze.Value end)
+
+TowerSettings:addToggle("ShowPlayers(for anti inv)", AntiINVall, function(value) AntiINVall = value if value == false then 	for i, v in  pairs(game.Players:GetChildren()) do if v ~= game.Players.LocalPlayer then DissableINV(v.Character, 0) end end end end)
+
+TowerSettings:addToggle("Hide Players", Hideplayers, function(value) Hideplayers = value if value == false then for i, v in  pairs(game.Players:GetChildren()) do if v ~= game.Players.LocalPlayer then DissableINV(v.Character, 0) end end end end)
+
+AutoS:addToggle("Speed tower", false, function(value) autofarm.Speed = value end)
+
+AutoS:addToggle("Enabled", false, function(value) autofarm.Enabeld = value autofarm["First Time"] = true if value == true then UI:Notify("Enabeld!", "Autofarm will start next round.") end end)
+
+Confic:addTextbox("Platform size", Size, function(value) Size = value end)
 
 Confic:addToggle("Use Display Names", UseDisplayNames, function(value) UseDisplayNames = value end)
 
@@ -343,7 +458,9 @@ end
 
 Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() end)
 
-Colors:addButton("Kill GUI", function() game.CoreGui["Tower Simulator GUI"]:Destroy() script:Destroy()end)
+Colors:addButton("Kill GUI", function() game.CoreGui["Tower Of Hell GUI"]:Destroy() script:Destroy()end)
+
+UI:SelectPage(main)
 
 --             functions
 ---------------------------------------
@@ -382,17 +499,6 @@ function toggleUI(show)
 	game.CoreGui.ThemeProvider.Enabled = show
 end
 
-
-function clearplatforms()
-	for i, v in pairs(workspace:GetChildren()) do
-		if v.Name == "falksjdhflkjasdhflkjasdhflkjasdfhj" then
-			v:Destroy()
-		end
-	end
-end
-
-
-
 function FindPlayer(target)
 	if UseDisplayNames == true then
 		for i,v in pairs(game.Players:GetPlayers()) do 
@@ -407,4 +513,89 @@ function FindPlayer(target)
 			end
 		end
 	end
+end
+
+function KillPlayer()
+	local player = game.Players.LocalPlayer
+	if not firetouchinterest then
+		UI:Notify("Upgrade exploit.", "Your exploit requires firetouchinterest!")
+		return
+	end
+	local target = Selectedplayer
+	player.Character.Humanoid.Name = 1
+	local l = player.Character["1"]:Clone()
+	l.Parent = player.Character
+	l.Name = "Humanoid"
+	wait(.2)
+	player.Character["1"]:Destroy()
+	workspace.CurrentCamera.CameraSubject = player.Character
+	player.Character.Humanoid.DisplayDistanceType = "None"
+	player.Character.Humanoid:UnequipTools()
+	local v = player.Backpack:FindFirstChildOfClass("Tool")
+	if not v then
+		UI:Notify("Please get a tool.", "Tool not found!")
+		return
+	end
+	v.Parent = player.Character
+	v.Parent = player.Character.HumanoidRootPart
+	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 0)
+	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 1)
+	pcall(function() player.Character.HumanoidRootPart.CFrame = CFrame.new(0, workspace.FallenPartsDestroyHeight + 5, 0) end)
+	wait(.3)
+	player.Character:Remove()
+	player.CharacterAdded:Wait()
+end
+
+
+function BringPlayer()
+	local savepos = workspace[game.Players.LocalPlayer.Name].HumanoidRootPart.Position
+	local player = game.Players.LocalPlayer
+	if not firetouchinterest then
+		UI:Notify("Upgrade exploit.", "Your exploit requires firetouchinterest!")
+		return
+	end
+	local target = Selectedplayer
+	player.Character.Humanoid.Name = 1
+	local l = player.Character["1"]:Clone()
+	l.Parent = player.Character
+	l.Name = "Humanoid"
+	wait(.2)
+	player.Character["1"]:Destroy()
+	workspace.CurrentCamera.CameraSubject = player.Character
+	player.Character.Humanoid.DisplayDistanceType = "None"
+	player.Character.Humanoid:UnequipTools()
+	local v = player.Backpack:FindFirstChildOfClass("Tool")
+	if not v then
+		UI:Notify("Please get a tool.", "Tool not found!")
+		return
+	end
+	v.Parent = player.Character
+	v.Parent = player.Character.HumanoidRootPart
+	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 0)
+	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 1)
+	pcall(function() player.Character.HumanoidRootPart.CFrame = NormPos end)
+	wait(.3)
+	player.Character:Remove()
+	player.CharacterAdded:Wait()
+	workspace[game.Players.LocalPlayer.Name]:MoveTo(savepos)
+end
+
+function GiveTool()
+	local player = game.Players.LocalPlayer
+	local target = Selectedplayer
+	player.Character.Humanoid.Name = 1
+	local l = player.Character["1"]:Clone()
+	l.Parent = player.Character
+	l.Name = "Humanoid"
+	wait(.2)
+	player.Character["1"]:Destroy()
+	player.Character.Humanoid.DisplayDistanceType = "None"
+	player.Character.Humanoid:UnequipTools()
+	local v = player.Backpack:FindFirstChildOfClass("Tool")
+	if not v then
+		UI:Notify("Please get a tool.", "Tool not found!")
+		return
+	end
+	v.Parent = player.Character
+	v.Parent = player.Character.HumanoidRootPart
 end
