@@ -10,7 +10,7 @@ supported executors like krnl, trigon, synapse x ect -- as of march 16 It Is Req
 
 suported games:
 
-1. tower of hell
+1. tower of hell -- i think its the best one
 2. destuction simulator
 3. tower simulator
 4. Press the button -- work in progress
