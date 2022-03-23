@@ -21,7 +21,7 @@ local AntiKill = false
 local AntiFog = false
 local Antiinv = false
 local AntiNeg = false
-local AntiINVall = false
+local AntiINVall = true
 local Hideplayers = false
 local hideUIData = {}
 
@@ -129,14 +129,13 @@ function Teleport(pos)
 	end
 end
 
-function clearplatforms()
+function clearplatforms(name)
 	for i, v in pairs(workspace:GetChildren()) do
-		if v.Name == "falksjdhflkjasdhflkjasdhflkjasdfhj" then
+		if v.Name == name then
 			v:Destroy()
 		end
 	end
 end
-
 
 local VirtualUser=game:service'VirtualUser'
 game:service'Players'.LocalPlayer.Idled:connect(function()
@@ -146,7 +145,6 @@ game:service'Players'.LocalPlayer.Idled:connect(function()
 	end
 end)
 
-
 UIS.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
 		Teleport(Mouse.Hit.p)
@@ -155,22 +153,32 @@ end)
 
 UserInput = game:GetService("UserInputService")
 
-function Spawnplatform()
-	if platform == true then
+function Spawnplatform(Transparency, name, delete)
+	if platform == true and UserInput:GetFocusedTextBox() == nil then
 		if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
 			local Clone = Instance.new("Part")
 			Clone.Parent = workspace
 			Clone.Anchored = true
 			Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
 			Clone.Size = Vector3.new(Size, 1, Size)
-			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
+			Clone.Name = name
+			Clone.Transparency = Transparency
+			if delete then
+				wait()
+				Clone:Destroy()
+			end
 		else
 			local Clone = Instance.new("Part")
 			Clone.Parent = workspace
 			Clone.Anchored = true
 			Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
 			Clone.Size = Vector3.new(Size, 1, Size)
-			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
+			Clone.Name = name
+			Clone.Transparency = Transparency
+			if delete then
+				wait()
+				Clone:Destroy()
+			end
 		end
 	end
 end
@@ -219,8 +227,8 @@ game:GetService('RunService').Stepped:connect(function()
 		end
 	end
 
-	if workspace:FindFirstChild(game.Players.LocalPlayer.Name) then
-		workspace[game.Players.LocalPlayer.Name].KillScript.Disabled = AntiKill
+	if workspace:FindFirstChild(game.Players.LocalPlayer.Name) and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
+		game.Players.LocalPlayer.Character.KillScript.Disabled = AntiKill
 	end
 
 	if PlayerSpeed ~= 16 then
@@ -240,6 +248,7 @@ game:GetService('RunService').Stepped:connect(function()
 			if AntiINVall then
 				for i, v in  pairs(game.Players:GetChildren()) do
 					DissableINV(v.Character, 0)
+					v.Character.invisible = false
 				end
 			else
 				DissableINV(game.Players.LocalPlayer.Character, 0)				
@@ -259,6 +268,7 @@ game:GetService('RunService').Stepped:connect(function()
 		for i, v in  pairs(game.Players:GetChildren()) do
 			if v ~= game.Players.LocalPlayer then
 				DissableINV(v.Character, 1)
+				v.Character.invisible = true
 			end
 		end
 	end
@@ -281,64 +291,12 @@ game:GetService('RunService').Stepped:connect(function()
 		end
 	end
 
-	if UserInput:IsKeyDown(Enum.KeyCode.Space) then
+	if UserInput:IsKeyDown(Enum.KeyCode.Space) and UserInput:GetFocusedTextBox() == nil then
 		if Infjump == true then
-			if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
-				local Clone = Instance.new("Part")
-				Clone.Parent = workspace
-				Clone.Anchored = true
-				Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
-				Clone.Size = Vector3.new(6, 1, 6)
-				Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
-				Clone.Transparency = 1
-				wait()
-				Clone:Destroy()
-			else
-				local Clone = Instance.new("Part")
-				Clone.Parent = workspace
-				Clone.Anchored = true
-				Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
-				Clone.Size = Vector3.new(6, 1, 6)
-				Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
-				Clone.Transparency = 1
-				wait()
-				Clone:Destroy()
-			end
+			Spawnplatform(1, "ajheliuhdlfkjahgeiul", true)
 		end
 	end
 end)
-
-UserInput.InputBegan:Connect(function(input , gameProccesedevent)
-	if gameProccesedevent then
-	else
-		if input.KeyCode == Enum.KeyCode.Space then
-			if Infjump == true then
-				if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
-					local Clone = Instance.new("Part")
-					Clone.Parent = workspace
-					Clone.Anchored = true
-					Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
-					Clone.Size = Vector3.new(6, 1, 6)
-					Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
-					Clone.Transparency = 1
-					wait(0.1)
-					Clone:Destroy()
-				else
-					local Clone = Instance.new("Part")
-					Clone.Parent = workspace
-					Clone.Anchored = true
-					Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
-					Clone.Size = Vector3.new(6, 1, 6)
-					Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
-					Clone.Transparency = 1
-					wait(0.1)
-					Clone:Destroy()
-				end
-			end
-		end		
-	end
-end)
-
 
 -- https://raw.githubusercontent.com/Stefanuk12/Venyx-UI-Library/main/source.lua
 -- https://raw.githubusercontent.com/zxciaz/VenyxUI/main/Reuploaded
@@ -388,7 +346,7 @@ AD:addButton("save location", function() col = workspace[game.Players.LocalPlaye
 
 AD:addButton("Load location", function() workspace[game.Players.LocalPlayer.Name]:MoveTo(col) end)
 
-AD:addButton("Clear Platforms", function() clearplatforms() end)
+AD:addButton("Clear Platforms", function() clearplatforms("falksjdhflkjasdhflkjasdhflkjasdfhj") end)
 
 AD:addButton("Load Dark Dex", function() game:HttpGet('https://raw.githubusercontent.com/SpeedSterKawaii/Dark-Dex/main/dex.lua', true) end)
 
@@ -416,8 +374,6 @@ Splayer:addButton("Kill Player", function() KillPlayer() end)
 
 Splayer:addButton("Bring Player", function() BringPlayer() end)
 
---Splayer:addButton("Give Player Tool", function() GiveTool() end)
-
 TOHS:addToggle("Anti bunny jump", AntiBunny, function(value) AntiBunny = value if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("bunny") then game.Players.LocalPlayer.Character.bunnyJump.Disabled = false end end end)
 
 TOHS:addToggle("Anti Kill", AntiKill, function(value) AntiKill = value end)
@@ -430,7 +386,7 @@ TOHS:addToggle("Anti Negitive", AntiNeg, function(value) AntiNeg = value  if val
 
 TOHS:addButton("Insant win(WARNING may ban do later in round)", function() local endzone = game.Workspace.tower.sections.finish.exit.ParticleBrick.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone end)
 
-TOHS:addButton("Give All Tools(local and some dont work)", function() for i, v in pairs(game.ReplicatedStorage.Gear:GetChildren()) do local clone = v:Clone() v.Parent = game.Players.LocalPlayer.Backpack end end)
+TOHS:addButton("Give All Tools(local and some dont work)", function() for i, v in pairs(game.ReplicatedStorage.Gear:GetChildren()) do local clone = v:Clone() clone.Parent = game.Players.LocalPlayer.Backpack end end)
 
 TOHS:addKeybind("Time Freeze Key", Enum.KeyCode.E, function() game.Players.LocalPlayer.PlayerScripts.timefreeze.Value = not game.Players.LocalPlayer.PlayerScripts.timefreeze.Value end)
 
@@ -448,7 +404,7 @@ Confic:addToggle("Use Display Names", UseDisplayNames, function(value) UseDispla
 
 Confic:addKeybind("Noclip key", nil, function() noclip = not noclip end)
 
-Confic:addKeybind("spawn platform key", Enum.KeyCode.Q, function() Spawnplatform()() end)
+Confic:addKeybind("spawn platform key", Enum.KeyCode.Q, function() Spawnplatform(0, "falksjdhflkjasdhflkjasdhflkjasdfhj") end)
 
 Confic:addButton("Save", function() SaveData() end)
 
