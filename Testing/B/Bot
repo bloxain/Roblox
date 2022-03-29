@@ -1,0 +1,96 @@
+if syn then
+	WebSockett = syn.websocket.connect("ws://127.0.0.1:7890/EchoAll")
+else
+	WebSockett = WebSocket.connect("ws://127.0.0.1:7890/EchoAll")
+end
+local VirtualUser=game:service'VirtualUser'
+game:service'Players'.LocalPlayer.Idled:connect(function()
+	VirtualUser:CaptureController()
+	VirtualUser:ClickButton2(Vector2.new())
+end)
+
+function findTarget(TargetPos)
+	local player = game.Players.LocalPlayer.Character
+	local rootPos = player.HumanoidRootPart.Position
+	local Hum = player.Humanoid
+
+	local pathfinder = game:GetService("PathfindingService")
+	local path = pathfinder:FindPathAsync(rootPos, TargetPos)
+	local points = path:GetWaypoints()
+
+	if path.Status == Enum.PathStatus.Success then
+		for i, v in pairs(points) do
+			Hum:MoveTo(v.Position)
+			Hum.MoveToFinished:Wait()
+			if v.Action == Enum.PathWaypointAction.Jump then
+				Hum.Jump = true
+			end
+		end
+	end
+end
+
+function execute(msg)
+	local file = msg
+	if file == "skip" then
+		local endzone = workspace.tower.sections.finish.FinishGlow.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone
+	end
+
+	if file == "Win" then
+		local endzone = game.Workspace.tower.sections.finish.exit.ParticleBrick.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone
+	end
+
+	if file == "jump" then
+		game.Players.LocalPlayer.Character.Humanoid.Jump = true
+	end
+
+	if file == "killall" then
+		game.Players.LocalPlayer.Character.Humanoid.Health = 0
+	end
+
+	if string.find(file, "rchat") then
+		local command = game:GetService("HttpService"):JSONDecode(file)
+		if command.typee == "rchat" then
+			wait(math.random(1, 10))
+			game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(command.say, "All")
+		end
+	end
+
+	if string.find(file, "fwalk") then
+		local command = game:GetService("HttpService"):JSONDecode(file)
+		if command.typee == "fwalk" then
+			game.Players.LocalPlayer.Character.Humanoid.WalkToPoint = workspace[command.Player].HumanoidRootPart.Position
+		end
+	end
+	
+	if string.find(file, "walk") then
+		local command = game:GetService("HttpService"):JSONDecode(file)
+		if command.typee == "walk" then
+			findTarget(workspace[command.Player].HumanoidRootPart.Position)
+		end
+	end
+
+	if string.find(file, "chat") then
+		local command = game:GetService("HttpService"):JSONDecode(file)
+		if command.typee == "chat" then
+			game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(command.say, "All")
+		end
+	end
+
+	if string.find(file, "Code") then
+		local command = game:GetService("HttpService"):JSONDecode(file)
+		if command.typee == "Code" then
+			loadstring(command.Run)()
+		end
+	end
+
+	if string.find(file, "TP") then
+		local command = game:GetService("HttpService"):JSONDecode(file)
+		if command.typee == "TP" then
+			game.Players.LocalPlayer.Character:MoveTo(workspace[command.Player].HumanoidRootPart.Position)
+		end
+	end
+end
+
+WebSockett.OnMessage:Connect(function(Msg)
+	execute(Msg)
+end)
