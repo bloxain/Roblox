@@ -1,0 +1,166 @@
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TextBox = Instance.new("TextBox")
+local TextButton = Instance.new("TextButton")
+
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+Frame.Position = UDim2.new(0.370063394, 0, -0.000593475008, 0)
+Frame.Size = UDim2.new(0, 475, 0, 124)
+
+TextBox.Parent = Frame
+TextBox.BackgroundColor3 = Color3.new(1, 1, 1)
+TextBox.BackgroundTransparency = 1
+TextBox.Size = UDim2.new(0, 475, 0, 71)
+TextBox.Font = Enum.Font.SourceSans
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.new(1, 1, 1)
+TextBox.TextSize = 14
+
+TextButton.Parent = Frame
+TextButton.BackgroundColor3 = Color3.new(0.329412, 0.329412, 0.329412)
+TextButton.Position = UDim2.new(0.30105263, 0, 0.629032254, 0)
+TextButton.Size = UDim2.new(0, 176, 0, 40)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = "Run"
+TextButton.TextColor3 = Color3.new(1, 1, 1)
+TextButton.TextScaled = true
+TextButton.TextSize = 14
+TextButton.TextWrapped = true
+
+local UserInputService = game:GetService("UserInputService")
+local runService = (game:GetService("RunService"));
+
+local gui = Frame
+
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+function Lerp(a, b, m)
+	return a + (b - a) * m
+end;
+
+local lastMousePos
+local lastGoalPos
+local DRAG_SPEED = (8); -- // The speed of the UI darg.
+function Update(dt)
+	if not (startPos) then return end;
+	if not (dragging) and (lastGoalPos) then
+		gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, lastGoalPos.X.Offset, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, lastGoalPos.Y.Offset, dt * DRAG_SPEED))
+		return 
+	end;
+
+	local delta = (lastMousePos - UserInputService:GetMouseLocation())
+	local xGoal = (startPos.X.Offset - delta.X);
+	local yGoal = (startPos.Y.Offset - delta.Y);
+	lastGoalPos = UDim2.new(startPos.X.Scale, xGoal, startPos.Y.Scale, yGoal)
+	gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, xGoal, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, yGoal, dt * DRAG_SPEED))
+end;
+
+gui.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = gui.Position
+		lastMousePos = UserInputService:GetMouseLocation()
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+gui.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+runService.Heartbeat:Connect(Update)
+
+local WebSocket = syn.websocket.connect("ws://127.0.0.1:7890/EchoAll") -- Specify your WebSocket URL here.
+
+local controling = nil
+
+function epic(message)
+	if message == ";skip" then
+		WebSocket:Send("skip")
+	end
+
+	if message == ";winall" then
+		WebSocket:Send("Win")
+	end
+	
+	if message == ";jump" then
+		WebSocket:Send("jump")
+	end
+	
+	if message == ";kill all" then
+		WebSocket:Send("killall")
+	end
+	
+	if string.find(message, ";chat ") then
+		local str = message
+		local newStr, replaced = string.gsub(str, ";chat ", "")
+		local write = game:GetService("HttpService"):JSONEncode({
+			["typee"] = "chat",
+			["say"] = newStr
+		})
+		WebSocket:Send(write)
+	end
+	
+	if string.find(message, ";rchat ") then
+		local str = message
+		local newStr, replaced = string.gsub(str, ";rchat ", "")
+		local write = game:GetService("HttpService"):JSONEncode({
+			["typee"] = "rchat",
+			["say"] = newStr
+		})
+		WebSocket:Send(write)
+	end
+	
+	if string.find(message, ";TP") then
+		local write = game:GetService("HttpService"):JSONEncode({
+			["typee"] = "TP",
+			["Player"] = game.Players.LocalPlayer.Name
+		})
+		WebSocket:Send(write)
+	end
+	
+	if string.find(message, ";fwalk") then
+		local write = game:GetService("HttpService"):JSONEncode({
+			["typee"] = "fwalk",
+			["Player"] = game.Players.LocalPlayer.Name
+		})
+		WebSocket:Send(write)
+	end
+	
+	if string.find(message, ";walk") then
+		local write = game:GetService("HttpService"):JSONEncode({
+			["typee"] = "walk",
+			["Player"] = game.Players.LocalPlayer.Name
+		})
+		WebSocket:Send(write)
+	end
+	
+	if string.find(message, ";execute ") then
+		local str = message
+		local newStr, replaced = string.gsub(str, ";execute ", "")
+		local write = game:GetService("HttpService"):JSONEncode({
+			["typee"] = "Code",
+			["Run"] = newStr
+		})
+		WebSocket:Send(write)
+	end
+end
+
+
+game.Players.LocalPlayer.Chatted:Connect(function(message) epic(message) end)
+TextButton.MouseButton1Click:Connect(function() epic(TextBox.Text) end)
