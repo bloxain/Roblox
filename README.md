@@ -19,6 +19,7 @@ universal:
 
 1. Universal GUI
 2. Executor
+3. bot control
 
 # execute code here
 
