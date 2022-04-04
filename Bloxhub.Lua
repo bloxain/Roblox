@@ -1,6 +1,5 @@
 local Version = "0.3.7"
 local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
-local file = ""
 function Run()
 	if game.GameId == 703124385 then
 		loadstring(readfile("Bloxhub#7364/Tower_Of_Hell.Lua"))()
