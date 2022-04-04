@@ -21,7 +21,7 @@ function Run()
 end
 if isfolder then
 	if isfolder("Bloxhub#7364") then
-		if readfile("Bloxhub#7364/Data.Lua") ~= Version then
+		if readfile("Bloxhub#7364/Data.Lua") == Version then
 			Run()
 		else
 			writefile("Bloxhub#7364/Data.Lua", Version)
