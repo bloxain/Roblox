@@ -248,7 +248,7 @@ game:GetService('RunService').Stepped:connect(function()
 			if AntiINVall then
 				for i, v in  pairs(game.Players:GetChildren()) do
 					DissableINV(v.Character, 0)
-					v.Character.invisible = false
+				--	v.Character.invisible = false
 				end
 			else
 				DissableINV(game.Players.LocalPlayer.Character, 0)				
@@ -268,7 +268,7 @@ game:GetService('RunService').Stepped:connect(function()
 		for i, v in  pairs(game.Players:GetChildren()) do
 			if v ~= game.Players.LocalPlayer then
 				DissableINV(v.Character, 1)
-				v.Character.invisible = true
+				--v.Character.invisible = true
 			end
 		end
 	end
