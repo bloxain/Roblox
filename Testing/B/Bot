@@ -47,6 +47,12 @@ function execute(msg)
 		game.Players.LocalPlayer.Character.Humanoid.Health = 0
 	end
 
+	if file == "FireManger" then
+		firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace["Remove Manager"].Head, 1)
+		wait(0.1)
+		firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace["Remove Manager"].Head, 0)
+	end
+
 	if string.find(file, "rchat") then
 		local command = game:GetService("HttpService"):JSONDecode(file)
 		if command.typee == "rchat" then
@@ -61,7 +67,7 @@ function execute(msg)
 			game.Players.LocalPlayer.Character.Humanoid.WalkToPoint = workspace[command.Player].HumanoidRootPart.Position
 		end
 	end
-	
+
 	if string.find(file, "walk") then
 		local command = game:GetService("HttpService"):JSONDecode(file)
 		if command.typee == "walk" then
@@ -87,6 +93,16 @@ function execute(msg)
 		local command = game:GetService("HttpService"):JSONDecode(file)
 		if command.typee == "TP" then
 			game.Players.LocalPlayer.Character:MoveTo(workspace[command.Player].HumanoidRootPart.Position)
+		end
+	end
+
+	if string.find(file, "Control") then
+		local command = game:GetService("HttpService"):JSONDecode(file)
+		if command.typee == "Control" then
+			if command.Player == game.Players.LocalPlayer.Name or command.Player == "all" then
+				game.Players.LocalPlayer.Character.Humanoid.Jump = command.Jump
+				game.Players.LocalPlayer.Character.Humanoid:MoveTo(Vector3.new(command.MoveX, command.MoveY, command.MoveZ))
+			end
 		end
 	end
 end
