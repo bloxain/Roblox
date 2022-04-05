@@ -23,6 +23,7 @@ local Antiinv = false
 local AntiNeg = false
 local AntiINVall = true
 local Hideplayers = false
+local speedtower = false
 local hideUIData = {}
 
 local autofarm = {
@@ -74,6 +75,7 @@ function LoadData()
 		clickon = data.clickon
 		deleteon = data.deleteon
 		platform = data.platform
+		speedtower = data.speedtower
 	end
 end
 
@@ -201,7 +203,8 @@ function SaveData()
 		["Infjump"] = Infjump;
 		["platform"] = platform;
 		["clickon"] = clickon;
-		["deleteon"] = deleteon
+		["deleteon"] = deleteon;
+		["speedtower"] = speedtower
 
 	}
 	writefile("Tower_of_hell#832917.lua", game:GetService("HttpService"):JSONEncode(datatosave))
@@ -280,7 +283,7 @@ game:GetService('RunService').Stepped:connect(function()
 					local endzone = workspace.tower.sections.finish.FinishGlow.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone
 					autofarm["First Time"] = true
 				else
-					local endzone = game.Workspace.tower.sections.finish.exit.ParticleBrick.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone
+					local endzone = workspace.tower.sections.finish.exit.ParticleBrick.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone
 					autofarm["First Time"] = true
 				end
 			end
@@ -384,7 +387,7 @@ TOHS:addToggle("Anti invisible", Antiinv, function(value) Antiinv = value if val
 
 TOHS:addToggle("Anti Negitive", AntiNeg, function(value) AntiNeg = value  if value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("negative") then game.Lighting.Negative.Saturation = -2 end end  end)
 
-TOHS:addButton("Insant win(WARNING may ban do later in round)", function() local endzone = game.Workspace.tower.sections.finish.exit.ParticleBrick.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone end)
+TOHS:addButton("Insant win(WARNING may ban do later in round)", function() if speedtower == false then game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.tower.sections.finish.exit.ParticleBrick.CFrame else game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.tower.sections.finish.FinishGlow.CFrame end end)
 
 TOHS:addButton("Give All Tools(local and some dont work)", function() for i, v in pairs(game.ReplicatedStorage.Gear:GetChildren()) do local clone = v:Clone() clone.Parent = game.Players.LocalPlayer.Backpack end end)
 
@@ -401,6 +404,8 @@ AutoS:addToggle("Enabled", false, function(value) autofarm.Enabeld = value autof
 Confic:addTextbox("Platform size", Size, function(value) Size = value end)
 
 Confic:addToggle("Use Display Names", UseDisplayNames, function(value) UseDisplayNames = value end)
+
+Confic:addToggle("Speed Tower(for instant win)", speedtower, function(value) speedtower = value end)
 
 Confic:addKeybind("Noclip key", nil, function() noclip = not noclip end)
 
