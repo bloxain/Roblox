@@ -1,3 +1,9 @@
+-- cmds ;jump, ;walk, ;fwalk, ;TP, ;chat, ;rchat, ;execute, control
+--for TOH ;skip, ;winall
+--for Work At A Pizza Place ;FireM
+local cntrlon = false
+local targetplayer = nil
+local whitelist = {}
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local TextBox = Instance.new("TextBox")
@@ -45,6 +51,7 @@ function Lerp(a, b, m)
 	return a + (b - a) * m
 end;
 
+
 local lastMousePos
 local lastGoalPos
 local DRAG_SPEED = (8); -- // The speed of the UI darg.
@@ -89,7 +96,27 @@ local WebSocket = syn.websocket.connect("ws://127.0.0.1:7890/EchoAll") -- Specif
 
 local controling = nil
 
-function epic(message)
+function FindPlayer(target)
+	for i,v in pairs(game.Players:GetPlayers()) do 
+		if v.DisplayName:lower():sub(1,#target) == target:lower() then
+			return v.Name
+		end
+	end
+end
+
+
+function control(player)
+	if player == "all" then
+		targetplayer = "all"
+	else
+		targetplayer = FindPlayer(player)
+		game.Players.LocalPlayer.Character:MoveTo(workspace[targetplayer].HumanoidRootPart.Position)
+	end
+
+	cntrlon = true
+end
+
+function epic(message, namee)
 	if message == ";skip" then
 		WebSocket:Send("skip")
 	end
@@ -97,15 +124,19 @@ function epic(message)
 	if message == ";winall" then
 		WebSocket:Send("Win")
 	end
-	
+
 	if message == ";jump" then
 		WebSocket:Send("jump")
 	end
-	
+
 	if message == ";kill all" then
 		WebSocket:Send("killall")
 	end
-	
+
+	if message == ";FireM" then
+		WebSocket:Send("FireManger")
+	end
+
 	if string.find(message, ";chat ") then
 		local str = message
 		local newStr, replaced = string.gsub(str, ";chat ", "")
@@ -115,7 +146,7 @@ function epic(message)
 		})
 		WebSocket:Send(write)
 	end
-	
+
 	if string.find(message, ";rchat ") then
 		local str = message
 		local newStr, replaced = string.gsub(str, ";rchat ", "")
@@ -125,31 +156,44 @@ function epic(message)
 		})
 		WebSocket:Send(write)
 	end
-	
+
 	if string.find(message, ";TP") then
 		local write = game:GetService("HttpService"):JSONEncode({
 			["typee"] = "TP",
-			["Player"] = game.Players.LocalPlayer.Name
+			["Player"] = namee
 		})
 		WebSocket:Send(write)
 	end
-	
+
 	if string.find(message, ";fwalk") then
 		local write = game:GetService("HttpService"):JSONEncode({
 			["typee"] = "fwalk",
-			["Player"] = game.Players.LocalPlayer.Name
+			["Player"] = namee
 		})
 		WebSocket:Send(write)
 	end
-	
+
 	if string.find(message, ";walk") then
 		local write = game:GetService("HttpService"):JSONEncode({
 			["typee"] = "walk",
-			["Player"] = game.Players.LocalPlayer.Name
+			["Player"] = namee
 		})
 		WebSocket:Send(write)
 	end
+
+	if string.find(message, ";control ") then
+		local str = message
+		local newStr, replaced = string.gsub(str, ";control ", "")
+		control(newStr)
+	end
 	
+	if string.find(message, ";add ") then
+		local str = message
+		local newStr, replaced = string.gsub(str, ";add ", "")
+		table.insert(whitelist, 1, FindPlayer(newStr))
+		print(FindPlayer(newStr))
+	end
+
 	if string.find(message, ";execute ") then
 		local str = message
 		local newStr, replaced = string.gsub(str, ";execute ", "")
@@ -162,5 +206,59 @@ function epic(message)
 end
 
 
-game.Players.LocalPlayer.Chatted:Connect(function(message) epic(message) end)
-TextButton.MouseButton1Click:Connect(function() epic(TextBox.Text) end)
+game.Players.LocalPlayer.Chatted:Connect(function(message) epic(message, game.Players.LocalPlayer.Name) end)
+TextButton.MouseButton1Click:Connect(function() epic(TextBox.Text, game.Players.LocalPlayer.Name) end)
+
+for i, v in pairs(game.Players:GetChildren()) do
+	v.Chatted:Connect(function(mesg)
+		local player = v.Name
+		local Pass = false
+		for i = 1, #whitelist do
+			if string.find(player, whitelist[i]) then
+				Pass = true
+				player = whitelist[i]
+			end
+		end
+		if Pass == true then
+			epic(mesg, player)
+		end
+	end)
+end
+
+game.Players.PlayerAdded:Connect(function(v)
+	v.Chatted:Connect(function(mesg)
+		local player = v.Name
+		local Pass = false
+		for i = 1, #whitelist do
+			if string.find(player, whitelist[i]) then
+				Pass = true
+				player = whitelist[i]
+			end
+		end
+		if Pass == true then
+			epic(mesg, player)
+		end
+	end)
+end)
+
+while wait(0.2) do
+	if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+		Jumping = true
+	end
+
+	if cntrlon == true then
+		wait(0.05)
+		local write = game:GetService("HttpService"):JSONEncode({
+			["typee"] = "Control",
+			["Player"] = targetplayer,
+			["MoveX"] = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X,
+			["MoveY"] = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y,
+			["MoveZ"] = game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z,
+			["Jump"] = Jumping
+
+		})
+		WebSocket:Send(write)
+	end
+	Jumping = false
+end
+
