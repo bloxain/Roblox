@@ -1,4 +1,4 @@
-local Version = "0.3.7"
+local Version = "0.3.8"
 local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
 function Run()
 	if game.GameId == 703124385 then
