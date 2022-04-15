@@ -2210,7 +2210,7 @@ do
 		end
 	end
 end
-if syn then
+if printconsole then
 	printconsole("dino and steffei was here :)")
 end
 return library
