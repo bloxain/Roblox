@@ -1,15 +1,15 @@
 local Updater = {}
 function Updater.Create ()
-	local Updater = Instance.new("Frame")
-	local Progress = Instance.new("TextLabel")
-	local Info = Instance.new("TextLabel")
+	Updater = Instance.new("Frame")
+	Progress = Instance.new("TextLabel")
+	Info = Instance.new("TextLabel")
 
 	if syn then
 		syn.protect_gui(Updater)
 	end
 
 	Updater.Name = "Updater"
-	Updater.Parent = game.CoreGui.ThemeProvider.RightFrame
+	Updater.Parent = game.CoreGui.ThemeProvider.TopBarFrame.RightFrame
 	Updater.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
 	Updater.Position = UDim2.new(0.380385727, 0, 0.427475065, 0)
 	Updater.Size = UDim2.new(0, 300, 0, 36)
@@ -36,9 +36,9 @@ function Updater.Create ()
 	Info.TextSize = 14
 	Info.TextWrapped = true
 
-	local AddAmount = 0
-	local addAmount1 = 0
-	local NewSize = 0
+	AddAmount = 0
+	addAmount1 = 0
+	NewSize = 0
 end
 
 function Updater.Show (Text, Amount)
