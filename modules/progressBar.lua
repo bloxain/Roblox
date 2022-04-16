@@ -3,7 +3,8 @@ function Updater.Create ()
 	Updater = Instance.new("Frame")
 	Progress = Instance.new("TextLabel")
 	Info = Instance.new("TextLabel")
-	local UiCorner = Instance.new("UICorner")
+	local Round1 = Instance.new("UICorner")
+	local Round2 = Instance.new("UICorner")
 
 	if syn then
 		syn.protect_gui(Updater)
@@ -15,15 +16,17 @@ function Updater.Create ()
 	Updater.Position = UDim2.new(0.380385727, 0, 0.427475065, 0)
 	Updater.Size = UDim2.new(0, 300, 0, 36)
 	Updater.Visible = false
+	Round1.Parent = Updater
 
 	Progress.Name = "Progress"
 	Progress.Parent = Updater
-	Progress.BackgroundColor3 = Color3.new(1, 1, 1)
+	Progress.BackgroundColor3 = Color3.fromRGB(170, 170, 0)
 	Progress.Size = UDim2.new(0, 0, 0, 36)
 	Progress.Font = Enum.Font.SourceSans
 	Progress.Text = ""
 	Progress.TextColor3 = Color3.new(0, 0, 0)
 	Progress.TextSize = 14
+	Round1.Parent = Progress
 
 	Info.Name = "Info"
 	Info.Parent = Updater
@@ -36,8 +39,6 @@ function Updater.Create ()
 	Info.TextScaled = true
 	Info.TextSize = 14
 	Info.TextWrapped = true
-	
-	UiCorner.Parent = Updater
 
 	AddAmount = 0
 	AddAmount1 = 0
