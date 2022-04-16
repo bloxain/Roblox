@@ -26,7 +26,7 @@ function Updater.Create ()
 	Progress.Text = ""
 	Progress.TextColor3 = Color3.new(0, 0, 0)
 	Progress.TextSize = 14
-	Round1.Parent = Progress
+	Round2.Parent = Progress
 
 	Info.Name = "Info"
 	Info.Parent = Updater
