@@ -39,11 +39,14 @@ function Updater.Create ()
 	AddAmount = 0
 	addAmount1 = 0
 	NewSize = 0
+	precent = 0
+	title = ""
 end
 
 function Updater.Show (Text, Amount)
 	addAmount1 = 100 / Amount
 	AddAmount = 300 / Amount
+	title = Text
 	
 	Info.Text = Text.." | 0%"
 	Updater.Visible = true
@@ -51,8 +54,9 @@ end
 
 function Updater.Update ()
 	NewSize += addAmount1
-	
+	precent += addAmount1
 	Progress.Size = UDim2.new(0, NewSize, 0, 36)
+	Info.Text = title.." | %"..precent
 end
 
 function Updater.Hide ()
@@ -60,5 +64,7 @@ function Updater.Hide ()
 	addAmount1 = 0
 	NewSize = 0
 	Updater.Visible = false
+	title = ""
+	precent = 0
 end
 return Updater
