@@ -7,7 +7,7 @@ if syn then
 end
 
 Updater.Name = "Updater"
-Updater.Parent = game.CoreGui.ThemeProvider.RightFrame
+Updater.Parent = game.CoreGui.ThemeProvider.TopBarFrame.RightFrame
 Updater.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
 Updater.Position = UDim2.new(0.380385727, 0, 0.427475065, 0)
 Updater.Size = UDim2.new(0, 300, 0, 36)
@@ -58,5 +58,6 @@ function Updater.Hide ()
 	addAmount1 = 0
 	NewSize = 0
 	Updater.Visible = false
+	Progress.Size = UDim2.new(0, 0, 0, 36)
 end
 return Updater
