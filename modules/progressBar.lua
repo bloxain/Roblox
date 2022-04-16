@@ -60,7 +60,7 @@ function Updater.Update ()
 	NewSize += AddAmount
 	precent += AddAmount1
 	Progress.Size = UDim2.new(0, NewSize, 0, 36)
-	Info.Text = title.." | %"..precent
+	Info.Text = title.." | %"..math.floor(precent * 20 + 0.5)/20
 end
 
 function Updater.Hide ()
