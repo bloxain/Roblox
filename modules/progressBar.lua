@@ -3,6 +3,7 @@ function Updater.Create ()
 	Updater = Instance.new("Frame")
 	Progress = Instance.new("TextLabel")
 	Info = Instance.new("TextLabel")
+	local UiCorner = Instance.new("UICorner")
 
 	if syn then
 		syn.protect_gui(Updater)
@@ -35,16 +36,18 @@ function Updater.Create ()
 	Info.TextScaled = true
 	Info.TextSize = 14
 	Info.TextWrapped = true
+	
+	UiCorner.Parent = Updater
 
 	AddAmount = 0
-	addAmount1 = 0
+	AddAmount1 = 0
 	NewSize = 0
 	precent = 0
 	title = ""
 end
 
 function Updater.Show (Text, Amount)
-	addAmount1 = 100 / Amount
+	AddAmount1 = 100 / Amount
 	AddAmount = 300 / Amount
 	title = Text
 	
@@ -53,15 +56,15 @@ function Updater.Show (Text, Amount)
 end
 
 function Updater.Update ()
-	NewSize += addAmount1
-	precent += addAmount1
+	NewSize += AddAmount
+	precent += AddAmount1
 	Progress.Size = UDim2.new(0, NewSize, 0, 36)
 	Info.Text = title.." | %"..precent
 end
 
 function Updater.Hide ()
 	AddAmount = 0
-	addAmount1 = 0
+	AddAmount1 = 0
 	NewSize = 0
 	Updater.Visible = false
 	title = ""
