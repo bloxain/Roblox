@@ -148,13 +148,21 @@ function Run()
 	local Games = {
 		["911750776"] = "https://pastebin.com/raw/bFu2yg8n",
 		["210851291"] = "https://raw.githubusercontent.com/RegularVynixu/Vynixius/main/Build%20A%20Boat%20For%20Treasure/BABFT",
-		["110181652"] = "https://raw.githubusercontent.com/SlamminPig/rblxgames/main/Epic%20Minigames/EpicMinigamesGUI"
+		["110181652"] = "https://raw.githubusercontent.com/SlamminPig/rblxgames/main/Epic%20Minigames/EpicMinigamesGUI",
+		["279565647"] = "https://pastebin.com/raw/JbWJ7R7i",
+		["601130232"] = "https://raw.githubusercontent.com/Boxking776/kocmoc/main/kocmoc-remastered.lua",
+		["1659645941"] = "http://void-scripts.com/Scripts/islands_new.lua",
+		["540856839"] = "https://drive.google.com/uc?export=download&id=1xeauG47nspgBlMKxXP304-NZHYwhIa53"
 	}
 	
 	local GameNames = {
 		["911750776"] = "Broken Bones",
 		["210851291"] = "BABFT",
-		["110181652"] = "Epic MiniGames"
+		["110181652"] = "Epic MiniGames",
+		["279565647"] = "Lucky Blocks",
+		["601130232"] = "Bee Swarm Simulator",
+		["1659645941"] = "Ilands",
+		["540856839"] = "Trueser Hunt"
 	}	
 
 	local bloxain = {
@@ -170,7 +178,12 @@ function Run()
 
 	if Games[tostring(game.GameId)] then
 		UI(Games[tostring(game.GameId)], GameNames[tostring(game.GameId)])
+		return
 	end
+	
+	loadstring(readfile("Bloxhub#7364/Universal_Gui.Lua"))()
 end
 
 Run()
+
+setclipboard(game.GameId)
