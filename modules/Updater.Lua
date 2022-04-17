@@ -79,3 +79,4 @@ writefile("Bloxhub#7364/Venyx_UI.Lua", game:HttpGet("https://github.com/bloxain/
 Update()
 writefile("Bloxhub#7364/GameFinder.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Game_Finder.Lua"))
 Update()
+Hide()
