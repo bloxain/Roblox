@@ -1,22 +1,8 @@
-local Version = "0.3.9"
+local Version = "0.4.0"
 local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
+local file = ""
 function Run()
-	if game.GameId == 703124385 then
-		loadstring(readfile("Bloxhub#7364/Tower_Of_Hell.Lua"))()
-		return
-	end
-
-	if game.GameId == 781563604 then
-		loadstring(readfile("Bloxhub#7364/Destruction_Simulator.Lua"))()
-		return
-	end
-
-	if game.GameId == 2035583477 then
-		loadstring(readfile("Bloxhub#7364/Tower_Simulator.Lua"))()
-		return
-	end
-	
-	loadstring(readfile("Bloxhub#7364/Universal_Gui.Lua"))()
+	loadstring(readfile("Bloxhub#7364/GameFinder.Lua"))()
 end
 if isfolder then
 	if isfolder("Bloxhub#7364") then
