@@ -164,7 +164,7 @@ function Run()
 	}
 
 	if bloxain[tostring(game.GameId)] then
-		loadstring(readfile("Bloxhub#7364/")..bloxain[tostring(game.GameId)])()
+		loadstring(readfile("Bloxhub#7364/"..bloxain[tostring(game.GameId)]))()
 		return
 	end
 
