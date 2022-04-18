@@ -185,5 +185,3 @@ function Run()
 end
 
 Run()
-
-setclipboard(game.GameId)
