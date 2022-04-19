@@ -32,7 +32,7 @@ Info.BackgroundColor3 = Color3.new(1, 1, 1)
 Info.BackgroundTransparency = 1
 Info.Size = UDim2.new(0, 308, 0, 36)
 Info.Font = Enum.Font.SourceSans
-Info.Text = "Updateing | 0%"
+Info.Text = "Updateing... | 0%"
 Info.TextColor3 = Color3.new(1, 1, 1)
 Info.TextScaled = true
 Info.TextSize = 14
@@ -44,12 +44,9 @@ NewSize = 0
 precent = 0
 title = ""
 
-function Show(Text, Amount)
+function Show(Amount)
 	AddAmount1 = 100 / Amount
 	AddAmount = 300 / Amount
-	title = Text
-
-	Info.Text = Text.." | 0%"
 	Updater.Visible = true
 end
 
@@ -60,12 +57,21 @@ function Update()
 	Info.Text = title.." | %"..math.floor(precent * 20 + 0.5)/20
 end
 
-function Hide()
-	Updater:Destroy()
+local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
+local versoin = readfile("Bloxhub#7364/Data.Lua")
+
+Show(11)
+if isfolder("Bloxhub#7364") then
+	delfolder("Bloxhub#7364")
 end
 
-Show("Updateing...", 6)
-local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
+makefolder("Bloxhub#7364")
+Update()
+makefolder("Bloxhub#7364/Modules")
+Update()
+makefolder("Bloxhub#7364/Saves")
+Update()
+
 
 writefile("Bloxhub#7364/Tower_Of_Hell.Lua", game:HttpGet(Github.."T/Tower_Of_Hell.Lua"))
 Update()
@@ -77,6 +83,11 @@ writefile("Bloxhub#7364/Universal_Gui.Lua", game:HttpGet("https://github.com/blo
 Update()
 writefile("Bloxhub#7364/Venyx_UI.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Venyx_UI.Lua"))
 Update()
-writefile("Bloxhub#7364/GameFinder.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Game_Finder.Lua"))
+writefile("Bloxhub#7364/Modules/GameFinder.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Game_Finder.Lua"))
 Update()
-Hide()
+writefile("Bloxhub#7364/Modules/progressBar.lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/progressBar.lua"))
+Update()
+writefile("Bloxhub#7364/Modules/Versoin.lua", versoin)
+Update()
+
+Updater:Destroy()
