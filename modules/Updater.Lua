@@ -63,6 +63,13 @@ local versoin = readfile("Bloxhub#7364/Data.Lua")
 Show(11)
 if isfolder("Bloxhub#7364") then
 	delfolder("Bloxhub#7364")
+	if isfolder("Bloxhub#7364/Saves") then
+		moredata = {}
+		for i, v in pairs(listfiles("Bloxhub#7364/Saves")) do
+			local add = {v, readfile("Bloxhub#7364/Saves")}
+			table.insert(moredata, 1, add)
+		end
+	end
 end
 
 makefolder("Bloxhub#7364")
@@ -89,5 +96,12 @@ writefile("Bloxhub#7364/Modules/progressBar.lua", game:HttpGet("https://github.c
 Update()
 writefile("Bloxhub#7364/Modules/Versoin.lua", versoin)
 Update()
+
+if moredata then
+	for i = 1, #moredata do
+		local localdata = moredata[i]
+		writefile(localdata[1], localdata[2])
+	end
+end
 
 Updater:Destroy()
