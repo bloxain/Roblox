@@ -13,13 +13,19 @@ suported games:
 1. tower of hell -- i think its the best one
 2. destuction simulator
 3. tower simulator
-4. Press the button -- work in progress
 
 universal:
 
 1. Universal GUI
 2. Executor
 3. bot control
+
+Third party(made by other people)
+
+1. Epic Minigames
+2. Build a boat for tresure
+3. Lucky Blocks
+4. Ilands
 
 # execute code here
 
