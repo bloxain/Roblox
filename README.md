@@ -9,16 +9,18 @@ i have got synapse x to make this project better
 supported executors like krnl, trigon, synapse x ect -- as of march 16 It Is Reqiured that file funcs are on your executors
 
 suported games:
+Games | Support
+----- | -------
+tower of hell | Great
+destuction simulator | Ok
+tower simulator | Ok
 
-1. tower of hell -- i think its the best one
-2. destuction simulator
-3. tower simulator
-
-universal:
-
-1. Universal GUI
-2. Executor
-3. bot control
+# Universal
+Scripts | Support
+----- | -------
+Universal GUI | Great
+Executor | Poor
+bot control | Ok
 
 Third party(made by other people)
 
