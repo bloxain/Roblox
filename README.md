@@ -4,7 +4,7 @@ discord: https://discord.gg/cjP6mnDT
 
 YouTube: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
 
-i have got synapse x to make this project better
+i have got synapse x to make this project better -- use <kbd>f3</kbd> to open and close the GUI
 
 supported executors like krnl, trigon, synapse x ect -- as of march 16 It Is Reqiured that file funcs are on your executors
 
