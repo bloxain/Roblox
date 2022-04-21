@@ -19,7 +19,9 @@ local unlockzoom = false
 local walkspeed = 16
 local jumpPower = 50
 local HideUItoggle = false
+local touchon = false
 local hideUIData = {}
+local Accessorys = {}
 
 function LoadData()
 	if not isfile("Universal_19872.lua") then
@@ -35,6 +37,12 @@ end
 
 LoadData()
 
+for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+	if v:IsA("Accessory") then
+		table.insert(Accessorys, 1, v.Name)
+	end
+end
+
 if game.Players.LocalPlayer.Character.Humanoid.UseJumpPower == false then
 	jumpPower = 7
 end
@@ -49,7 +57,7 @@ local Mouse = Plr:GetMouse()
 -- https://raw.githubusercontent.com/Stefanuk12/Venyx-UI-Library/main/source.lua
 -- https://raw.githubusercontent.com/zxciaz/VenyxUI/main/Reuploaded
 -- // Initialising the UI
-local Venyx = loadstring(readfile("Bloxhub#7364/Venyx_UI.Lua"))()
+local Venyx = loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Venyx_UI.Lua"))()
 local UI = Venyx.new("universal Gui")
 local Themes = {
 	Background = Color3.fromRGB(24, 24, 24),
@@ -64,11 +72,16 @@ local Themes = {
 
 local main = UI:addPage("Main")
 local AD = main:addSection("additional features")
-local server = UI:addPage("Server")
-local Splayer = server:addSection("Players")
-local theme = UI:addPage("Settings")
 local MainGame = main:addSection("Game")
 local localplayer = main:addSection("localplayer")
+
+local server = UI:addPage("Server")
+local Splayer = server:addSection("Players")
+
+local FePage = UI:addPage("FE Scripts")
+local FE = FePage:addSection("Scripts(good Exploit Reqiured) sometimes synapse x")
+
+local theme = UI:addPage("Settings")
 local Confic = theme:addSection("Config")
 local Colors = theme:addSection("Colors")
 
@@ -97,6 +110,8 @@ AD:addToggle("cntrl click teleport", false, function(value) clickon = value end)
 
 AD:addToggle("alt click delete", false, function(value) deleteon = value end)
 
+AD:addToggle("cntrl right click touch(touches a part)", false, function(value) touchon = value end)
+
 AD:addToggle("spawn platform", false, function(value) platform = value end)
 
 AD:addToggle("awalys enable shiftlock", false, function(value) shiftlock = value end)
@@ -121,6 +136,12 @@ Splayer:addButton("Give Player Tool", function() GiveTool() end)
 
 Splayer:addToggle("Hitbox expander", false, function(value) hitboxenabled = value if value == false then for i,v in next, game:GetService('Players'):GetPlayers() do 	v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2)v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end)
 
+FE:addButton("Grow(body Scale:All 100% except BodyProportionScale: 0%) ONLY ARTHO", function() Grow() end)
+
+FE:addDropdown("Accessory(for FE Scripts", Accessorys, nil, function(value) _G.Bloxain1 = value end)
+
+FE:addButton("FE Demon Script(chose a good accessory", function() loadstring(game:HttpGet("https://drive.google.com/uc?export=download&id=1n2LZELzJb7NsGO17eLKCXSu5-cHrIg0u"))() end)
+
 Confic:addTextbox("Platform size", "", function(value) Size = value end)
 
 Confic:addTextbox("Hitbox size", "20", function(value) HeadSize = tonumber(value) end)
@@ -140,7 +161,62 @@ Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() e
 Colors:addButton("Kill GUI", function() game.CoreGui["universal Gui"]:Destroy() script:Destroy()end)
 
 --             functions
----------------------------------------
+---------------------------------------''
+
+function Grow()
+	local LocalPlayer = game.Players.LocalPlayer
+	local Character = LocalPlayer.Character
+	local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+
+	function rm()
+		for i,v in pairs(Character:GetDescendants()) do
+			if v:IsA("BasePart") then
+				if v.Name == "Handle" or v.Name == "Head" then
+					if Character.Head:FindFirstChild("OriginalSize") then
+						Character.Head.OriginalSize:Destroy()
+					end
+				else
+					for i,cav in pairs(v:GetDescendants()) do
+						if cav:IsA("Attachment") then
+							if cav:FindFirstChild("OriginalPosition") then
+								cav.OriginalPosition:Destroy()  
+							end
+						end
+					end
+					v:FindFirstChild("OriginalSize"):Destroy()
+					if v:FindFirstChild("AvatarPartScaleType") then
+						v:FindFirstChild("AvatarPartScaleType"):Destroy()
+					end
+				end
+			end
+		end
+	end
+
+	rm()
+	wait(0.5)
+	Humanoid:FindFirstChild("BodyProportionScale"):Destroy()
+	wait(1)
+
+	rm()
+	wait(0.5)
+	Humanoid:FindFirstChild("BodyHeightScale"):Destroy()
+	wait(1)
+
+	rm()
+	wait(0.5)
+	Humanoid:FindFirstChild("BodyWidthScale"):Destroy()
+	wait(1)
+
+	rm()
+	wait(0.5)
+	Humanoid:FindFirstChild("BodyDepthScale"):Destroy()
+	wait(1)
+
+	rm()
+	wait(0.5)
+	Humanoid:FindFirstChild("HeadScale"):Destroy()
+	wait(1)
+end
 
 function clearplatforms()
 	for i, v in pairs(workspace:GetChildren()) do
@@ -275,6 +351,14 @@ end)
 UIS.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
 		Teleport(Mouse.Hit.p)
+	end
+end)
+
+UIS.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton2 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
+		firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Mouse.Hit, 1)
+		wait(0.1)
+		firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Mouse.Hit, 0)
 	end
 end)
 
@@ -419,36 +503,26 @@ end
 
 
 function BringPlayer()
-	local savepos = workspace[game.Players.LocalPlayer.Name].HumanoidRootPart.Position
-	local player = game.Players.LocalPlayer
-	if not firetouchinterest then
-		UI:Notify("Upgrade exploit.", "Your exploit requires firetouchinterest!")
-		return
+	local CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+	local Target = Selectedplayer
+	for i,x in pairs(game.Players:GetPlayers()) do
+		if x.Name == Target then
+			game:GetService("Players").LocalPlayer.Character.Humanoid:UnequipTools()
+			local Humanoid = game:GetService("Players").LocalPlayer.Character.Humanoid:Clone()
+			Humanoid.BreakJointsOnDeath = false
+			game.Players.LocalPlayer.Character.Animate.Disabled = true
+			game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
+			Humanoid.Parent = game:GetService("Players").LocalPlayer.Character
+			for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+				if v:IsA("Tool") then
+					game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChildOfClass("Tool"))
+					firetouchinterest(v.Handle,x.Character.HumanoidRootPart,0)
+				end
+			end
+		end
 	end
-	local target = Selectedplayer
-	player.Character.Humanoid.Name = 1
-	local l = player.Character["1"]:Clone()
-	l.Parent = player.Character
-	l.Name = "Humanoid"
-	wait(.2)
-	player.Character["1"]:Destroy()
-	workspace.CurrentCamera.CameraSubject = player.Character
-	player.Character.Humanoid.DisplayDistanceType = "None"
-	player.Character.Humanoid:UnequipTools()
-	local v = player.Backpack:FindFirstChildOfClass("Tool")
-	if not v then
-		UI:Notify("Please get a tool.", "Tool not found!")
-		return
-	end
-	v.Parent = player.Character
-	v.Parent = player.Character.HumanoidRootPart
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 0)
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 1)
-	pcall(function() player.Character.HumanoidRootPart.CFrame = NormPos end)
-	wait(.3)
-	player.Character:Remove()
-	player.CharacterAdded:Wait()
-	workspace[game.Players.LocalPlayer.Name]:MoveTo(savepos)
+	game.Players.LocalPlayer.CharacterAdded:Wait():WaitForChild("Humanoid")
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame
 end
 
 function GiveTool()
