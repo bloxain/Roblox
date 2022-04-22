@@ -1,4 +1,4 @@
--- cmds ;jump, ;walk, ;fwalk, ;TP, ;chat, ;rchat, ;execute, control
+-- cmds ;jump, ;walk, ;fwalk, ;TP, ;chat, ;rchat, ;execute, ;control
 --for TOH ;skip, ;winall
 --for Work At A Pizza Place ;FireM
 local cntrlon = false
