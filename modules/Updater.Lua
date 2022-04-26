@@ -60,9 +60,8 @@ end
 local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
 local versoin = readfile("Bloxhub#7364/Data.Lua")
 
-Show(11)
+Show(12)
 if isfolder("Bloxhub#7364") then
-	delfolder("Bloxhub#7364")
 	if isfolder("Bloxhub#7364/Saves") then
 		moredata = {}
 		for i, v in pairs(listfiles("Bloxhub#7364/Saves")) do
@@ -70,6 +69,7 @@ if isfolder("Bloxhub#7364") then
 			table.insert(moredata, 1, add)
 		end
 	end
+	delfolder("Bloxhub#7364")
 end
 
 makefolder("Bloxhub#7364")
@@ -87,6 +87,8 @@ Update()
 writefile("Bloxhub#7364/Tower_Simulator.Lua", game:HttpGet(Github.."T/Tower_Simulator.Lua"))
 Update()
 writefile("Bloxhub#7364/Universal_Gui.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Universal_Gui.Lua"))
+Update()
+writefile("Bloxhub#7364/Natural_Disaster_Survival.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Games/N/Natural%20Disaster%20Survival.Lua"))
 Update()
 writefile("Bloxhub#7364/Venyx_UI.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Venyx_UI.Lua"))
 Update()
