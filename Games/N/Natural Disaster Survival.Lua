@@ -46,7 +46,6 @@ function SaveData()
 		["AntiAcid"] = AntiAcid,
 		["AntiVius"] = AntiVius,
 		["NoCloud"] = NoCloud,
-		["noclip"] = noclip,
 		["AntiTsunami"] = AntiTsunami
 	}
 	writefile("Disater#1283.lua", game:GetService("HttpService"):JSONEncode(datatosave))
