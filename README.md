@@ -14,6 +14,7 @@ Games | Support
 tower of hell | Great
 destuction simulator | Ok
 tower simulator | Ok
+Natral Disaster | Ok
 
 # Universal
 Scripts | Support
