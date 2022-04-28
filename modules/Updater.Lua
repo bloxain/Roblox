@@ -67,7 +67,7 @@ if isfolder("Bloxhub#7364") then
 		for i, v in pairs(listfiles("Bloxhub#7364/Saves")) do
 			local add = {
 				["Path"] = v,
-				["Data"] = Readfile("Bloxhub#7364/Saves")
+				["Data"] = readfile("Bloxhub#7364/Saves")
 			}
 			
 			table.insert(moredata, 1, add)
