@@ -152,7 +152,8 @@ function Run()
 		["279565647"] = "https://pastebin.com/raw/JbWJ7R7i",
 		["601130232"] = "https://raw.githubusercontent.com/Boxking776/kocmoc/main/kocmoc-remastered.lua",
 		["1659645941"] = "http://void-scripts.com/Scripts/islands_new.lua",
-		["540856839"] = "https://drive.google.com/uc?export=download&id=1xeauG47nspgBlMKxXP304-NZHYwhIa53"
+		["540856839"] = "https://drive.google.com/uc?export=download&id=1xeauG47nspgBlMKxXP304-NZHYwhIa53",
+		["73885730"] = "https://pastebin.com/raw/mHfK0Xk4"
 	}
 	
 	local GameNames = {
@@ -162,7 +163,8 @@ function Run()
 		["279565647"] = "Lucky Blocks",
 		["601130232"] = "Bee Swarm Simulator",
 		["1659645941"] = "Ilands",
-		["540856839"] = "Trueser Hunt"
+		["540856839"] = "Trueser Hunt",
+		["73885730"] = "Prison Life Gui"
 	}	
 
 	local bloxain = {
