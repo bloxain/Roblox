@@ -65,13 +65,16 @@ if isfolder("Bloxhub#7364") then
 	if isfolder("Bloxhub#7364/Saves") then
 		moredata = {}
 		for i, v in pairs(listfiles("Bloxhub#7364/Saves")) do
-			local add = {v, readfile("Bloxhub#7364/Saves")}
+			local add = {
+				["Path"] = v,
+				["Data"] = Readfile("Bloxhub#7364/Saves")
+			}
+			
 			table.insert(moredata, 1, add)
 		end
 	end
 	delfolder("Bloxhub#7364")
 end
-
 makefolder("Bloxhub#7364")
 Update()
 makefolder("Bloxhub#7364/Modules")
@@ -101,8 +104,7 @@ Update()
 
 if moredata then
 	for i = 1, #moredata do
-		local localdata = moredata[i]
-		writefile(localdata[1], localdata[2])
+		writefile(moredata[i].Path, moredata[i].Data)
 	end
 end
 
