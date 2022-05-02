@@ -172,6 +172,7 @@ function Run()
 		["781563604"] = "Destruction_Simulator.Lua",
 		["703124385"] = "Tower_Of_Hell.Lua",
 		["65241"] = "Natural_Disaster_Survival.Lua"
+		["668582985"] = "Egg_Farm_Simulator.Lua"
 	}
 
 	if bloxain[tostring(game.GameId)] then
