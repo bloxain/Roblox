@@ -102,7 +102,7 @@ local AD = main:addSection("additional features")
 local MainGame = main:addSection("Game")
 local localplayer = main:addSection("localplayer")
 
-local EggPage = UI:addPage("Server")
+local EggPage = UI:addPage("Egg Farm")
 local EggFarm = EggPage:addSection("Players")
 
 local server = UI:addPage("Server")
@@ -170,7 +170,7 @@ EggFarm:addToggle("Auto Upgrade Heroes", AutoTrain, function(value) AutoTrain = 
 
 EggFarm:addToggle("auto cellect achivements", AutoAchive, function(value) AutoAchive = value end)
 
-EggFarm:addToggle("auto Buy Heroes", AutoBuyHeros, function(value) AutoBuyHeros = value end)
+EggFarm:addToggle("auto Buy Heroes(idk if work)", AutoBuyHeros, function(value) AutoBuyHeros = value end)
 
 EggFarm:addToggle("auto Cellect Daimonds", AutoDaimonds, function(value) AutoDaimonds = value end)
 
@@ -649,9 +649,7 @@ while wait(10) do
 	
 	if AutoBuyHeros then
 		local amount = GetFarm().Heroes:GetChildren()
-		local ohTable3 = {
-			[1] = PathWaypoint.new(Vector3.new(-8, 6, 5.7220459e-06), Walk, SmoothPlastic),
-		}
+		local ohTable3 = {}
 		game:GetService("ReplicatedStorage").Events.Heroes:FireServer("Train", #amount + 1, ohTable3, 1)
 	end
 end
