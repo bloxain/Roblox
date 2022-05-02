@@ -14,8 +14,8 @@ if isfolder then
 			Run()
 		end
 	else
-		makefolder("Bloxhub#7364")
-		writefile("Bloxhub#7364/Data.Lua", Version)
+		makefolder("Bloxhub#7364") makefolder("Bloxhub#7364/Modules")
+		writefile("Bloxhub#7364/Modules/Versoin.lua", Version)
 		loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Updater.Lua"))()
 		Run()
 	end
