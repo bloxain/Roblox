@@ -58,16 +58,16 @@ function Update()
 end
 
 local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
-local versoin = readfile("Bloxhub#7364/Data.Lua")
+local versoin = readfile("Bloxhub#7364/Modules/Versoin.lua")
 
-Show(12)
+Show(13)
 if isfolder("Bloxhub#7364") then
 	if isfolder("Bloxhub#7364/Saves") then
 		moredata = {}
 		for i, v in pairs(listfiles("Bloxhub#7364/Saves")) do
 			local add = {
 				["Path"] = v,
-				["Data"] = readfile("Bloxhub#7364/Saves")
+				["Data"] = readfile(v)
 			}
 			
 			table.insert(moredata, 1, add)
@@ -89,6 +89,8 @@ writefile("Bloxhub#7364/Destruction_Simulator.Lua", game:HttpGet(Github.."D/Dest
 Update()
 writefile("Bloxhub#7364/Tower_Simulator.Lua", game:HttpGet(Github.."T/Tower_Simulator.Lua"))
 Update()
+writefile("Bloxhub#7364/Egg_Farm_Simulator.Lua", game:HttpGet(Github.."E/Egg_Farm_Simulator.Lua"))
+Update()
 writefile("Bloxhub#7364/Universal_Gui.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Universal_Gui.Lua"))
 Update()
 writefile("Bloxhub#7364/Natural_Disaster_Survival.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Games/N/Natural%20Disaster%20Survival.Lua"))
@@ -105,6 +107,7 @@ Update()
 if moredata then
 	for i = 1, #moredata do
 		writefile(moredata[i].Path, moredata[i].Data)
+		print(moredata[i].Data)
 	end
 end
 
