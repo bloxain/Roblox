@@ -103,7 +103,7 @@ local MainGame = main:addSection("Game")
 local localplayer = main:addSection("localplayer")
 
 local EggPage = UI:addPage("Egg Farm")
-local EggFarm = EggPage:addSection("Players")
+local EggFarm = EggPage:addSection("AutoFarm + more")
 
 local server = UI:addPage("Server")
 local Splayer = server:addSection("Players")
