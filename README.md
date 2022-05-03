@@ -6,6 +6,8 @@ YouTube: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
 
 i have got synapse x to make this project better -- use <kbd>f3</kbd> to open and close the GUI
 
+if you want to make a video about this you can just give credits: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
+
 supported executors like krnl, trigon, synapse x ect -- as of march 16 It Is Reqiured that file funcs are on your executors
 
 suported games:
@@ -15,6 +17,7 @@ tower of hell | Great
 destuction simulator | Ok
 tower simulator | Ok
 Natral Disaster | Ok
+egg farm | ok
 
 # Universal
 Scripts | Support
