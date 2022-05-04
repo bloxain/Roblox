@@ -1,3 +1,9 @@
+# execute code here
+
+```lua
+loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Bloxhub.Lua"))()
+```
+
 this is where loadstrings are downloaded and executed feel free off learn of it!
 
 discord: https://discord.gg/cjP6mnDT
@@ -33,11 +39,6 @@ Third party(made by other people)
 3. Lucky Blocks
 4. Ilands
 
-# execute code here
-
-```lua
-loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Bloxhub.Lua"))()
-```
 # How to make your own GUI
 
 
