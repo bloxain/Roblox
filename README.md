@@ -42,7 +42,7 @@ Third party(made by other people)
 # How to make your own GUI
 
 
-the GUI is part of another github https://stefanuk12.github.io/Venyx-UI-Library//main/source.lua
+the GUI is part of another github https://stefanuk12.github.io/Venyx-UI-Library/
 
 to use copy and execute the universal GUI and check its compatable with and remove things that dont work or get flaged by the anti cheat
 
