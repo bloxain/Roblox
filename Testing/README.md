@@ -1,8 +1,13 @@
-this is where i will work on things as school and since i cant test them dont report issuse with it I recomend useing the offical more stable version
+# NOTE
+this is by bloxain / robloxain pro(YT)
+
+all of this is free to use give credit but
 
 
-to be added
-1.
+# github
+PLEASE DONT DELETE idk why you deleteing roblox exploit(unless roblox told you)
 
-might be added
-1. press the button
+it you do want to delete please let me accses a download of my project so i can move platforms thxs
+
+
+thats just in case
