@@ -1,7 +1,7 @@
 # NOTE
 this is by bloxain / robloxain pro(YT)
 
-all of this is free to use give credit but
+all of this is free to use give credit tho
 
 
 # github
