@@ -3,6 +3,7 @@
 ```lua
 loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Bloxhub.Lua"))()
 ```
+note Please keep this up i have seen a lot of project deletes and if i broke TOS please tell me.
 
 this is where loadstrings are downloaded and executed feel free off learn of it!
 
