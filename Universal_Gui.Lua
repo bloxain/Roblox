@@ -1,27 +1,31 @@
 local col = nil
-local clickon = false
-local deleteon = false
-local platform = false
-local noclip = false
-local Infjump = false
-local UIS = game:GetService("UserInputService")
-local Size = 6
-local Player = game.Players.LocalPlayer
-local Mouse = Player:GetMouse()
 local Selectedplayer = nil
-local firetouchinterest = firetouchinterest or fake_touch or nil
-local UseDisplayNames = false
+local noclip = false
+local touchon = false
+local clickon = false
 local AntiAFK = false
-local HeadSize = 20
-local hitboxenabled = false
+local Infjump = false
+local touchon = false
+local platform = false
+local platform = false
+local deleteon = false
 local shiftlock = false
 local unlockzoom = false
+local HideUItoggle = false
+local HideUItoggle = false
+local hitboxenabled = false
+local UseDisplayNames = false
+local Player = game.Players.LocalPlayer
+local Mouse = Player:GetMouse()
+local UIS = game:GetService("UserInputService")
+local firetouchinterest = firetouchinterest or fake_touch or nil
+local HeadSize = 20
 local walkspeed = 16
 local jumpPower = 50
-local HideUItoggle = false
-local touchon = false
 local hideUIData = {}
 local Accessorys = {}
+local Size = 6
+local Libary = loadstring(readfile("Bloxhub#7364/Modules/Main.Lua"))()
 
 function LoadData()
 	if not isfile("Universal_19872.lua") then
@@ -31,19 +35,18 @@ function LoadData()
 		Size = data.PSize
 		UseDisplayNames = data.usedisplayNames
 		AntiAFK = data.anti_afk
-		--HideUIs = data.HideUI
 	end
 end
 
 LoadData()
 
-for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+for i, v in pairs(Libary.GetChar():GetChildren()) do
 	if v:IsA("Accessory") then
 		table.insert(Accessorys, 1, v.Name)
 	end
 end
 
-if game.Players.LocalPlayer.Character.Humanoid.UseJumpPower == false then
+if Libary.GetChar().Humanoid.UseJumpPower == false then
 	jumpPower = 7
 end
 
@@ -75,8 +78,9 @@ local AD = main:addSection("additional features")
 local MainGame = main:addSection("Game")
 local localplayer = main:addSection("localplayer")
 
-local server = UI:addPage("Server")
-local Splayer = server:addSection("Players")
+local GamePage = UI:addPage("Game")
+local Splayer = GamePage:addSection("Players")
+local GameAd = GamePage:addSection("Game")
 
 local FePage = UI:addPage("FE Scripts")
 local FE = FePage:addSection("Scripts(good Exploit Reqiured) sometimes synapse x")
@@ -88,15 +92,15 @@ local Colors = theme:addSection("Colors")
 
 
 
-localplayer:addSlider("Player Speed", 16, 16, 300, function(value) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value walkspeed = value end)
+localplayer:addSlider("Player Speed", 16, 16, 300, function(value) Libary.GetChar().Humanoid.WalkSpeed = value walkspeed = value end)
 
-localplayer:addSlider("Player jumpPower", jumpPower, jumpPower, 300, function(value) game.Players.LocalPlayer.Character.Humanoid.JumpPower = value jumpPower = value end)
+localplayer:addSlider("Player jumpPower", jumpPower, jumpPower, 300, function(value) Libary.GetChar().Humanoid.JumpPower = value jumpPower = value end)
 
 MainGame:addSlider("Gravity", 196.2, 0, 196.2, function(value) workspace.Gravity = value end)
 
-AD:addButton("save location", function() col = workspace[game.Players.LocalPlayer.Name].HumanoidRootPart.Position end)
+AD:addButton("save location", function() col = Libary.GetChar().HumanoidRootPart.Position end)
 
-AD:addButton("Load location", function() workspace[game.Players.LocalPlayer.Name]:MoveTo(col) end)
+AD:addButton("Load location", function() Libary.TpPlayer(col) end)
 
 AD:addButton("Clear Platforms", function() clearplatforms() end)
 
@@ -126,15 +130,17 @@ AD:addKeybind("Hide UI", nil, function() toggleUI(HideUItoggle) HideUItoggle = n
 
 Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
 
-Splayer:addButton("teleport to player", function() game.Players.LocalPlayer.character:MoveTo(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end)
+Splayer:addButton("teleport to player", function() Libary.TpPlayer(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end)
 
-Splayer:addButton("Kill Player", function() KillPlayer() end)
+--Splayer:addButton("Kill Player", function() KillPlayer() end)
 
-Splayer:addButton("Bring Player", function() BringPlayer() end)
+--Splayer:addButton("Bring Player", function() BringPlayer() end)
 
-Splayer:addButton("Give Player Tool", function() GiveTool() end)
+--Splayer:addButton("Give Player Tool", function() GiveTool() end)
 
 Splayer:addToggle("Hitbox expander", false, function(value) hitboxenabled = value if value == false then for i,v in next, game:GetService('Players'):GetPlayers() do 	v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2)v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end)
+
+GameAd:addSlider("Fps Cap", 30, 60, 1000, function(value) setfpscap(value) end)
 
 FE:addButton("Grow(body Scale:All 100% except BodyProportionScale: 0%) ONLY ARTHO", function() Grow() end)
 
@@ -264,7 +270,7 @@ function Fixcamera()
 	for i, v in pairs(workspace:GetChildren()) do
 		if v:IsA("Camera") then
 			v.HeadScale = 1
-			v.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+			v.CameraSubject = Libary.GetChar().Humanoid
 			v.CameraType = Enum.CameraType.Custom
 			v.DiagonalFieldOfView = 143.882
 			v.FieldOfView = 70
@@ -279,15 +285,11 @@ function Fixcamera()
 end
 
 
-function GetCharacter()
-	return game.Players.LocalPlayer.Character
-end
-
 function Teleport(pos)
 	if clickon == true then
 		local Char = GetCharacter()
 		if Char then
-			Char:MoveTo(pos)
+			Libary.TpPlayer(pos)
 		end
 	end
 end
@@ -311,18 +313,18 @@ end
 
 function Spawnplatform()
 	if platform == true then
-		if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
+		if Libary.GetChar():FindFirstChild("Left Leg") then
 			local Clone = Instance.new("Part")
 			Clone.Parent = workspace
 			Clone.Anchored = true
-			Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
+			Clone.Position = Libary.GetChar()["Left Leg"].Position
 			Clone.Size = Vector3.new(Size, 1, Size)
 			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
 		else
 			local Clone = Instance.new("Part")
 			Clone.Parent = workspace
 			Clone.Anchored = true
-			Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
+			Clone.Position = Libary.GetChar()["LeftFoot"].Position
 			Clone.Size = Vector3.new(Size, 1, Size)
 			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
 		end
@@ -356,9 +358,9 @@ end)
 
 UIS.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton2 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
-		firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Mouse.Hit, 1)
+		firetouchinterest(Libary.GetChar().HumanoidRootPart, Mouse.Hit, 1)
 		wait(0.1)
-		firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Mouse.Hit, 0)
+		firetouchinterest(Libary.GetChar().HumanoidRootPart, Mouse.Hit, 0)
 	end
 end)
 
@@ -382,7 +384,7 @@ end)
 game:GetService('RunService').Stepped:connect(function()
 
 	if noclip then
-		if game:GetService("Players").LocalPlayer.Character ~= nil then
+		if Libary.GetChar() ~= nil then
 			for _, child in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
 				if child:IsA("BasePart") and child.CanCollide == true then
 					child.CanCollide = false
@@ -400,11 +402,11 @@ game:GetService('RunService').Stepped:connect(function()
 	end
 
 	if jumpPower ~= 50 or jumpPower ~= 7 then
-		game.Players.LocalPlayer.Character.Humanoid.JumpPower = jumpPower
+		Libary.GetChar().Humanoid.JumpPower = jumpPower
 	end
 
 	if walkspeed ~= 16 then
-		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
+		Libary.GetChar().Humanoid.WalkSpeed = walkspeed
 	end
 
 	if shiftlock == true then
@@ -417,7 +419,7 @@ game:GetService('RunService').Stepped:connect(function()
 				local Clone = Instance.new("Part")
 				Clone.Parent = workspace
 				Clone.Anchored = true
-				Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
+				Clone.Position = Libary.GetChar()["Left Leg"].Position
 				Clone.Size = Vector3.new(6, 1, 6)
 				Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
 				Clone.Transparency = 1
@@ -427,7 +429,7 @@ game:GetService('RunService').Stepped:connect(function()
 				local Clone = Instance.new("Part")
 				Clone.Parent = workspace
 				Clone.Anchored = true
-				Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
+				Clone.Position = Libary.GetChar()["LeftFoot"].Position
 				Clone.Size = Vector3.new(6, 1, 6)
 				Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
 				Clone.Transparency = 1
@@ -443,11 +445,11 @@ UserInput.InputBegan:Connect(function(input , gameProccesedevent)
 	else
 		if input.KeyCode == Enum.KeyCode.Space then
 			if Infjump == true then
-				if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
+				if Libary.GetChar():FindFirstChild("Left Leg") then
 					local Clone = Instance.new("Part")
 					Clone.Parent = workspace
 					Clone.Anchored = true
-					Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
+					Clone.Position = Libary.GetChar()["Left Leg"].Position
 					Clone.Size = Vector3.new(6, 1, 6)
 					Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
 					Clone.Transparency = 1
@@ -457,7 +459,7 @@ UserInput.InputBegan:Connect(function(input , gameProccesedevent)
 					local Clone = Instance.new("Part")
 					Clone.Parent = workspace
 					Clone.Anchored = true
-					Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
+					Clone.Position = Libary.GetChar()["LeftFoot"].Position
 					Clone.Size = Vector3.new(6, 1, 6)
 					Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
 					Clone.Transparency = 1
@@ -471,85 +473,14 @@ UserInput.InputBegan:Connect(function(input , gameProccesedevent)
 end)
 
 function KillPlayer()
-	local player = game.Players.LocalPlayer
-	if not firetouchinterest then
-		UI:Notify("Upgrade exploit.", "Your exploit requires firetouchinterest!")
-		return
-	end
-	local target = Selectedplayer
-	player.Character.Humanoid.Name = 1
-	local l = player.Character["1"]:Clone()
-	l.Parent = player.Character
-	l.Name = "Humanoid"
-	wait(.2)
-	player.Character["1"]:Destroy()
-	workspace.CurrentCamera.CameraSubject = player.Character
-	player.Character.Humanoid.DisplayDistanceType = "None"
-	player.Character.Humanoid:UnequipTools()
-	local v = player.Backpack:FindFirstChildOfClass("Tool")
-	if not v then
-		UI:Notify("Please get a tool.", "Tool not found!")
-		return
-	end
-	v.Parent = player.Character
-	v.Parent = player.Character.HumanoidRootPart
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 0)
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 1)
-	pcall(function() player.Character.HumanoidRootPart.CFrame = CFrame.new(0, workspace.FallenPartsDestroyHeight + 5, 0) end)
-	wait(.3)
-	player.Character:Remove()
-	player.CharacterAdded:Wait()
+
 end
 
 
 function BringPlayer()
-	local CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-	local Target = Selectedplayer
-	for i,x in pairs(game.Players:GetPlayers()) do
-		if x.Name == Target then
-			game:GetService("Players").LocalPlayer.Character.Humanoid:UnequipTools()
-			local Humanoid = game:GetService("Players").LocalPlayer.Character.Humanoid:Clone()
-			Humanoid.BreakJointsOnDeath = false
-			game.Players.LocalPlayer.Character.Animate.Disabled = true
-			game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
-			Humanoid.Parent = game:GetService("Players").LocalPlayer.Character
-			for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-				if v:IsA("Tool") then
-					game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChildOfClass("Tool"))
-					firetouchinterest(v.Handle,x.Character.HumanoidRootPart,0)
-				end
-			end
-		end
-	end
-	game.Players.LocalPlayer.CharacterAdded:Wait():WaitForChild("Humanoid")
-	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame
+
 end
 
 function GiveTool()
-	local player = game.Players.LocalPlayer
-	local target = Selectedplayer
-	player.Character.Humanoid.Name = 1
-	local l = player.Character["1"]:Clone()
-	l.Parent = player.Character
-	l.Name = "Humanoid"
-	wait(.2)
-	player.Character["1"]:Destroy()
-	player.Character.Humanoid.DisplayDistanceType = "None"
-	player.Character.Humanoid:UnequipTools()
-	local v = player.Backpack:FindFirstChildOfClass("Tool")
-	if not v then
-		UI:Notify("Please get a tool.", "Tool not found!")
-		return
-	end
-	v.Parent = player.Character
-	v.Parent = player.Character.HumanoidRootPart
-end
 
-function SaveData()
-	local datatosave = {
-		PSize = Size;
-		usedisplayNames = UseDisplayNames;
-		anti_afk = AntiAFK
-	}
-	writefile("Universal_19872.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
