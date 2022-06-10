@@ -207,9 +207,10 @@ function Run()
 			CreateScript(-1, "Universal Gui", "i made all my script with this as a base so it has many bloxain funcs")
 			return
 		end
+	else
+		PickScript:Destroy()
+		loadstring(readfile("Bloxhub#7364/Universal_Gui.Lua"))()
 	end
-
-	loadstring(readfile("Bloxhub#7364/Universal_Gui.Lua"))()
 end
 
 Run()    
