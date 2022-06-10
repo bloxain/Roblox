@@ -28,7 +28,7 @@ function module.TpFakePlayer(cords)
 end
 
 
-function module.CheckChar()
+function module.GetChar()
 	if workspace:FindFirstChild(game.Players.LocalPlayer.Name) then
 		return game.Players.LocalPlayer.Character
 	end
@@ -36,12 +36,27 @@ function module.CheckChar()
 end
 
 function module.TpPlayer(cords)
-	if module.CheckChar() then
+	if workspace:FindFirstChild(game.Players.LocalPlayer.Name) then
 		game.Players.LocalPlayer.Character:MoveTo(cords)
 	end
 	return true
 end
 
+function module.FindPlayer(UseDisplayNames, target)
+	if UseDisplayNames == true then
+		for i,v in pairs(game.Players:GetPlayers()) do 
+			if v.DisplayName:lower():sub(1,#target) == target:lower() then
+				return v
+			end
+		end
+	else
+		for i,v in pairs(game.Players:GetPlayers()) do 
+			if v.Name:lower():sub(1,#target) == target:lower() then
+				return v
+			end
+		end
+	end
+end
 module.FakeCharacter = nil
-module.RealCharacter = module.CheckChar()
+module.RealCharacter = module.GetChar()
 return module
