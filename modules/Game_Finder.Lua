@@ -1,191 +1,245 @@
-function UI(Scripttxt, Name)
-	local Choice = Instance.new("ScreenGui")
-	local Main = Instance.new("Frame")
-	local Bloxain = Instance.new("Frame")
-	local Title = Instance.new("TextLabel")
-	local Script = Instance.new("TextLabel")
-	local Run = Instance.new("TextButton")
-	local Both = Instance.new("TextButton")
-	local Other = Instance.new("Frame")
-	local Title3rd = Instance.new("TextLabel")
-	local Script3rd = Instance.new("TextLabel")
-	local Run3rd = Instance.new("TextButton")
-	local UiCorner = Instance.new("UICorner", Other)
-	local UiCorner1 = Instance.new("UICorner", Bloxain)
-	local UiCorner2 = Instance.new("UICorner", Run)
-	local UiCorner3 = Instance.new("UICorner", Run3rd)
-	local UiCorner4 = Instance.new("UICorner", Both)
+local scripttoRun = nil
+-- GUI to Lua
+-----
+-- Version: 2.0.
+-- Made by chrisopdemobiel.
 
-	Choice.Name = "Choice"
-	Choice.Parent = game.CoreGui
-	Choice.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+-- Instances:
 
-	Main.Name = "Main"
-	Main.Parent = Choice
-	Main.BackgroundColor3 = Color3.new(1, 1, 1)
-	Main.Position = UDim2.new(0.396800637, 0, 0.421862334, 0)
-	Main.Size = UDim2.new(0.206398755, 0, 0.156275302, 0)
-	Main.Transparency = 1
+local PickScript = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Ad = Instance.new("TextLabel")
+local Discord = Instance.new("TextButton")
+local Scripts = Instance.new("ScrollingFrame")
+local Desc = Instance.new("TextLabel")
+local TextLabel = Instance.new("TextLabel")
+local Youtube = Instance.new("TextButton")
+local TextButton = Instance.new("TextButton")
+local Close = Instance.new("TextButton")
+local ListLayout = Instance.new("UIListLayout")
 
-	Bloxain.Name = "Bloxain"
-	Bloxain.Parent = Main
-	Bloxain.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
-	Bloxain.BorderColor3 = Color3.new(0.258824, 0.258824, 0.258824)
-	Bloxain.Size = UDim2.new(0.378071845, 0, 1.03626943, 0)
+if syn then
+	syn.protect_gui(PickScript)
+end
 
-	Title.Name = "Title"
-	Title.Parent = Bloxain
-	Title.BackgroundColor3 = Color3.new(1, 1, 1)
-	Title.BackgroundTransparency = 1
-	Title.Size = UDim2.new(1, 0, 0.25, 0)
-	Title.Font = Enum.Font.SourceSans
-	Title.Text = "Bloxain"
-	Title.TextColor3 = Color3.new(1, 1, 1)
-	Title.TextScaled = true
-	Title.TextSize = 14
-	Title.TextWrapped = true
+Instance.new("UICorner", MainFrame)
+Instance.new("UICorner", Close)
 
-	Script.Name = "Script"
-	Script.Parent = Bloxain
-	Script.BackgroundColor3 = Color3.new(1, 1, 1)
-	Script.BackgroundTransparency = 1
-	Script.Position = UDim2.new(0, 0, 0.324999988, 0)
-	Script.Size = UDim2.new(1, 0, 0.25, 0)
-	Script.Font = Enum.Font.SourceSans
-	Script.Text = "Universal Gui"
-	Script.TextColor3 = Color3.new(1, 1, 1)
-	Script.TextScaled = true
-	Script.TextSize = 14
-	Script.TextWrapped = true
+--Properties:
 
-	Run.Name = "Run"
-	Run.Parent = Bloxain
-	Run.BackgroundColor3 = Color3.new(1, 1, 1)
-	Run.BackgroundTransparency = 0.8999999761581421
-	Run.Position = UDim2.new(0, 0, 0.699999988, 0)
-	Run.Size = UDim2.new(1, 0, 0.25, 0)
-	Run.Font = Enum.Font.SourceSans
-	Run.Text = "Run"
-	Run.TextColor3 = Color3.new(1, 1, 1)
-	Run.TextScaled = true
-	Run.TextSize = 14
-	Run.TextWrapped = true
+PickScript.Name = "PickScript"
+PickScript.Parent = game.CoreGui
+PickScript.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-	Both.Name = "Both"
-	Both.Parent = Main
-	Both.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
-	Both.BorderSizePixel = 0
-	Both.Position = UDim2.new(0.377638906, 0, 0.339097857, 0)
-	Both.Size = UDim2.new(0.236294895, 0, 0.259067357, 0)
-	Both.Font = Enum.Font.SourceSans
-	Both.Text = "Both"
-	Both.TextColor3 = Color3.new(1, 1, 1)
-	Both.TextScaled = true
-	Both.TextSize = 14
-	Both.TextWrapped = true
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = PickScript
+MainFrame.BackgroundColor3 = Color3.fromRGB(99, 99, 99)
+MainFrame.Position = UDim2.new(0.3656542, 0, 0.313317955, 0)
+MainFrame.Size = UDim2.new(0, 689, 0, 485)
 
-	Other.Name = "Other"
-	Other.Parent = Main
-	Other.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
-	Other.BorderColor3 = Color3.new(0.258824, 0.258824, 0.258824)
-	Other.Position = UDim2.new(0.614451647, 0, -0.0207253881, 0)
-	Other.Size = UDim2.new(0.378071845, 0, 1.03626943, 0)
+Ad.Name = "Ad"
+Ad.Parent = MainFrame
+Ad.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Ad.BackgroundTransparency = 1.000
+Ad.Size = UDim2.new(0, 201, 0, 54)
+Ad.Font = Enum.Font.Ubuntu
+Ad.Text = "Bloxain"
+Ad.TextColor3 = Color3.fromRGB(255, 255, 255)
+Ad.TextScaled = true
+Ad.TextSize = 14.000
+Ad.TextWrapped = true
 
-	Title3rd.Name = "Title"
-	Title3rd.Parent = Other
-	Title3rd.BackgroundColor3 = Color3.new(1, 1, 1)
-	Title3rd.BackgroundTransparency = 1
-	Title3rd.Size = UDim2.new(1, 0, 0.25, 0)
-	Title3rd.Font = Enum.Font.SourceSans
-	Title3rd.Text = Name
-	Title3rd.TextColor3 = Color3.new(1, 1, 1)
-	Title3rd.TextScaled = true
-	Title3rd.TextSize = 14
-	Title3rd.TextWrapped = true
+Discord.Name = "Discord"
+Discord.Parent = MainFrame
+Discord.BackgroundColor3 = Color3.fromRGB(170, 85, 255)
+Discord.BackgroundTransparency = 1.000
+Discord.Position = UDim2.new(0.0420899838, 0, 0.89690721, 0)
+Discord.Size = UDim2.new(0, 115, 0, 43)
+Discord.Font = Enum.Font.SourceSansSemibold
+Discord.Text = "Discord"
+Discord.TextColor3 = Color3.fromRGB(170, 0, 255)
+Discord.TextScaled = true
+Discord.TextSize = 14.000
+Discord.TextWrapped = true
 
-	Script3rd.Name = "Script"
-	Script3rd.Parent = Other
-	Script3rd.BackgroundColor3 = Color3.new(1, 1, 1)
-	Script3rd.BackgroundTransparency = 1
-	Script3rd.Position = UDim2.new(0, 0, 0.25, 0)
-	Script3rd.Size = UDim2.new(1, 0, 0.449999988, 0)
-	Script3rd.Font = Enum.Font.SourceSans
-	Script3rd.Text = Scripttxt
-	Script3rd.TextColor3 = Color3.new(1, 1, 1)
-	Script3rd.TextScaled = true
-	Script3rd.TextSize = 14
-	Script3rd.TextWrapped = true
+Scripts.Name = "Scripts"
+Scripts.Parent = MainFrame
+Scripts.Active = true
+Scripts.BackgroundColor3 = Color3.fromRGB(111, 111, 111)
+Scripts.Position = UDim2.new(0.0319303349, 0, 0.177319586, 0)
+Scripts.Size = UDim2.new(0, 241, 0, 326)
 
-	Run3rd.Name = "Run"
-	Run3rd.Parent = Other
-	Run3rd.BackgroundColor3 = Color3.new(1, 1, 1)
-	Run3rd.BackgroundTransparency = 0.8999999761581421
-	Run3rd.Position = UDim2.new(0, 0, 0.699999988, 0)
-	Run3rd.Size = UDim2.new(1, 0, 0.25, 0)
-	Run3rd.Font = Enum.Font.SourceSans
-	Run3rd.Text = "Run"
-	Run3rd.TextColor3 = Color3.new(1, 1, 1)
-	Run3rd.TextScaled = true
-	Run3rd.TextSize = 14
-	Run3rd.TextWrapped = true
-	
-	Both.MouseButton1Click:Connect(function()
-		Choice:Destroy()
-		loadstring(readfile("Bloxhub#7364/Universal_Gui.Lua"))()
-		loadstring(game:HttpGet(Scripttxt))()
-	end)
-	Run.MouseButton1Click:Connect(function()
-		Choice:Destroy()
-		loadstring(readfile("Bloxhub#7364/Universal_Gui.Lua"))()
-	end)
-	Run3rd.MouseButton1Click:Connect(function()
-		Choice:Destroy()
-		loadstring(game:HttpGet(Scripttxt))()
+Desc.Name = "Desc"
+Desc.Parent = MainFrame
+Desc.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Desc.BackgroundTransparency = 1.000
+Desc.Position = UDim2.new(0.454281569, 0, 0.265979379, 0)
+Desc.Size = UDim2.new(0, 350, 0, 283)
+Desc.Font = Enum.Font.SourceSans
+Desc.Text = "Welcome to bloxain please choose a script to execute."
+Desc.TextColor3 = Color3.fromRGB(255, 255, 255)
+Desc.TextSize = 25.000
+Desc.TextWrapped = true
+Desc.TextXAlignment = Enum.TextXAlignment.Left
+Desc.TextYAlignment = Enum.TextYAlignment.Top
+
+TextLabel.Parent = MainFrame
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.Position = UDim2.new(0.563134968, 0, 0.164948449, 0)
+TextLabel.Size = UDim2.new(0, 200, 0, 49)
+TextLabel.Font = Enum.Font.SourceSans
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
+
+Youtube.Name = "Youtube"
+Youtube.Parent = MainFrame
+Youtube.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+Youtube.BackgroundTransparency = 1.000
+Youtube.Position = UDim2.new(0.243831635, 0, 0.89690721, 0)
+Youtube.Size = UDim2.new(0, 133, 0, 43)
+Youtube.Font = Enum.Font.SourceSansSemibold
+Youtube.Text = "Youtube"
+Youtube.TextColor3 = Color3.fromRGB(255, 0, 4)
+Youtube.TextScaled = true
+Youtube.TextSize = 14.000
+Youtube.TextWrapped = true
+
+TextButton.Parent = MainFrame
+TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.BackgroundTransparency = 1.000
+TextButton.Position = UDim2.new(0.563134968, 0, 0.793814421, 0)
+TextButton.Size = UDim2.new(0, 200, 0, 50)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = "Run Script"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextScaled = true
+TextButton.TextSize = 14.000
+TextButton.TextWrapped = true
+
+Close.Name = "Close"
+Close.Parent = MainFrame
+Close.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+Close.Position = UDim2.new(0.92071259, 0, 0.0215463787, 0)
+Close.Size = UDim2.new(0, 43, 0, 43)
+Close.Font = Enum.Font.SourceSans
+Close.Text = "X"
+Close.TextColor3 = Color3.fromRGB(255, 255, 255)
+Close.TextScaled = true
+Close.TextSize = 14.000
+Close.TextWrapped = true
+
+ListLayout.Name = "ListLayout"
+ListLayout.Parent = Scripts
+ListLayout.Padding = UDim.new(0, 5)
+
+
+function CreateScript(scripttt, Name, Descc)
+	local Scriptt = Instance.new("TextButton")
+	Instance.new("UICorner", Scriptt)
+	Scriptt.Name = Name
+	Scriptt.Parent = Scripts
+	Scriptt.BackgroundColor3 = Color3.fromRGB(136, 136, 136)
+	Scriptt.Size = UDim2.new(0, 225, 0, 43)
+	Scriptt.Font = Enum.Font.SourceSans
+	Scriptt.Text = Name
+	Scriptt.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Scriptt.TextScaled = true
+	Scriptt.TextSize = 14.000
+	Scriptt.TextWrapped = true
+
+	Scriptt.MouseButton1Click:Connect(function()
+		TextLabel.Text = Name
+		Desc.Text = Descc
+		scripttoRun = tostring(scripttt)
 	end)
 end
 
+local Games = {
+	["911750776"] = {false, false, "Broken Bonesl", "A script for Broken Bones with inf money(thats all i use it for) once pressed end the round", "https://pastebin.com/raw/bFu2yg8n"},
+	["210851291"] = {false, false, "BABFT", "This Script has autofarm teamchanging godmode and more its better than anything i could do so i put it here", "https://raw.githubusercontent.com/RegularVynixu/Vynixius/main/Build%20A%20Boat%20For%20Treasure/BABFT"},
+	["110181652"] = {false, false, "Epic MiniGames", "this script can cheat almost all the minigames and it very usefull becuse it is not a cheaply Gui and had some fetures(works with universal Gui For Extra Fetures", "https://raw.githubusercontent.com/SlamminPig/rblxgames/main/Epic%20Minigames/EpicMinigamesGUI"},
+	["279565647"] = {false, false, "Lucky Blocks", "Very good script has many combat fetures amd the ablity to crash the server you Can also open many blocks very fast to find a spicfic iteml", "https://pastebin.com/raw/JbWJ7R7i"},
+	["601130232"] = {false, false, "Bee Swarm Simulator", "Sent by someone idk what it dose", "https://raw.githubusercontent.com/Boxking776/kocmoc/main/kocmoc-remastered.lua"},
+	["1659645941"] = {false, false, "Ilands", "PACKED with feture teleports autofarm crop farming building bow aimbot selling buying clearing junk and is overall packed with fetures", "http://void-scripts.com/Scripts/islands_new.lua"},
+	["540856839"] = {false, false, "Trueser Hunt", "idk sent by someone", "https://drive.google.com/uc?export=download&id=1xeauG47nspgBlMKxXP304-NZHYwhIa53"},
+	["73885730"] = {false, false, "Prison Life Gui", "Gun modding, anti arrest, anti tase, anti(everything basicly), kill all and more", "https://pastebin.com/raw/mHfK0Xk4"},
+	["2035583477"] = {true, true, "Tower Simulator", "MADE BY ME (bad update speed) auto build, inf jump and more", "Tower_Simulator.Lua"},
+	["781563604"] = {true, true, "Destruction Simulator", "MADE BY ME inf coins, instant rocket, spam bombs and rockets, get levels, noclip, inf jump, more", "Destruction_Simulator.Lua"},
+	["703124385"] = {true, true, "Tower Of Hell", "MADE BY ME autofarm, Tp to top, Tp player, infjump, give all gears, no clip, stop time, anti all bad mutators and more", "Tower_Of_Hell.Lua"},
+	["668582985"] = {true, true, "Egg Farm Simulator", "MADE BY ME", "everything my script have plus autofarm get daimonds faster kill and more", "Egg_Farm_Simulator.Lua"},
+	["65241"] = {true, true, "Natural Disaster Survival", "autofarm anti anoyying screens no cloud FE script", "Natural_Disaster_Survival.Lua"},
+	["-1"] = {true, false, "Universal Gui", "i make all script with this as a base so it has many bloxain funcs", "Universal_Gui.Lua"}
+}
+
+local GamesArrary = {
+	{911750776, false, false, "Broken Bonesl", "A script for Broken Bones with inf money(thats all i use it for) once pressed end the round", "https://pastebin.com/raw/bFu2yg8n"},
+	{210851291, false, false, "BABFT", "This Script has autofarm teamchanging godmode and more its better than anything i could do so i put it here", "https://raw.githubusercontent.com/RegularVynixu/Vynixius/main/Build%20A%20Boat%20For%20Treasure/BABFT"},
+	{110181652, false, false, "Epic MiniGames", "this script can cheat almost all the minigames and it very usefull becuse it is not a cheaply Gui and had some fetures(works with universal Gui For Extra Fetures", "https://raw.githubusercontent.com/SlamminPig/rblxgames/main/Epic%20Minigames/EpicMinigamesGUI"},
+	{279565647, false, false, "Lucky Blocks", "Very good script has many combat fetures amd the ablity to crash the server you Can also open many blocks very fast to find a spicfic iteml", "https://pastebin.com/raw/JbWJ7R7i"},
+	{601130232, false, false, "Bee Swarm Simulator", "Sent by someone idk what it dose", "https://raw.githubusercontent.com/Boxking776/kocmoc/main/kocmoc-remastered.lua"},
+	{1659645941, false, false, "Ilands", "PACKED with feture teleports autofarm crop farming building bow aimbot selling buying clearing junk and is overall packed with fetures", "http://void-scripts.com/Scripts/islands_new.lua"},
+	{540856839, false, false, "Trueser Hunt", "idk sent by someone", "https://drive.google.com/uc?export=download&id=1xeauG47nspgBlMKxXP304-NZHYwhIa53"},
+	{73885730, false, false, "Prison Life Gui", "Gun modding, anti arrest, anti tase, anti(everything basicly), kill all and more", "https://pastebin.com/raw/mHfK0Xk4"},
+	{2035583477, true, true, "Tower Simulator", "MADE BY ME (bad update speed) auto build, inf jump and more", "Tower_Simulator.Lua"},
+	{781563604, true, true, "Destruction Simulator", "MADE BY ME inf coins, instant rocket, spam bombs and rockets, get levels, noclip, inf jump, more", "Destruction_Simulator.Lua"},
+	{703124385, true, true, "Tower Of Hell", "MADE BY ME autofarm, Tp to top, Tp player, infjump, give all gears, no clip, stop time, anti all bad mutators and more", "Tower_Of_Hell.Lua"},
+	{668582985, true, true, "Egg Farm Simulator", "MADE BY ME", "everything my script have plus autofarm get daimonds faster kill and more", "Egg_Farm_Simulator.Lua"},
+	{65241, true, true, "Natural Disaster Survival", "autofarm anti anoyying screens no cloud FE script", "Natural_Disaster_Survival.Lua"},
+}
+
+
 function Run()
-	local Games = {
-		["911750776"] = "https://pastebin.com/raw/bFu2yg8n",
-		["210851291"] = "https://raw.githubusercontent.com/RegularVynixu/Vynixius/main/Build%20A%20Boat%20For%20Treasure/BABFT",
-		["110181652"] = "https://raw.githubusercontent.com/SlamminPig/rblxgames/main/Epic%20Minigames/EpicMinigamesGUI",
-		["279565647"] = "https://pastebin.com/raw/JbWJ7R7i",
-		["601130232"] = "https://raw.githubusercontent.com/Boxking776/kocmoc/main/kocmoc-remastered.lua",
-		["1659645941"] = "http://void-scripts.com/Scripts/islands_new.lua",
-		["540856839"] = "https://drive.google.com/uc?export=download&id=1xeauG47nspgBlMKxXP304-NZHYwhIa53",
-		["73885730"] = "https://pastebin.com/raw/mHfK0Xk4"
-	}
-	
-	local GameNames = {
-		["911750776"] = "Broken Bones",
-		["210851291"] = "BABFT",
-		["110181652"] = "Epic MiniGames",
-		["279565647"] = "Lucky Blocks",
-		["601130232"] = "Bee Swarm Simulator",
-		["1659645941"] = "Ilands",
-		["540856839"] = "Trueser Hunt",
-		["73885730"] = "Prison Life Gui"
-	}	
 
-	local bloxain = {
-		["2035583477"] = "Tower_Simulator.Lua",
-		["781563604"] = "Destruction_Simulator.Lua",
-		["703124385"] = "Tower_Of_Hell.Lua",
-		["65241"] = "Natural_Disaster_Survival.Lua",
-		["668582985"] = "Egg_Farm_Simulator.Lua"
-	}
-
-	if bloxain[tostring(game.GameId)] then
-		loadstring(readfile("Bloxhub#7364/"..bloxain[tostring(game.GameId)]))()
-		return
-	end
 
 	if Games[tostring(game.GameId)] then
-		UI(Games[tostring(game.GameId)], GameNames[tostring(game.GameId)])
-		return
+		local temp = Games[tostring(game.GameId)]
+		
+		if temp[1] and temp[2] then
+			PickScript:Destroy()
+			loadstring(readfile("Bloxhub#7364/"..temp[5]))()
+			return
+		end
+		if temp[2] == false then
+			CreateScript(game.GameId, temp[3], temp[4])
+			CreateScript(-1, "Universal Gui", "i made all my script with this as a base so it has many bloxain funcs")
+			return
+		end
 	end
-	
+
 	loadstring(readfile("Bloxhub#7364/Universal_Gui.Lua"))()
 end
 
-Run()
+Run()    
+
+Close.MouseButton1Click:Connect(function()
+	MainFrame:TweenPosition(UDim2.new(0.3656542, 0, 1, 0))
+	wait(1)
+	PickScript:Destroy()
+end)
+
+
+TextButton.MouseButton1Click:Connect(function()
+	local temp = Games[scripttoRun]
+	if temp[1] then
+		loadstring(readfile("Bloxhub#7364/"..temp[5]))()
+	else
+		loadstring(game:HttpGet(temp[5]))()
+	end
+end)
+
+Discord.MouseButton1Click:Connect(function()
+	setclipboard("https://discord.gg/HDAEMyB7")
+	Ad.Text = "Copyed!"
+	wait(1)
+	Ad.Text = "Bloxain"
+end)
+
+Youtube.MouseButton1Click:Connect(function()
+	setclipboard("https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ")
+	Ad.Text = "Copyed!"
+	wait(1)
+	Ad.Text = "Bloxain"
+end)
