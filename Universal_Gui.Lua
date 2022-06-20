@@ -284,17 +284,6 @@ function Fixcamera()
 	end
 end
 
-
-function Teleport(pos)
-	if clickon == true then
-		local Char = GetCharacter()
-		if Char then
-			Libary.TpPlayer(pos)
-		end
-	end
-end
-
-
 function FindPlayer(target)
 	if UseDisplayNames == true then
 		for i,v in pairs(game.Players:GetPlayers()) do 
@@ -352,7 +341,7 @@ end)
 
 UIS.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
-		Teleport(Mouse.Hit.p)
+		Libary.TpPlayer(Mouse.Hit.p)
 	end
 end)
 
