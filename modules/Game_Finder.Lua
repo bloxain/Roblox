@@ -89,6 +89,7 @@ TextLabel.BackgroundTransparency = 1.000
 TextLabel.Position = UDim2.new(0.563134968, 0, 0.164948449, 0)
 TextLabel.Size = UDim2.new(0, 200, 0, 49)
 TextLabel.Font = Enum.Font.SourceSans
+TextLabel.Text = "Welcome"
 TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextLabel.TextScaled = true
 TextLabel.TextSize = 14.000
@@ -153,7 +154,7 @@ function CreateScript(scripttt, Name, Descc)
 	Scriptt.MouseButton1Click:Connect(function()
 		TextLabel.Text = Name
 		Desc.Text = Descc
-		scripttoRun = tostring(scripttt)
+		scripttoRun = scripttt
 	end)
 end
 
@@ -188,29 +189,29 @@ local GamesArrary = {
 	{703124385, true, true, "Tower Of Hell", "MADE BY ME autofarm, Tp to top, Tp player, infjump, give all gears, no clip, stop time, anti all bad mutators and more", "Tower_Of_Hell.Lua"},
 	{668582985, true, true, "Egg Farm Simulator", "MADE BY ME", "everything my script have plus autofarm get daimonds faster kill and more", "Egg_Farm_Simulator.Lua"},
 	{65241, true, true, "Natural Disaster Survival", "autofarm anti anoyying screens no cloud FE script", "Natural_Disaster_Survival.Lua"},
+	{-1, true, false, "Universal Gui", "i make all script with this as a base so it has many bloxain funcs", "Universal_Gui.Lua"}
 }
 
 
 function Run()
-
-
-	if Games[tostring(game.GameId)] then
-		local temp = Games[tostring(game.GameId)]
+	for i= 1, #GamesArrary do
+		local temp = GamesArrary[i]
+		if temp[1] == game.GameId then
 		
-		if temp[1] and temp[2] then
-			PickScript:Destroy()
-			loadstring(readfile("Bloxhub#7364/"..temp[5]))()
-			return
+			if temp[2] and temp[3] then
+				PickScript:Destroy()
+				loadstring(readfile("Bloxhub#7364/"..temp[7]))()
+				return
+			end
+			if temp[3] == false then
+				CreateScript(GamesArrary[i], temp[4], temp[5])
+				CreateScript(-1, "Universal Gui", "i made all my script with this as a base so it has many bloxain funcs")
+				return
+			end
 		end
-		if temp[2] == false then
-			CreateScript(game.GameId, temp[3], temp[4])
-			CreateScript(-1, "Universal Gui", "i made all my script with this as a base so it has many bloxain funcs")
-			return
-		end
-	else
-		PickScript:Destroy()
-		loadstring(readfile("Bloxhub#7364/Universal_Gui.Lua"))()
 	end
+	PickScript:Destroy()
+	loadstring(readfile("Bloxhub#7364/Universal_Gui.Lua"))()
 end
 
 Run()    
@@ -223,11 +224,11 @@ end)
 
 
 TextButton.MouseButton1Click:Connect(function()
-	local temp = Games[scripttoRun]
-	if temp[1] then
-		loadstring(readfile("Bloxhub#7364/"..temp[5]))()
+	local temp = scripttoRun
+	if temp[2] then
+		loadstring(readfile("Bloxhub#7364/"..temp[6]))()
 	else
-		loadstring(game:HttpGet(temp[5]))()
+		loadstring(game:HttpGet(temp[6]))()
 	end
 end)
 
@@ -243,4 +244,4 @@ Youtube.MouseButton1Click:Connect(function()
 	Ad.Text = "Copyed!"
 	wait(1)
 	Ad.Text = "Bloxain"
-end)
+end) 
