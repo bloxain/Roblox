@@ -22,6 +22,7 @@ local firetouchinterest = firetouchinterest or fake_touch or nil
 local HeadSize = 20
 local walkspeed = 16
 local jumpPower = 50
+local SavedFog = 100000
 local hideUIData = {}
 local Accessorys = {}
 local Size = 6
@@ -52,14 +53,12 @@ end
 
 UserInput = game:GetService("UserInputService")
 
---Hold CLTR and click to delete parts (you need to rejoin if you delete something wrong)
+
 local Plr = game:GetService("Players").LocalPlayer
 local Mouse = Plr:GetMouse()
 
 
--- https://raw.githubusercontent.com/Stefanuk12/Venyx-UI-Library/main/source.lua
--- https://raw.githubusercontent.com/zxciaz/VenyxUI/main/Reuploaded
--- // Initialising the UI
+
 local Venyx = loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Venyx_UI.Lua"))()
 local UI = Venyx.new("universal Gui")
 local Themes = {
@@ -91,13 +90,6 @@ local Colors = theme:addSection("Colors")
 
 
 
-
-localplayer:addSlider("Player Speed", 16, 16, 300, function(value) Libary.GetChar().Humanoid.WalkSpeed = value walkspeed = value end)
-
-localplayer:addSlider("Player jumpPower", jumpPower, jumpPower, 300, function(value) Libary.GetChar().Humanoid.JumpPower = value jumpPower = value end)
-
-MainGame:addSlider("Gravity", 196.2, 0, 196.2, function(value) workspace.Gravity = value end)
-
 AD:addButton("save location", function() col = Libary.GetChar().HumanoidRootPart.Position end)
 
 AD:addButton("Load location", function() Libary.TpPlayer(col) end)
@@ -126,21 +118,26 @@ AD:addToggle("Hide UI", HideUIs, function(value) AntiAFK = value end)
 
 AD:addToggle("Unlock Zomm Distance", false, function(value) if value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = value end)
 
-AD:addKeybind("Hide UI", nil, function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end)
+AD:addKeybind("Hide UI", nil, function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end)localplayer:addSlider("Player Speed", 16, 16, 300, function(value) Libary.GetChar().Humanoid.WalkSpeed = value walkspeed = value end)
+
+localplayer:addSlider("Player jumpPower", jumpPower, jumpPower, 300, function(value) Libary.GetChar().Humanoid.JumpPower = value jumpPower = value end)
+
 
 Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
 
 Splayer:addButton("teleport to player", function() Libary.TpPlayer(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end)
 
---Splayer:addButton("Kill Player", function() KillPlayer() end)
+Splayer:addToggle("Hitbox expander", false, function(value) hitboxenabled = value if value == false then for i,v in next, game:GetService('Players'):GetPlayers() do if v ~= Player then v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2)v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end end)
 
---Splayer:addButton("Bring Player", function() BringPlayer() end)
 
---Splayer:addButton("Give Player Tool", function() GiveTool() end)
+GameAd:addSlider("Fps Cap", 60, 30, 1000, function(value) setfpscap(value) end)
 
-Splayer:addToggle("Hitbox expander", false, function(value) hitboxenabled = value if value == false then for i,v in next, game:GetService('Players'):GetPlayers() do 	v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2)v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end)
+GameAd:addSlider("Gravity", 196.2, 0, 196.2, function(value) workspace.Gravity = value end)
 
-GameAd:addSlider("Fps Cap", 30, 60, 1000, function(value) setfpscap(value) end)
+GameAd:addToggle("Remove Fog", false, function(value) if value == true then game.Lighting.FogEnd = math.huge SavedFog = game.Lighting.FogEnd return end game.Lighting.FogEnd = SavedFog end)
+
+GameAd:addButton("PERMATE remove texutres", function() RemoveTexures() end)
+
 
 FE:addButton("Grow(body Scale:All 100% except BodyProportionScale: 0%) ONLY ARTHO", function() Grow() end)
 
@@ -149,6 +146,7 @@ FE:addDropdown("Accessory(for FE Scripts", Accessorys, nil, function(value) _G.B
 FE:addButton("FE Demon Script(chose a good accessory", function() loadstring(game:HttpGet("https://drive.google.com/uc?export=download&id=1n2LZELzJb7NsGO17eLKCXSu5-cHrIg0u"))() end)
 
 Confic:addTextbox("Platform size", "", function(value) Size = value end)
+
 
 Confic:addTextbox("Hitbox size", "20", function(value) HeadSize = tonumber(value) end)
 
@@ -320,6 +318,20 @@ function Spawnplatform()
 	end
 end
 
+function RemoveTexures()
+	for i, v in pairs(workspace:GetDescendants()) do
+		if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("WedgePart") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+			v.Material = Enum.Material.SmoothPlastic
+		end
+	end
+	
+	workspace.DescendantAdded:Connect(function(v)
+		if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("WedgePart") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+			v.Material = Enum.Material.SmoothPlastic
+		end
+	end)
+end
+
 -----------------------------------EVENTS----------------------------------------------------------------------------------------------------
 
 Mouse.Button1Down:connect(function()
@@ -460,16 +472,3 @@ UserInput.InputBegan:Connect(function(input , gameProccesedevent)
 	end
 
 end)
-
-function KillPlayer()
-
-end
-
-
-function BringPlayer()
-
-end
-
-function GiveTool()
-
-end
