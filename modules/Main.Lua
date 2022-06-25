@@ -29,7 +29,7 @@ end
 
 
 function module.GetChar()
-	if workspace:FindFirstChild(game.Players.LocalPlayer.Name) then
+	if workspace:FindFirstChild(game.Players.LocalPlayer.Name) and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
 		return game.Players.LocalPlayer.Character
 	end
 	return false
