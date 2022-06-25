@@ -58,9 +58,8 @@ function Update()
 end
 
 local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
-local versoin = readfile("Bloxhub#7364/Modules/Versoin.lua")
 
-Show(14)
+Show(13)
 if isfolder("Bloxhub#7364") then
 	if isfolder("Bloxhub#7364/Saves") then
 		moredata = {}
@@ -102,8 +101,6 @@ Update()
 writefile("Bloxhub#7364/Modules/progressBar.lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/progressBar.lua"))
 Update()
 writefile("Bloxhub#7364/Modules/Main.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Main.Lua"))
-Update()
-writefile("Bloxhub#7364/Modules/Versoin.lua", versoin)
 Update()
 
 if moredata then
