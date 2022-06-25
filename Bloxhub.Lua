@@ -1,4 +1,4 @@
-local Version = "0.4.8"
+local Version = "0.4.7"
 local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
 local file = ""
 function Run()
@@ -9,14 +9,15 @@ if isfolder then
 		if readfile("Bloxhub#7364/Modules/Versoin.lua") == Version then
 			Run()
 		else
-			writefile("Bloxhub#7364/Data.Lua", Version)
 			loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Updater.Lua"))()
+			writefile("Bloxhub#7364/Data.Lua", Version)
 			Run()
 		end
 	else
 		makefolder("Bloxhub#7364") makefolder("Bloxhub#7364/Modules")
 		writefile("Bloxhub#7364/Modules/Versoin.lua", Version)
 		loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Updater.Lua"))()
+		writefile("Bloxhub#7364/Data.Lua", Version)
 		Run()
 	end
 end
