@@ -18,27 +18,52 @@ local UseDisplayNames = false
 local Player = game.Players.LocalPlayer
 local Mouse = Player:GetMouse()
 local UIS = game:GetService("UserInputService")
-local firetouchinterest = firetouchinterest or fake_touch or nil
+local Size = 6
 local HeadSize = 20
 local walkspeed = 16
 local jumpPower = 50
 local SavedFog = 100000
+local Libary = loadstring(readfile("Bloxhub#7364/Modules/Main.Lua"))()
 local hideUIData = {}
 local Accessorys = {}
-local Size = 6
-local Libary = loadstring(readfile("Bloxhub#7364/Modules/Main.Lua"))()
+local keys = {"F4", "Q", "F3"}
+local Themes = {
+	["Background"] = Color3.fromRGB(24, 24, 24),
+	["Glow"] = Color3.fromRGB(0, 0, 0),
+	["Accent"] = Color3.fromRGB(10, 10, 10),
+	["LightContrast"] = Color3.fromRGB(43, 43, 43),
+	["DarkContrast"] = Color3.fromRGB(14, 14, 14),  
+	["TextColor"] = Color3.fromRGB(255, 255, 255)
+}
 
 function LoadData()
-	if not isfile("Universal_19872.lua") then
+	if not isfile("Bloxhub#7364/Saves/Universal_Gui.lua") then
 		return
 	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Universal_19872.lua"))
-		Size = data.PSize
-		UseDisplayNames = data.usedisplayNames
-		AntiAFK = data.anti_afk
+		local data = game:GetService("HttpService"):JSONDecode(readfile("Bloxhub#7364/Saves/Universal_Gui.lua"))
+		if data.Themes == nil then
+			return
+		end
+		Size = data.Size
+		UseDisplayNames = data.UseDisplayNames
+		AntiAFK = data.AntiAFK
+		deleteon = data.deleteon
+		clickon = data.clickon
+		touchon = data.touchon
+		platform = data.platform
+		shiftlock = data.shiftlock
+		unlockzoom = data.unlockzoom
+		noclip = data.noclip
+		Infjump = data.Infjump
+		keys = data.keys
+		
+		local temp = {}
+		for theme, color in pairs(data.Themes) do
+			temp[theme] = Color3.new(color[1], color[2], color[3])
+		end
+		Themes = temp
 	end
 end
-
 LoadData()
 
 for i, v in pairs(Libary.GetChar():GetChildren()) do
@@ -61,14 +86,6 @@ local Mouse = Plr:GetMouse()
 
 local Venyx = loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Venyx_UI.Lua"))()
 local UI = Venyx.new("universal Gui")
-local Themes = {
-	Background = Color3.fromRGB(24, 24, 24),
-	Glow = Color3.fromRGB(0, 0, 0),
-	Accent = Color3.fromRGB(10, 10, 10),
-	LightContrast = Color3.fromRGB(188, 51, 54),
-	DarkContrast = Color3.fromRGB(14, 14, 14),  
-	TextColor = Color3.fromRGB(255, 255, 255)
-}
 
 
 
@@ -98,27 +115,27 @@ AD:addButton("Clear Platforms", function() clearplatforms() end)
 
 AD:addButton("Reset Camera", function() Fixcamera() end)
 
-AD:addToggle("noclip", false, function(value) noclip = value end)
+AD:addToggle("noclip", noclip, function(value) noclip = value end)
 
-AD:addToggle("Inf jump", false,function(value) Infjump = value end)
+AD:addToggle("Inf jump", Infjump,function(value) Infjump = value end)
 
-AD:addToggle("cntrl click teleport", false, function(value) clickon = value end)
+AD:addToggle("cntrl click teleport", clickon, function(value) clickon = value end)
 
-AD:addToggle("alt click delete", false, function(value) deleteon = value end)
+AD:addToggle("alt click delete", deleteon, function(value) deleteon = value end)
 
-AD:addToggle("cntrl right click touch(touches a part)", false, function(value) touchon = value end)
+AD:addToggle("cntrl right click touch(touches a part)", touchon, function(value) touchon = value end)
 
-AD:addToggle("spawn platform", false, function(value) platform = value end)
+AD:addToggle("spawn platform", platform, function(value) platform = value end)
 
-AD:addToggle("awalys enable shiftlock", false, function(value) shiftlock = value end)
+AD:addToggle("awalys enable shiftlock", shiftlock, function(value) shiftlock = value end)
 
 AD:addToggle("Anti AFK", AntiAFK, function(value) AntiAFK = value end)
 
-AD:addToggle("Hide UI", HideUIs, function(value) AntiAFK = value end)
+AD:addToggle("Unlock Zomm Distance", unlockzoom, function(value) if value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = value end)
 
-AD:addToggle("Unlock Zomm Distance", false, function(value) if value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = value end)
+AD:addKeybind("Hide UI", Enum.KeyCode[keys[1]], function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end, function(key) keys[1] = key.KeyCode.Name end)
 
-AD:addKeybind("Hide UI", nil, function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end)localplayer:addSlider("Player Speed", 16, 16, 300, function(value) Libary.GetChar().Humanoid.WalkSpeed = value walkspeed = value end)
+localplayer:addSlider("Player Speed", 16, 16, 300)
 
 localplayer:addSlider("Player jumpPower", jumpPower, jumpPower, 300, function(value) Libary.GetChar().Humanoid.JumpPower = value jumpPower = value end)
 
@@ -127,7 +144,7 @@ Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
 
 Splayer:addButton("teleport to player", function() Libary.TpPlayer(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end)
 
-Splayer:addToggle("Hitbox expander", false, function(value) hitboxenabled = value if value == false then for i,v in next, game:GetService('Players'):GetPlayers() do if v ~= Player then v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2)v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end end)
+Splayer:addToggle("Hitbox expander", hitboxenabled, function(value) hitboxenabled = value if value == false then for i,v in next, game:GetService('Players'):GetPlayers() do if v ~= Player then v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2)v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end end)
 
 
 GameAd:addSlider("Fps Cap", 60, 30, 1000, function(value) setfpscap(value) end)
@@ -152,17 +169,23 @@ Confic:addTextbox("Hitbox size", "20", function(value) HeadSize = tonumber(value
 
 Confic:addToggle("Use Display Names", UseDisplayNames, function(value) UseDisplayNames = value end)
 
-Confic:addKeybind("spawn platform key", Enum.KeyCode.Q, function() Spawnplatform()() end)
+Confic:addKeybind("spawn platform key", Enum.KeyCode[keys[2]], function() Spawnplatform() end, function(key) keys[2] = key.KeyCode.Name end)
 
 Confic:addButton("Save", function() SaveData() end)
 
 for theme, color in pairs(Themes) do
-	Colors:addColorPicker(theme, color, function(color3) UI:setTheme(theme, color3) end) -- // Adding a color picker for each type of theme customisable
+	Colors:addColorPicker(theme, color, function(colorr3) UI:setTheme(theme, colorr3) Themes[theme] = colorr3 end) -- // Adding a color picker for each type of theme customisable
 end
 
-Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() end)
+Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode[keys[3]], function() UI:toggle() end, function(key) keys[3] = key.KeyCode.Name end)
 
-Colors:addButton("Kill GUI", function() game.CoreGui["universal Gui"]:Destroy() script:Destroy()end)
+Colors:addButton("Kill GUI", function() game.CoreGui["universal Gui"]:Destroy() script:Destroy() end)
+
+for theme, color in pairs(Themes) do
+	UI:setTheme(theme, color)
+end
+
+UI:SelectPage(main, true)
 
 --             functions
 ---------------------------------------''
@@ -472,3 +495,27 @@ UserInput.InputBegan:Connect(function(input , gameProccesedevent)
 	end
 
 end)
+
+function SaveData(profile)
+	local temp = {}
+	for theme, color in pairs(Themes) do
+		temp[theme] = {color.R, color.G, color.B}
+		print(color.R)
+	end
+	local datatosave = {
+		["Size"] = Size,
+		["UseDisplayNames"] = UseDisplayNames,
+		["AntiAFK"] = AntiAFK,
+		['Themes'] = temp,
+		["deleteon"] = deleteon,
+		["clickon"] = clickon,
+		["touchon"] = touchon,
+		["platform"] = platform,
+		["shiftlock"] = shiftlock,
+		["unlockzoom"] = unlockzoom,
+		["noclip"] = noclip,
+		["Infjump"] = Infjump,
+		["keys"] = keys,
+	}
+	writefile("Bloxhub#7364/Saves/Universal_Gui.lua", game:GetService("HttpService"):JSONEncode(datatosave))
+end
