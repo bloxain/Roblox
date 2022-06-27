@@ -36,6 +36,10 @@ local Themes = {
 	["TextColor"] = Color3.fromRGB(255, 255, 255)
 }
 
+while not Libary.GetChar() do
+	wait()
+end
+
 function LoadData()
 	if not isfile("Bloxhub#7364/Saves/Universal_Gui.lua") then
 		return
@@ -84,14 +88,13 @@ local Mouse = Plr:GetMouse()
 
 
 
-local Venyx = loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Venyx_UI.Lua"))()
+local Venyx = loadstring(readfile("Bloxhub#7364/Venyx_UI.Lua"))()
 local UI = Venyx.new("universal Gui")
 
 
 
 local main = UI:addPage("Main")
 local AD = main:addSection("additional features")
-local MainGame = main:addSection("Game")
 local localplayer = main:addSection("localplayer")
 
 local GamePage = UI:addPage("Game")
@@ -135,16 +138,16 @@ AD:addToggle("Unlock Zomm Distance", unlockzoom, function(value) if value == fal
 
 AD:addKeybind("Hide UI", Enum.KeyCode[keys[1]], function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end, function(key) keys[1] = key.KeyCode.Name end)
 
-localplayer:addSlider("Player Speed", 16, 16, 300)
+localplayer:addSlider("Player Speed", 16, 16, 300, function(value) Libary.GetChar().Humanoid.WalkSpeed = value walkspeed = value end)
 
 localplayer:addSlider("Player jumpPower", jumpPower, jumpPower, 300, function(value) Libary.GetChar().Humanoid.JumpPower = value jumpPower = value end)
 
 
-Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
+Splayer:addTextbox("Player", "", function(text) FindPlayer(text) end)
 
 Splayer:addButton("teleport to player", function() Libary.TpPlayer(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end)
 
-Splayer:addToggle("Hitbox expander", hitboxenabled, function(value) hitboxenabled = value if value == false then for i,v in next, game:GetService('Players'):GetPlayers() do if v ~= Player then v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2)v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end end)
+Splayer:addToggle("Hitbox expander", hitboxenabled, function(value) hitboxenabled = value if value == false then for i,v in next, game:GetService('Players'):GetPlayers() do if v ~= Player then v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2) v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end end)
 
 
 GameAd:addSlider("Fps Cap", 60, 30, 1000, function(value) setfpscap(value) end)
@@ -162,8 +165,8 @@ FE:addDropdown("Accessory(for FE Scripts", Accessorys, nil, function(value) _G.B
 
 FE:addButton("FE Demon Script(chose a good accessory", function() loadstring(game:HttpGet("https://drive.google.com/uc?export=download&id=1n2LZELzJb7NsGO17eLKCXSu5-cHrIg0u"))() end)
 
-Confic:addTextbox("Platform size", "", function(value) Size = value end)
 
+Confic:addTextbox("Platform size", Size, function(value) Size = value end)
 
 Confic:addTextbox("Hitbox size", "20", function(value) HeadSize = tonumber(value) end)
 
@@ -403,40 +406,7 @@ game:GetService('RunService').RenderStepped:connect(function()
 			end
 		end
 	end
-end)
-
-game:GetService('RunService').Stepped:connect(function()
-
-	if noclip then
-		if Libary.GetChar() ~= nil then
-			for _, child in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-				if child:IsA("BasePart") and child.CanCollide == true then
-					child.CanCollide = false
-				end
-			end
-		end
-	end
-
-	if shiftlock then
-		game.Players.LocalPlayer.DevEnableMouseLock = true
-	end
-
-	if unlockzoom then
-		game.Players.LocalPlayer.CameraMaxZoomDistance = 99999
-	end
-
-	if jumpPower ~= 50 or jumpPower ~= 7 then
-		Libary.GetChar().Humanoid.JumpPower = jumpPower
-	end
-
-	if walkspeed ~= 16 then
-		Libary.GetChar().Humanoid.WalkSpeed = walkspeed
-	end
-
-	if shiftlock == true then
-		game.Players.LocalPlayer.DevEnableMouseLock = true
-	end
-
+	
 	if UserInput:IsKeyDown(Enum.KeyCode.Space) then
 		if Infjump == true then
 			if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
@@ -464,36 +434,43 @@ game:GetService('RunService').Stepped:connect(function()
 	end
 end)
 
-UserInput.InputBegan:Connect(function(input , gameProccesedevent)
-	if gameProccesedevent then
-	else
-		if input.KeyCode == Enum.KeyCode.Space then
-			if Infjump == true then
-				if Libary.GetChar():FindFirstChild("Left Leg") then
-					local Clone = Instance.new("Part")
-					Clone.Parent = workspace
-					Clone.Anchored = true
-					Clone.Position = Libary.GetChar()["Left Leg"].Position
-					Clone.Size = Vector3.new(6, 1, 6)
-					Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
-					Clone.Transparency = 1
-					wait(0.1)
-					Clone:Destroy()
-				else
-					local Clone = Instance.new("Part")
-					Clone.Parent = workspace
-					Clone.Anchored = true
-					Clone.Position = Libary.GetChar()["LeftFoot"].Position
-					Clone.Size = Vector3.new(6, 1, 6)
-					Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
-					Clone.Transparency = 1
-					wait(0.1)
-					Clone:Destroy()
+game:GetService("RunService").Stepped:Connect(function()
+	if noclip then
+		if Libary.GetChar() then
+			for _, child in pairs(Libary.GetChar():GetDescendants()) do
+				if child:IsA("BasePart") and child.CanCollide == true then
+					child.CanCollide = false
 				end
 			end
-		end		
+		end
 	end
+end)
 
+game.Players.LocalPlayer.Changed:Connect(function()
+	if shiftlock then
+		game.Players.LocalPlayer.DevEnableMouseLock = true
+	end
+	
+	if unlockzoom then
+		game.Players.LocalPlayer.CameraMaxZoomDistance = 99999
+	end
+end)
+
+function CharLoaded(Char)
+	Char.Humanoid.Changed:Connect(function()
+		if jumpPower ~= 50 and jumpPower ~= 7 then
+			Char.Humanoid.JumpPower = jumpPower
+		end
+
+		if walkspeed ~= 16 then
+			Char.Humanoid.WalkSpeed = walkspeed
+		end
+	end)
+end
+CharLoaded(Libary.GetChar())
+game.Players.LocalPlayer.CharacterAdded:Connect(function(Char)
+	Char:WaitForChild("Humanoid")
+	CharLoaded(Char)
 end)
 
 function SaveData(profile)
