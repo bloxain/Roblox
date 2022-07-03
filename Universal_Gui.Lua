@@ -15,14 +15,16 @@ local HideUItoggle = false
 local HideUItoggle = false
 local hitboxenabled = false
 local UseDisplayNames = false
-local Player = game.Players.LocalPlayer
-local Mouse = Player:GetMouse()
-local UIS = game:GetService("UserInputService")
 local Size = 6
 local HeadSize = 20
 local walkspeed = 16
 local jumpPower = 50
 local SavedFog = 100000
+local AddGame = ""
+local FeedBack = ""
+local Player = game.Players.LocalPlayer
+local Mouse = Player:GetMouse()
+local UIS = game:GetService("UserInputService")
 local Libary = loadstring(readfile("Bloxhub#7364/Modules/Main.Lua"))()
 local hideUIData = {}
 local Accessorys = {}
@@ -108,6 +110,9 @@ local theme = UI:addPage("Settings")
 local Confic = theme:addSection("Config")
 local Colors = theme:addSection("Colors")
 
+local CreditPage = UI:addPage("FeedBack")
+local CreditAD = CreditPage:addSection("Credits: Bloxain -- Code, GreenDyno -- UI")
+
 
 
 AD:addButton("save location", function() col = Libary.GetChar().HumanoidRootPart.Position end)
@@ -188,6 +193,14 @@ for theme, color in pairs(Themes) do
 	UI:setTheme(theme, color)
 end
 
+CreditAD:addTextbox("FeedBack/suggestions and why to change it", "", function(value) FeedBack = value end)
+
+CreditAD:addButton("Send FeedBack", function() SendDiscord(FeedBack, "https://discord.com/api/webhooks/993009314304368710/qsprqRRCCt0_y5PcAB1llZCshT1F7PX95LI53vSa0RH2w-nUkY90vBwJcjGBgrRpZ6pV") UI:Notify("Sent!", "I will hopefully look and consider this later") end)
+
+CreditAD:addTextbox("Add Script: Paste script to add to bloxain", "", function(value) AddGame = value end)
+
+CreditAD:addButton("Send Script", function() SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame , "https://discord.com/api/webhooks/992990519783329822/lnJH_nA3jNTwpn-WJgum3wywfD_AxmnQxZHkjv9nwyJRZ0RZXMhqzCfeBeLLRlldiSWN") UI:Notify("Sent!", "This is checked then(Hopefully) added to bloxain in the next update") end)
+
 UI:SelectPage(main, true)
 
 --             functions
@@ -254,6 +267,24 @@ function clearplatforms()
 			v:Destroy()
 		end
 	end
+end
+
+function SendDiscord(Message, WebhookURL)
+	local Data = {
+		["content"] = Message,
+		["username"] = Player.Name
+	}
+
+	local Response = syn.request({
+		Url = WebhookURL,
+		Method = "POST",
+		Headers = {
+			["Content-Type"] = "application/json"  -- When sending JSON, set this!
+		},
+		Body = game:GetService("HttpService"):JSONEncode(Data)
+	})
+
+	print(Response.StatusCode)
 end
 
 function toggleUI(show)
@@ -496,3 +527,5 @@ function SaveData(profile)
 	}
 	writefile("Bloxhub#7364/Saves/Universal_Gui.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
+
+settings().Network.IncomingReplicationLag = 9999
