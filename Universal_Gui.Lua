@@ -111,7 +111,7 @@ local Confic = theme:addSection("Config")
 local Colors = theme:addSection("Colors")
 
 local CreditPage = UI:addPage("FeedBack")
-local CreditAD = CreditPage:addSection("Credits: Bloxain -- Code, GreenDyno -- UI")
+local CreditAD = CreditPage:addSection("Credits: Bloxain -- Code, GreenDyno -- UI Synapse Reqired to Send")
 
 
 
