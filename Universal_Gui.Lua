@@ -201,6 +201,10 @@ CreditAD:addTextbox("Add Script: Paste script to add to bloxain", "", function(v
 
 CreditAD:addButton("Send Script", function() SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame , "https://discord.com/api/webhooks/992990519783329822/lnJH_nA3jNTwpn-WJgum3wywfD_AxmnQxZHkjv9nwyJRZ0RZXMhqzCfeBeLLRlldiSWN") UI:Notify("Sent!", "This is checked then(Hopefully) added to bloxain in the next update") end)
 
+CreditAD:addButton("Copy Discord", function() setclipboard("https://discord.gg/Vr2jNFpK") UI:Notify("Copyed!", "you can paste the link in your browser") end)
+
+CreditAD:addButton("Copy YouTube", function() setclipboard("https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ") UI:Notify("Copyed!", "you can paste the link in your browser") end)
+
 UI:SelectPage(main, true)
 
 --             functions
