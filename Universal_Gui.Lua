@@ -531,5 +531,3 @@ function SaveData(profile)
 	}
 	writefile("Bloxhub#7364/Saves/Universal_Gui.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
-
-settings().Network.IncomingReplicationLag = 9999
