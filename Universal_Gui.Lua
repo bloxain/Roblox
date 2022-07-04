@@ -195,11 +195,11 @@ end
 
 CreditAD:addTextbox("FeedBack/suggestions and why to change it", "", function(value) FeedBack = value end)
 
-CreditAD:addButton("Send FeedBack", function() SendDiscord(FeedBack, "https://discord.com/api/webhooks/993009314304368710/qsprqRRCCt0_y5PcAB1llZCshT1F7PX95LI53vSa0RH2w-nUkY90vBwJcjGBgrRpZ6pV") UI:Notify("Sent!", "I will hopefully look and consider this later") end)
+CreditAD:addButton("Send FeedBack", function() SendDiscord(FeedBack, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkzMDA5MzE0MzA0MzY4NzEwL3FzcHJxUlJDQ3QwX3k1UGNBQjFsbFpDc2hUMUY3UFg5NUxJNTN2U2EwUkgydy1uVWtZOTB2QndKY2pHQmdyUnBaNnBW")) UI:Notify("Sent!", "I will hopefully look and consider this later") end)
 
 CreditAD:addTextbox("Add Script: Paste script to add to bloxain", "", function(value) AddGame = value end)
 
-CreditAD:addButton("Send Script", function() SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame , "https://discord.com/api/webhooks/992990519783329822/lnJH_nA3jNTwpn-WJgum3wywfD_AxmnQxZHkjv9nwyJRZ0RZXMhqzCfeBeLLRlldiSWN") UI:Notify("Sent!", "This is checked then(Hopefully) added to bloxain in the next update") end)
+CreditAD:addButton("Send Script", function() SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkyOTkwNTE5NzgzMzI5ODIyL2xuSkhfbkEzak5Ud3BuLVdKZ3VtM3d5d2ZEX0F4bW5ReFpIa2p2OW53eUpSWjBSWlhNaHF6Q2ZlQmVMTFJsbGRpU1dO")) UI:Notify("Sent!", "This is checked then(Hopefully) added to bloxain in the next update") end)
 
 CreditAD:addButton("Copy Discord", function() setclipboard("https://discord.gg/Vr2jNFpK") UI:Notify("Copyed!", "you can paste the link in your browser") end)
 
