@@ -48,14 +48,14 @@ function SaveData()
 		["NoCloud"] = NoCloud,
 		["AntiTsunami"] = AntiTsunami
 	}
-	writefile("Disater#1283.lua", game:GetService("HttpService"):JSONEncode(datatosave))
+	writefile("Bloxhub#7364/Saves/Disater.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
 
 function LoadData()
-	if not isfile("Disater#1283.lua") then
+	if not isfile("Bloxhub#7364/Saves/Disater.lua") then
 		return
 	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Disater#1283.lua"))
+		local data = game:GetService("HttpService"):JSONDecode(readfile("Bloxhub#7364/Saves/Disater.lua"))
 		UseDisplayNames = data.UseDisplayNames
 		AntiAFK = data.AntiAFK
 		Vote = data.Vote
