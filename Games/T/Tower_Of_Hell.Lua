@@ -57,10 +57,10 @@ game.Players.LocalPlayer.PlayerScripts.LocalScript.Disabled = true
 game.Players.LocalPlayer.PlayerScripts.LocalScript2.Disabled = true
 
 function LoadData()
-	if not isfile("Bloxhub#7364/Modules/Tower_of_hell.lua") then
+	if not isfile("Bloxhub#7364/Saves/Tower_of_hell.lua") then
 		return
 	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Bloxhub#7364/Modules/Tower_of_hell.lua"))
+		local data = game:GetService("HttpService"):JSONDecode(readfile("Bloxhub#7364/Saves/Tower_of_hell.lua"))
 		Size = data.PSize
 		UseDisplayNames = data.usedisplayNames
 		Hideplayers = data.Hideplayers
@@ -207,7 +207,7 @@ function SaveData()
 		["speedtower"] = speedtower
 
 	}
-	writefile("Bloxhub#7364/Modules/Tower_of_hell.lua", game:GetService("HttpService"):JSONEncode(datatosave))
+	writefile("Bloxhub#7364/Saves/Tower_of_hell.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
 
 Mouse.Button1Down:connect(function()
