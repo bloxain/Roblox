@@ -57,10 +57,10 @@ game.Players.LocalPlayer.PlayerScripts.LocalScript.Disabled = true
 game.Players.LocalPlayer.PlayerScripts.LocalScript2.Disabled = true
 
 function LoadData()
-	if not isfile("Tower_of_hell#832917.lua") then
+	if not isfile("Bloxhub#7364/Modules/Tower_of_hell.lua") then
 		return
 	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Tower_of_hell#832917.lua"))
+		local data = game:GetService("HttpService"):JSONDecode(readfile("Bloxhub#7364/Modules/Tower_of_hell.lua"))
 		Size = data.PSize
 		UseDisplayNames = data.usedisplayNames
 		Hideplayers = data.Hideplayers
@@ -207,7 +207,7 @@ function SaveData()
 		["speedtower"] = speedtower
 
 	}
-	writefile("Tower_of_hell#832917.lua", game:GetService("HttpService"):JSONEncode(datatosave))
+	writefile("Bloxhub#7364/Modules/Tower_of_hell.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
 
 Mouse.Button1Down:connect(function()
@@ -251,7 +251,7 @@ game:GetService('RunService').Stepped:connect(function()
 			if AntiINVall then
 				for i, v in  pairs(game.Players:GetChildren()) do
 					DissableINV(v.Character, 0)
-				--	v.Character.invisible = false
+					--	v.Character.invisible = false
 				end
 			else
 				DissableINV(game.Players.LocalPlayer.Character, 0)				
@@ -336,7 +336,8 @@ local TowerSettings = theme:addSection("Config")
 local Confic = theme:addSection("Config")
 local Colors = theme:addSection("Colors")
 
-
+local CreditPage = UI:addPage("FeedBack")
+local CreditAD = CreditPage:addSection("Credits: Bloxain -- Code, GreenDyno -- UI Synapse Reqired to Send")
 
 
 localplayer:addSlider("Player Speed", 16, 16, 300, function(value) PlayerSpeed = value game:GetService("ReplicatedStorage").globalSpeed.Value = value end)
@@ -421,7 +422,19 @@ Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() e
 
 Colors:addButton("Kill GUI", function() game.CoreGui["Tower Of Hell GUI"]:Destroy() script:Destroy()end)
 
-UI:SelectPage(main)
+CreditAD:addTextbox("FeedBack/suggestions and why to change it", "", function(value) FeedBack = value end)
+
+CreditAD:addButton("Send FeedBack", function() SendDiscord("GUI: Tower of Hell".."\n GameId: "..game.GameId.."\n PlaceId: "..game.PlaceId.."\n JobId: "..game.JobId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n FeedBack: \n\n"..FeedBack, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkzMDA5MzE0MzA0MzY4NzEwL3FzcHJxUlJDQ3QwX3k1UGNBQjFsbFpDc2hUMUY3UFg5NUxJNTN2U2EwUkgydy1uVWtZOTB2QndKY2pHQmdyUnBaNnBW")) UI:Notify("Sent!", "I will hopefully look and consider this later") end)
+
+CreditAD:addTextbox("Add Script: Paste script to add to bloxain", "", function(value) AddGame = value end)
+
+CreditAD:addButton("Send Script", function() SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkyOTkwNTE5NzgzMzI5ODIyL2xuSkhfbkEzak5Ud3BuLVdKZ3VtM3d5d2ZEX0F4bW5ReFpIa2p2OW53eUpSWjBSWlhNaHF6Q2ZlQmVMTFJsbGRpU1dO")) UI:Notify("Sent!", "This is checked then(Hopefully) added to bloxain in the next update") end)
+
+CreditAD:addButton("Copy Discord", function() setclipboard("https://discord.gg/Vr2jNFpK") UI:Notify("Copyed!", "you can paste the link in your browser") end)
+
+CreditAD:addButton("Copy YouTube", function() setclipboard("https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ") UI:Notify("Copyed!", "you can paste the link in your browser") end)
+
+UI:SelectPage(main, true)
 
 --             functions
 ---------------------------------------
