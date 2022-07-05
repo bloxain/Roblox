@@ -194,13 +194,13 @@ local GamesArrary = {
 
 
 function Run()
-	for i= 1, #GamesArrary do
+	for i = 1, #GamesArrary do
 		local temp = GamesArrary[i]
 		if temp[1] == game.GameId then
 		
 			if temp[2] and temp[3] then
 				PickScript:Destroy()
-				loadstring(readfile("Bloxhub#7364/"..temp[7]))()
+				loadstring(readfile("Bloxhub#7364/"..temp[6]))()
 				return
 			end
 			if temp[3] == false then
