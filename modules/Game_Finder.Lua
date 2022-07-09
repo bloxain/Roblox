@@ -180,7 +180,7 @@ local GamesArrary = {
 	{2035583477, true, true, "Tower Simulator", "MADE BY ME (bad update speed) auto build, inf jump and more", "Tower_Simulator.Lua"},
 	{781563604, true, true, "Destruction Simulator", "MADE BY ME inf coins, instant rocket, spam bombs and rockets, get levels, noclip, inf jump, more", "Destruction_Simulator.Lua"},
 	{703124385, true, true, "Tower Of Hell", "MADE BY ME autofarm, Tp to top, Tp player, infjump, give all gears, no clip, stop time, anti all bad mutators and more", "Tower_Of_Hell.Lua"},
-	{668582985, true, true, "Egg Farm Simulator", "MADE BY ME", "everything my script have plus autofarm get daimonds faster kill and more", "Egg_Farm_Simulator.Lua"},
+	{668582985, true, true, "Egg Farm Simulator", "MADE BY ME everything my script have plus autofarm get daimonds faster kill and more", "Egg_Farm_Simulator.Lua"},
 	{65241, true, true, "Natural Disaster Survival", "autofarm anti anoyying screens no cloud FE script", "Natural_Disaster_Survival.Lua"},
 	{911750776, false, false, "Broken Bonesl", "A script for Broken Bones with inf money(thats all i use it for) once pressed end the round", "https://pastebin.com/raw/bFu2yg8n"},
 	{210851291, false, false, "BABFT", "This Script has autofarm teamchanging godmode and more its better than anything i could do so i put it here", "https://raw.githubusercontent.com/RegularVynixu/Vynixius/main/Build%20A%20Boat%20For%20Treasure/BABFT"},
