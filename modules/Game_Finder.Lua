@@ -189,7 +189,8 @@ local GamesArrary = {
 	{601130232, false, false, "Bee Swarm Simulator", "Sent by someone idk what it dose", "https://raw.githubusercontent.com/Boxking776/kocmoc/main/kocmoc-remastered.lua"},
 	{1659645941, false, false, "Ilands", "PACKED with feture teleports autofarm crop farming building bow aimbot selling buying clearing junk and is overall packed with fetures", "http://void-scripts.com/Scripts/islands_new.lua"},
 	{540856839, false, false, "Trueser Hunt", "idk sent by someone", "https://drive.google.com/uc?export=download&id=1xeauG47nspgBlMKxXP304-NZHYwhIa53"},
-	{73885730, false, false, "Prison Life Gui", "Gun modding, anti arrest, anti tase, anti(everything basicly), kill all and more", "https://pastebin.com/raw/mHfK0Xk4"}
+	{73885730, false, false, "Prison Life Gui", "Gun modding, anti arrest, anti tase, anti(everything basicly), kill all and more", "https://pastebin.com/raw/mHfK0Xk4"},
+	{3321455016, false, false, "Tapping Legends X", "auto farm, auto egg, all with a nice UI made by CPU_Accelerator", "https://pastebin.com/raw/vADzHCsB"}
 }
 
 
