@@ -336,7 +336,6 @@ function Bombcmds(typee)
 	for i, v in pairs(workspace:GetChildren()) do
 		if v.Name == "BombCart" then
 			if v:FindFirstChild("move") then
-				print(v:FindFirstChild("move").direction.Value)
 				if typee == "Delete" then
 					v:Destroy()
 				elseif typee == "Spawn" then
@@ -387,7 +386,6 @@ end
 function DeacivatePendulum(value)
 	for i, v in pairs(workspace:GetChildren()) do
 		if v.Name == "Pendulum" then
-			print("called")
 			for o, p in pairs(v:GetDescendants()) do
 				if p:IsA("HingeConstraint") then
 					if value then
@@ -451,8 +449,6 @@ function SendDiscord(Message, WebhookURL)
 		},
 		Body = game:GetService("HttpService"):JSONEncode(Data)
 	})
-
-	print(Response.StatusCode)
 end
 
 function Grow()
@@ -760,7 +756,6 @@ function SaveData(profile)
 	local temp = {}
 	for theme, color in pairs(Themes) do
 		temp[theme] = {color.R, color.G, color.B}
-		print(color.R)
 	end
 	local datatosave = {
 		["Size"] = Size,
