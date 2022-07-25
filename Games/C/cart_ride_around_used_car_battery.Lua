@@ -633,9 +633,10 @@ temp.Event:Connect(function()
 		elseif CmdsBombs.Spawn then
 			Bombcmds("Spawn")
 		end
-	end
-	if Speedcarts.Speed then
-		LockCarts()
+		
+		if Speedcarts.Speed then
+			LockCarts()
+		end
 	end
 end)
 temp:Fire()
