@@ -634,6 +634,9 @@ temp.Event:Connect(function()
 			Bombcmds("Spawn")
 		end
 	end
+	if Speedcarts.Speed then
+		LockCarts()
+	end
 end)
 temp:Fire()
 
