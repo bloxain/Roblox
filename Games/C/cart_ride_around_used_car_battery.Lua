@@ -39,6 +39,7 @@ local Themes = {
 }
 -- Game
 local BombCmd = ""
+local spawnallcarts = false
 local TPdata
 local CmdsBombs = {
 	["Explode"] = false,
@@ -198,6 +199,10 @@ Carts:addButton("set Speed", function() LockCarts() end)
 
 Carts:addSlider("Cart Speed", 5, 5, 1000, function(value) Speedcarts.amount = math.floor(value / 15)*15 end)
 
+Carts:addButton("Spawn all carts", function() SpawnAllCarts() end)
+
+Carts:addToggle("Spawn all Crts", Speedcarts.Speed, function(value) spawnallcarts = value end)
+
 
 Bombs:addDropdown("Bomb Cmds", {"Delete", "Spawn", "Explode", "backward", "forward", "paused"}, nil, function(value) BombCmd = value end)
 
@@ -292,6 +297,19 @@ function LockCarts()
 	end
 end
 
+function SpawnAllCarts()
+	if not Libary.GetChar() then
+		return
+	end
+	for i,v in pairs(workspace:GetChildren()) do
+		if v.Name == "rustyrespawner" or v.Name == "respawner" then
+			firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v.respawn, 1)
+			wait(.1)
+			firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v.respawn, 0)
+		end
+	end
+end
+
 function TpTOarea(value)
 	if value == "admissions" then
 		Libary.TpPlayer(workspace['pride flag'].Part.Position)
@@ -334,14 +352,17 @@ end
 
 function Bombcmds(typee)
 	for i, v in pairs(workspace:GetChildren()) do
+		if not Libary.GetChar() then
+			return
+		end
 		if v.Name == "BombCart" then
-			if v:FindFirstChild("move") then
+			if v:FindFirstChild("move") and v:FindFirstChild("explode") then
 				if typee == "Delete" then
 					v:Destroy()
 				elseif typee == "Spawn" then
-					firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, workspace.bombrespawnerply.respawn, 1)
+					firetouchinterest(Libary.GetChar().HumanoidRootPart, workspace.bombrespawnerply.respawn, 1)
 					task.wait(.1)
-					firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, workspace.bombrespawnerply.respawn, 0)
+					firetouchinterest(Libary.GetChar().HumanoidRootPart, workspace.bombrespawnerply.respawn, 0)
 				elseif typee == "Explode" then
 					fireclickdetector(v.explode.ClickDetector)
 				elseif typee == "backward" then
@@ -636,6 +657,10 @@ temp.Event:Connect(function()
 		
 		if Speedcarts.Speed then
 			LockCarts()
+		end
+		
+		if spawnallcarts then
+			SpawnAllCarts()
 		end
 	end
 end)
