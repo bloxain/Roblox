@@ -193,15 +193,20 @@ for theme, color in pairs(Themes) do
 	UI:setTheme(theme, color)
 end
 
+
+Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() end)
+
+Colors:addButton("Kill GUI", function() game.CoreGui["universal Gui"]:Destroy() script:Destroy()end)
+
 CreditAD:addTextbox("FeedBack/suggestions and why to change it", "", function(value) FeedBack = value end)
 
-CreditAD:addButton("Send FeedBack", function() SendDiscord(FeedBack, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkzMDA5MzE0MzA0MzY4NzEwL3FzcHJxUlJDQ3QwX3k1UGNBQjFsbFpDc2hUMUY3UFg5NUxJNTN2U2EwUkgydy1uVWtZOTB2QndKY2pHQmdyUnBaNnBW")) UI:Notify("Sent!", "I will hopefully look and consider this later") end)
+CreditAD:addButton("Send FeedBack", function() SendDiscord("GUI: Universal".."\n GameId: "..game.GameId.."\n PlaceId: "..game.PlaceId.."\n JobId: "..game.JobId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n FeedBack: \n\n"..FeedBack, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkzMDA5MzE0MzA0MzY4NzEwL3FzcHJxUlJDQ3QwX3k1UGNBQjFsbFpDc2hUMUY3UFg5NUxJNTN2U2EwUkgydy1uVWtZOTB2QndKY2pHQmdyUnBaNnBW")) UI:Notify("Sent!", "I will hopefully look and consider this later") end)
 
 CreditAD:addTextbox("Add Script: Paste script to add to bloxain", "", function(value) AddGame = value end)
 
 CreditAD:addButton("Send Script", function() SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkyOTkwNTE5NzgzMzI5ODIyL2xuSkhfbkEzak5Ud3BuLVdKZ3VtM3d5d2ZEX0F4bW5ReFpIa2p2OW53eUpSWjBSWlhNaHF6Q2ZlQmVMTFJsbGRpU1dO")) UI:Notify("Sent!", "This is checked then(Hopefully) added to bloxain in the next update") end)
 
-CreditAD:addButton("Copy Discord", function() setclipboard("https://discord.gg/Vr2jNFpK") UI:Notify("Copyed!", "you can paste the link in your browser") end)
+CreditAD:addButton("Copy Discord", function() setclipboard("https://discord.gg/PPFYacGb2b") UI:Notify("Copyed!", "you can paste the link in your browser") end)
 
 CreditAD:addButton("Copy YouTube", function() setclipboard("https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ") UI:Notify("Copyed!", "you can paste the link in your browser") end)
 
@@ -360,7 +365,7 @@ function FindPlayer(target)
 end
 
 function Spawnplatform()
-	if platform == true then
+	if platform == true and Libary.GetChar() then
 		if Libary.GetChar():FindFirstChild("Left Leg") then
 			local Clone = Instance.new("Part")
 			Clone.Parent = workspace
@@ -372,7 +377,7 @@ function Spawnplatform()
 			local Clone = Instance.new("Part")
 			Clone.Parent = workspace
 			Clone.Anchored = true
-			Clone.Position = Libary.GetChar()["LeftFoot"].Position
+			Clone.Position = Libary.GetChar()["LeftLowerLeg"].Position
 			Clone.Size = Vector3.new(Size, 1, Size)
 			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
 		end
