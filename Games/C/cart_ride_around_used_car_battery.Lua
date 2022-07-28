@@ -803,7 +803,3 @@ function SaveData(profile)
 	}
 	writefile("Bloxhub#7364/Saves/Universal_Gui.lua", game:GetService("HttpService"):JSONEncode(datatosave))
 end
-
-firetouchinterest(game:GetService("Workspace")["germ_storm5"].HumanoidRootPart, game:GetService("Workspace").superiorrespawner.respawn, 1)
-wait(.1)
-firetouchinterest(game:GetService("Workspace")["germ_storm5"].HumanoidRootPart, game:GetService("Workspace").superiorrespawner.respawn, 0)
