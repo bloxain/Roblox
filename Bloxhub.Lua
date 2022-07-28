@@ -1,4 +1,4 @@
-local Version = "0.5"
+local Version = "0.5.0.1"
 local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
 local file = ""
 function Run()
