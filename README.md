@@ -7,7 +7,7 @@ note Please keep this up i have seen a lot of project deletes and if i broke TOS
 
 this is where loadstrings are downloaded and executed feel free off learn of it!
 
-discord: https://discord.gg/cjP6mnDT
+discord: https://discord.gg/PPFYacGb2b
 
 YouTube: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
 
