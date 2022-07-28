@@ -411,7 +411,7 @@ CreditAD:addTextbox("Add Script: Paste script to add to bloxain", "", function(v
 
 CreditAD:addButton("Send Script", function() SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkyOTkwNTE5NzgzMzI5ODIyL2xuSkhfbkEzak5Ud3BuLVdKZ3VtM3d5d2ZEX0F4bW5ReFpIa2p2OW53eUpSWjBSWlhNaHF6Q2ZlQmVMTFJsbGRpU1dO")) UI:Notify("Sent!", "This is checked then(Hopefully) added to bloxain in the next update") end)
 
-CreditAD:addButton("Copy Discord", function() setclipboard("https://discord.gg/Vr2jNFpK") UI:Notify("Copyed!", "you can paste the link in your browser") end)
+CreditAD:addButton("Copy Discord", function() setclipboard("https://discord.gg/PPFYacGb2b") UI:Notify("Copyed!", "you can paste the link in your browser") end)
 
 CreditAD:addButton("Copy YouTube", function() setclipboard("https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ") UI:Notify("Copyed!", "you can paste the link in your browser") end)
 
