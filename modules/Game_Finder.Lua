@@ -202,7 +202,7 @@ function Run()
 		
 			if temp[2] and temp[3] then
 				PickScript:Destroy()
-				loadstring(readfile("Bloxhub#7364/"..temp[6]))()
+				loadstring(readfile("BloxainHub/"..temp[6]))()
 				return
 			end
 			if temp[3] == false then
@@ -213,7 +213,7 @@ function Run()
 		end
 	end
 	PickScript:Destroy()
-	loadstring(readfile("Bloxhub#7364/Universal_Gui.Lua"))()
+	loadstring(readfile("BloxainHub/Universal_Gui.Lua"))()
 end
 
 Run()    
@@ -227,7 +227,7 @@ end)
 TextButton.MouseButton1Click:Connect(function()
 	local temp = scripttoRun
 	if temp[2] then
-		loadstring(readfile("Bloxhub#7364/"..temp[6]))()
+		loadstring(readfile("BloxainHub/"..temp[6]))()
 	else
 		loadstring(game:HttpGet(temp[6]))()
 	end
