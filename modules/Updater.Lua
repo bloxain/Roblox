@@ -55,15 +55,16 @@ function Update()
 	precent += AddAmount1
 	Progress.Size = UDim2.new(0, NewSize, 0, 36)
 	Info.Text = title.." | %"..math.floor(precent * 20 + 0.5)/20
+	task.wait(.1)
 end
 
 local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
 
 Show(14)
-if isfolder("Bloxhub#7364") then
-	if isfolder("Bloxhub#7364/Saves") then
+if isfolder("BloxainHub") then
+	if isfolder("BloxainHub/Saves") then
 		moredata = {}
-		for i, v in pairs(listfiles("Bloxhub#7364/Saves")) do
+		for i, v in pairs(listfiles("BloxainHub/Saves")) do
 			local add = {
 				["Path"] = v,
 				["Data"] = readfile(v)
@@ -72,37 +73,37 @@ if isfolder("Bloxhub#7364") then
 			table.insert(moredata, 1, add)
 		end
 	end
-	delfolder("Bloxhub#7364")
+	delfolder("BloxainHub")
 end
-makefolder("Bloxhub#7364")
+makefolder("BloxainHub")
 Update()
-makefolder("Bloxhub#7364/Modules")
+makefolder("BloxainHub/Modules")
 Update()
-makefolder("Bloxhub#7364/Saves")
+makefolder("BloxainHub/Saves")
 Update()
 
 
-writefile("Bloxhub#7364/Tower_Of_Hell.Lua", game:HttpGet(Github.."T/Tower_Of_Hell.Lua"))
+writefile("BloxainHub/Tower_Of_Hell.Lua", game:HttpGet(Github.."T/Tower_Of_Hell.Lua"))
 Update()
-writefile("Bloxhub#7364/Destruction_Simulator.Lua", game:HttpGet(Github.."D/Destruction_Simulator.Lua"))
+writefile("BloxainHub/Destruction_Simulator.Lua", game:HttpGet(Github.."D/Destruction_Simulator.Lua"))
 Update()
-writefile("Bloxhub#7364/Tower_Simulator.Lua", game:HttpGet(Github.."T/Tower_Simulator.Lua"))
+writefile("BloxainHub/Tower_Simulator.Lua", game:HttpGet(Github.."T/Tower_Simulator.Lua"))
 Update()
-writefile("Bloxhub#7364/Egg_Farm_Simulator.Lua", game:HttpGet(Github.."E/Egg_Farm_Simulator.Lua"))
+writefile("BloxainHub/Egg_Farm_Simulator.Lua", game:HttpGet(Github.."E/Egg_Farm_Simulator.Lua"))
 Update()
-writefile("Bloxhub#7364/Universal_Gui.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Universal_Gui.Lua"))
+writefile("BloxainHub/Universal_Gui.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Universal_Gui.Lua"))
 Update()
-writefile("Bloxhub#7364/cart_ride_around_used_car_battery.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Games/C/cart_ride_around_used_car_battery.Lua"))
+writefile("BloxainHub/cart_ride_around_used_car_battery.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Games/C/cart_ride_around_used_car_battery.Lua"))
 Update()
-writefile("Bloxhub#7364/Natural_Disaster_Survival.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Games/N/Natural%20Disaster%20Survival.Lua"))
+writefile("BloxainHub/Natural_Disaster_Survival.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Games/N/Natural%20Disaster%20Survival.Lua"))
 Update()
-writefile("Bloxhub#7364/Venyx_UI.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Venyx_UI.Lua"))
+writefile("BloxainHub/Modules/UI.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/UI.Lua"))
 Update()
-writefile("Bloxhub#7364/Modules/GameFinder.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Game_Finder.Lua"))
+writefile("BloxainHub/Modules/GameFinder.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Game_Finder.Lua"))
 Update()
-writefile("Bloxhub#7364/Modules/progressBar.lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/progressBar.lua"))
+writefile("BloxainHub/Modules/progressBar.lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/progressBar.lua"))
 Update()
-writefile("Bloxhub#7364/Modules/Main.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Main.Lua"))
+writefile("BloxainHub/Modules/Main.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Main.Lua"))
 Update()
 
 if moredata then
