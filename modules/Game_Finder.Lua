@@ -201,8 +201,10 @@ function Run()
 		if temp[1] == game.GameId then
 		
 			if temp[2] and temp[3] then
-				PickScript:Destroy()
+				PickScript:Destroy()			
+				print("BloxainHub/"..temp[6])
 				loadstring(readfile("BloxainHub/"..temp[6]))()
+
 				return
 			end
 			if temp[3] == false then
