@@ -78,4 +78,12 @@ end
 
 module.FakeCharacter = nil
 module.RealCharacter = module.GetChar()
+
+
+
+-- DATA
+module.PlayInto = true
+module.IntroName = "Bloxain Hub"
+module.Discord = "https://discord.gg/PPFYacGb2b"
+module.Youtube = "https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ"
 return module
