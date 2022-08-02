@@ -1,14 +1,12 @@
 local col = nil
 local Selectedplayer = nil
 local HideUItoggle = false
-local useJumpPower = false
+local useJumpPower = true
 local hitboxenabled = false
 local ScriptRunning  = true
 local UseDisplayNames = false
 local Size = 6
 local HeadSize = 20
-local walkspeed = 16
-local jumpPower = 50
 local SavedFog = 100000
 local AddGame = ""
 local FeedBack = ""
@@ -17,8 +15,8 @@ local Mouse = Player:GetMouse()
 local VirtualUser = game:service'VirtualUser'
 local runservice = game:GetService'RunService'
 local Inputservice = game:GetService'UserInputService'
-local UI = loadstring(readfile("Bloxhub#7364/Modules/UI.Lua"))()
-local Libary = loadstring(readfile("Bloxhub#7364/Modules/Main.Lua"))()
+local UI = loadstring(readfile("BloxainHub/Modules/UI.Lua"))()
+local Libary = loadstring(readfile("BloxainHub/Modules/Main.Lua"))()
 local hideUIData = {}
 local Accessorys = {}
 local keys = {"F4", "Q", "F3"}
@@ -41,9 +39,10 @@ end
 
 if Libary.GetChar().Humanoid.UseJumpPower == false then
 	jumpPower = 7
+	useJumpPower = false
 end
 
-local Window = UI:MakeWindow({Name = "universal Gui", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest", IntroEnabled = false, IntroText = "Bloxain Hub"})
+local Window = UI:MakeWindow({Name = "universal Gui", HidePremium = false, SaveConfig = true, ConfigFolder = "BloxainHub\Saves", IntroEnabled = Libary.PlayInto, IntroText = Libary.IntroName})
 
 local Main = Window:MakeTab({Name = "Main", Icon = "", PremiumOnly = false})
 
@@ -76,15 +75,15 @@ Main:AddToggle({Name = "spawn platform", Flag = "spawnplatform", Default = false
 
 Main:AddToggle({Name = "awalys enable shiftlock", Flag = "enableshiftlock", Default = false, Save = true,})
 
-Main:AddToggle({Name = "Anti AFK", Flag = "antiafk", Default = false, Save = true, Callback = function(Value) AntiAFK = Value end})
+Main:AddToggle({Name = "Anti AFK", Flag = "antiafk", Default = false, Save = true})
 
 Main:AddToggle({Name = "Unlock Zomm Distance", Flag = "unlockzoom", Default = false, Save = true, Callback = function(Value) if Value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = Value end})
 
 Main:AddBind({Name = "Hide UI", Flag = "Hide UI Key", Default = Enum.KeyCode.F4, Hold = false, Callback = function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end})
 
-Main:AddSlider({Name = "Player Speed", Min = 16, Max = 300, Default = 16, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Player Speed", Callback = function(Value) Libary.GetChar().Humanoid.WalkSpeed = Value walkspeed = Value end})
+Main:AddSlider({Name = "Player Speed", Flag = "PlayerSpeed", Min = 16, Max = 300, Default = 16, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Player Speed", Callback = function(Value) Libary.GetChar().Humanoid.WalkSpeed = Value end})
 
-Main:AddSlider({Name = "Player jumpPower", Min = jumpPower, Max = 300, Default = jumpPower, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Player jumpPower", Callback = function(Value) Libary.GetChar().Humanoid.JumpPower = Value jumpPower = Value end})
+Main:AddSlider({Name = "Player jumpPower", Flag = "PlayerJump", Min = jumpPower, Max = 300, Default = jumpPower, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Player jumpPower", Callback = function(Value) Libary.GetChar().Humanoid.JumpPower = Value end})
 
 
 GameAd:AddTextbox({Name = "Player", Default = "", TextDisappear = true, Callback = function(Value) Selectedplayer = FindPlayer(Value) end})
@@ -110,15 +109,15 @@ FE:AddDropdown({Name = "Accessory(for FE Scripts)", Default = "", Options = Acce
 FE:AddButton({Name = "FE Demon Script(cose a good accessory", Callback = function() loadstring(game:HttpGet("https://drive.google.com/uc?export=download&id=1n2LZELzJb7NsGO17eLKCXSu5-cHrIg0u"))() end})
 
 
-Settings:AddTextbox({Name = "Platform Size", Flag = "toggle", Default = "", TextDisappear = true, Save = true, Callback = function(Value) Size = Value end})
+Settings:AddSlider({Name = "Platform Size", Flag = "Platformsize", Save = true, Min = 1, Max = 100, Default = 6, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Platform Size"})
 
-Settings:AddTextbox({Name = "Hitbox size", Flag = "HitboxSize", Default = "20", TextDisappear = true, Save = true, Callback = function(Value) HeadSize = tonumber(value) end})
+Settings:AddSlider({Name = "Hitbox size", Flag = "HitboxSize", Save = true, Min = 1, Max = 100, Default = 6, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Hitbox size"})
 
 Settings:AddToggle({Name = "Use Display Names", Flag = "UseDispayNames", Default = false, Save = true, Callback = function(Value) UseDisplayNames = Value end})
 
 Settings:AddBind({Name = "spawn platform", Flag = "SpawnPlatform Key",  Default = Enum.KeyCode.Q, Hold = false, Save = true, Callback = function() if UI.Flags["spawnplatform"].Value then Spawnplatform() end end})
 
-Settings:AddBind({Name = "click teleport", Flag = "ClickTp Key", Default = Enum.KeyCode.Q, Hold = false, Save = true})
+Settings:AddBind({Name = "click teleport", Flag = "ClickTp Key", Default = Enum.KeyCode.LeftControl, Hold = false, Save = true})
 
 Settings:AddButton({Name = "Kill GUI", Callback = function() UI:Destroy() end})
 
@@ -131,9 +130,13 @@ Credits:AddTextbox({Name = "Add Script: Paste script to add to bloxain", Flag = 
 
 Credits:AddButton({Name = "Send Script", Callback = function() Libary.SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame) UI:MakeNotification({Name = "Sent!", Content = "This is checked then(Hopefully) added to bloxain in the next update", Time = 5}) end})
 
-Credits:AddButton({Name = "Copy Discord", Callback = function() setclipboard("https://discord.gg/PPFYacGb2b") UI:Notify("Copyed!", "you can paste the link in your browser") end})
+Credits:AddButton({Name = "Copy Discord", Callback = function() setclipboard(Libary.Discord) UI:Notify("Copyed!", "you can paste the link in your browser") end})
 
-Credits:AddButton({Name = "Copy YouTube", Callback = function() setclipboard("https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ") UI:Notify("Copyed!", "you can paste the link in your browser") end})
+Credits:AddButton({Name = "Copy YouTube", Callback = function() setclipboard(Libary.Youtube) UI:Notify("Copyed!", "you can paste the link in your browser") end})
+
+Credits:AddParagraph("Credits & Info",[["Team - Me(not even the docs)
+LIBARYS OrionLib / Veny x
+INFO - this code is open source for script creators and Game Devs(yes i hope game devs patch this script to better there game and my ablitys to script) my spelling sucks"]])
 
 --             functions
 ---------------------------------------''
@@ -273,7 +276,7 @@ function Spawnplatform(Transparency)
 	local Clone = Instance.new("Part")
 	Clone.Parent = workspace
 	Clone.Anchored = true
-	Clone.Size = Vector3.new(Size, 1, Size)
+	Clone.Size = Vector3.new(UI.Flags["Platformsize"].Value, 1, UI.Flags["Platformsize"].Value)
 	Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
 	Clone.Transparency = Transparency
 
@@ -371,7 +374,7 @@ end) runservice.RenderStepped:Connect(function()
 		for i,v in next, game:GetService('Players'):GetPlayers() do
 			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
 				pcall(function()
-					v.Character.HumanoidRootPart.Size = Vector3.new(HeadSize,HeadSize,HeadSize)
+					v.Character.HumanoidRootPart.Size = Vector3.new(UI.Flags["HitboxSize"].Value,UI.Flags["HitboxSize"].Value,UI.Flags["HitboxSize"].Value)
 					v.Character.HumanoidRootPart.Transparency = 0.8
 					v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")
 					v.Character.HumanoidRootPart.Material = "Neon"
@@ -384,15 +387,15 @@ end)
 
 function CharLoaded(Char)
 	Char.Humanoid.Changed:Connect(function()
-		if jumpPower ~= 50 and jumpPower ~= 7 then
+		if UI.Flags["PlayerJump"].Value ~= 50 and UI.Flags["PlayerJump"].Value ~= 7 then
 			if useJumpPower then
-				Char.Humanoid.JumpPower = jumpPower
+				Char.Humanoid.JumpPower = UI.Flags["PlayerJump"].Value
 			else
-				Char.Humanoid.JumpHeight = jumpPower
+				Char.Humanoid.JumpHeight = UI.Flags["PlayerJump"].Value
 			end
 		end
-		if walkspeed ~= 16 then
-			Char.Humanoid.WalkSpeed = walkspeed
+		if UI.Flags["PlayerSpeed"].Value ~= 16 then
+			Char.Humanoid.WalkSpeed = UI.Flags["PlayerSpeed"].Value
 		end
 	end)
 	Char.Humanoid.Died:Connect(function()
@@ -406,4 +409,4 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function(Char)
 	ScriptRunning = true
 end)
 
-UI:Init()
+UI:Init() 	 
