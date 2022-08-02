@@ -20,11 +20,12 @@ supported executors like krnl, trigon, synapse x ect -- as of march 16 It Is Req
 suported games:
 Games | Support
 ----- | -------
-tower of hell | Great
+tower of hell | ok
 destuction simulator | Ok
-tower simulator | Ok
+tower simulator | poor
 Natral Disaster | Ok
 egg farm | ok
+Cart RIde | Great
 
 # Universal
 Scripts | Support
@@ -42,8 +43,11 @@ Third party(made by other people)
 
 # How to make your own GUI
 
+TO HELP / MANUAL UPDATE
 
-the GUI is part of another github https://stefanuk12.github.io/Venyx-UI-Library/
+make a pull or send in discord ill test it and add / not add to main branch
+
+the GUI is part of another github https://github.com/shlexware/Orion
 
 to use copy and execute the universal GUI and check its compatable with and remove things that dont work or get flaged by the anti cheat
 
