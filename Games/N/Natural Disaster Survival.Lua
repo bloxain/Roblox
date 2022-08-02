@@ -1,244 +1,42 @@
 local col = nil
-local clickon = false
-local deleteon = false
-local platform = false
-local noclip = false
-local Infjump = false
-local UIS = game:GetService("UserInputService")
+local Selectedplayer = nil
+local HideUItoggle = false
+local useJumpPower = true
+local hitboxenabled = false
+local ScriptRunning  = true
+local UseDisplayNames = false
 local Size = 6
+local HeadSize = 20
+local SavedFog = 100000
+local AddGame = ""
+local FeedBack = ""
 local Player = game.Players.LocalPlayer
 local Mouse = Player:GetMouse()
-local Selectedplayer = nil
-local firetouchinterest = firetouchinterest or fake_touch or nil
-local UseDisplayNames = false
-local AntiAFK = false
-local HeadSize = 20
-local unlockzoom = false
-local walkspeed = 16
-local jumpPower = 50
-local HideUItoggle = false
-local touchon = false
-local Vote = true
-local Fall = false
-local NoScreen = false
-local AwalysWin = false
-local AntiAcid = false
-local AntiVius = false
-local NoCloud = false
-local AntiTsunami = false
-local AntiAlll = false
+local VirtualUser = game:service'VirtualUser'
+local runservice = game:GetService'RunService'
+local Inputservice = game:GetService'UserInputService'
+local UI = loadstring(readfile("BloxainHub/Modules/UI.Lua"))()
+local Libary = loadstring(readfile("BloxainHub/Modules/Main.Lua"))()
 local hideUIData = {}
 local Accessorys = {}
-
-function SaveData()
-	local datatosave = {
-		["UseDisplayNames"] = UseDisplayNames,
-		["AntiAFK"] = AntiAFK,
-		["Vote"] = Vote,
-		["platform"] = platform,
-		["clickon"] = clickon,
-		["deleteon"] = deleteon,
-		["Infjump"] = Infjump,
-		["noclip"] = noclip,
-		["unlockzoom"] = unlockzoom,
-		["Fall"] = Fall,
-		["NoScreen"] = NoScreen,
-		["AntiAcid"] = AntiAcid,
-		["AntiVius"] = AntiVius,
-		["NoCloud"] = NoCloud,
-		["AntiTsunami"] = AntiTsunami
-	}
-	writefile("Bloxhub#7364/Saves/Disater.lua", game:GetService("HttpService"):JSONEncode(datatosave))
-end
-
-function LoadData()
-	if not isfile("Bloxhub#7364/Saves/Disater.lua") then
-		return
-	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Bloxhub#7364/Saves/Disater.lua"))
-		UseDisplayNames = data.UseDisplayNames
-		AntiAFK = data.AntiAFK
-		Vote = data.Vote
-		platform = data.platform
-		clickon = data.clickon
-		deleteon = data.deleteon
-		Infjump = data.Infjump
-		noclip = data.noclip
-		unlockzoom = data.unlockzoom
-		Fall = data.Fall
-		NoScreen = data.NoScreen
-		AntiAcid = data.AntiAcid
-		AntiVius = data.AntiVius
-		NoCloud = data.NoCloud
-		noclip = data.noclip
-		AntiTsunami = data.AntiTsunami
-	end
-end
-
-LoadData()
-
-for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-	if v:IsA("Accessory") then
-		table.insert(Accessorys, 1, v.Name)
-	end
-end
-
-if game.Players.LocalPlayer.Character.Humanoid.UseJumpPower == false then
-	jumpPower = 7
-end
-
-UserInput = game:GetService("UserInputService")
-
---Hold CLTR and click to delete parts (you need to rejoin if you delete something wrong)
-local Plr = game:GetService("Players").LocalPlayer
-local Mouse = Plr:GetMouse()
-
-
--- https://raw.githubusercontent.com/Stefanuk12/Venyx-UI-Library/main/source.lua
--- https://raw.githubusercontent.com/zxciaz/VenyxUI/main/Reuploaded
--- // Initialising the UI
-local Venyx = loadstring(readfile("Bloxhub#7364/Venyx_UI.Lua"))()
-local UI = Venyx.new("Natural Disaster Survival")
+local keys = {"F4", "Q", "F3"}
 local Themes = {
-	Background = Color3.fromRGB(24, 24, 24),
-	Glow = Color3.fromRGB(0, 0, 0),
-	Accent = Color3.fromRGB(10, 10, 10),
-	LightContrast = Color3.fromRGB(188, 51, 54),
-	DarkContrast = Color3.fromRGB(14, 14, 14),  
-	TextColor = Color3.fromRGB(255, 255, 255)
+	["Background"] = Color3.fromRGB(24, 24, 24),
+	["Glow"] = Color3.fromRGB(0, 0, 0),
+	["Accent"] = Color3.fromRGB(10, 10, 10),
+	["LightContrast"] = Color3.fromRGB(43, 43, 43),
+	["DarkContrast"] = Color3.fromRGB(14, 14, 14),  
+	["TextColor"] = Color3.fromRGB(255, 255, 255)
 }
 
+repeat task.wait() until Libary.GetChar()
 
-
-local main = UI:addPage("Main")
-local AD = main:addSection("additional features")
-local MainGame = main:addSection("Game")
-local localplayer = main:addSection("localplayer")
-
-local server = UI:addPage("Server")
-local Splayer = server:addSection("Players")
-
-local Natral = UI:addPage("Natural Disaster")
-local disaster = Natral:addSection("Game Scripts(Anti Beta")
-
-local FePage = UI:addPage("FE Scripts")
-local FE = FePage:addSection("Scripts(good Exploit Reqiured) sometimes synapse x")
-
-local theme = UI:addPage("Settings")
-local Confic = theme:addSection("Config")
-local Colors = theme:addSection("Colors")
-
-local CreditPage = UI:addPage("FeedBack")
-local CreditAD = CreditPage:addSection("Credits: Bloxain -- Code, GreenDyno -- UI Synapse Reqired to Send")
-
-
-localplayer:addSlider("Player Speed", 16, 16, 300, function(value) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value walkspeed = value end)
-
-localplayer:addSlider("Player jumpPower", jumpPower, jumpPower, 300, function(value) game.Players.LocalPlayer.Character.Humanoid.JumpPower = value jumpPower = value end)
-
-MainGame:addSlider("Gravity", 196.2, 0, 196.2, function(value) workspace.Gravity = value end)
-
-AD:addButton("save location", function() col = workspace[game.Players.LocalPlayer.Name].HumanoidRootPart.Position end)
-
-AD:addButton("Load location", function() workspace[game.Players.LocalPlayer.Name]:MoveTo(col) end)
-
-AD:addButton("Clear Platforms", function() clearplatforms() end)
-
-AD:addToggle("noclip", false, function(value) noclip = value end)
-
-AD:addToggle("Inf jump", Infjump ,function(value) Infjump = value end)
-
-AD:addToggle("cntrl click teleport", clickon, function(value) clickon = value end)
-
-AD:addToggle("alt click delete", deleteon, function(value) deleteon = value end)
-
-AD:addToggle("spawn platform", platform, function(value) platform = value end)
-
-AD:addToggle("Anti AFK", AntiAFK, function(value) AntiAFK = value end)
-
-AD:addToggle("Hide UI", HideUIs, function(value) AntiAFK = value end)
-
-AD:addToggle("Unlock Zomm Distance", unlockzoom, function(value) if value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = value end)
-
-AD:addKeybind("Hide UI", nil, function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end)
-
-Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
-
-Splayer:addButton("teleport to player", function() game.Players.LocalPlayer.character:MoveTo(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end)
-
-Splayer:addButton("Kill Player", function() KillPlayer() end)
-
-Splayer:addButton("Bring Player", function() BringPlayer() end)
-
-Splayer:addButton("Give Player Tool", function() GiveTool() end)
-
-disaster:addToggle("MapVote", Vote, function(value) Vote = value end)
-
-disaster:addToggle("No Fall Damage", Fall, function(value) Fall = value if value == false then UI:Notify("Reset This To Apply") end end)
-
-disaster:addToggle("Awalys Win", AwalysWin, function(value) AwalysWin = value end)
-
-disaster:addToggle("Anti Acid Disaster", AntiAcid, function(value) AntiAcid = value end)
-
-disaster:addToggle("Anti Vius Disaster", AntiVius, function(value) AntiVius = value end)
-
-disaster:addToggle("Anti Tsunami Disaster", AntiTsunami, function(value) AntiTsunami = value end)
-
-disaster:addToggle("No Disaster Screen Thing", NoScreen, function(value) NoScreen = value end)
-
-disaster:addToggle("No Disaster Could", NoCloud, function(value) NoCloud = value end)
-
-disaster:addToggle("Anti All(Fall, disasters, ect INVISABLE)", AntiAlll, function(value) AntiAlll = value AntiAll(value) end)
-
-FE:addButton("Grow(body Scale:All 100% except BodyProportionScale: 0%) ONLY ARTHO", function() Grow() end)
-
-FE:addDropdown("Accessory(for FE Scripts", Accessorys, nil, function(value) _G.Bloxain1 = value end)
-
-FE:addButton("FE Demon Script(chose a good accessory", function() loadstring(game:HttpGet("https://drive.google.com/uc?export=download&id=1n2LZELzJb7NsGO17eLKCXSu5-cHrIg0u"))() end)
-
-Confic:addTextbox("Platform size", "", function(value) Size = value end)
-
-Confic:addTextbox("Hitbox size", "20", function(value) HeadSize = tonumber(value) end)
-
-Confic:addToggle("Use Display Names", UseDisplayNames, function(value) UseDisplayNames = value end)
-
-Confic:addKeybind("spawn platform key", Enum.KeyCode.Q, function() Spawnplatform()() end)
-
-Confic:addButton("Save", function() SaveData() end)
-
-for theme, color in pairs(Themes) do
-	Colors:addColorPicker(theme, color, function(color3) UI:setTheme(theme, color3) end) -- // Adding a color picker for each type of theme customisable
-end
-
-Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() end)
-
-Colors:addButton("Kill GUI", function() game.CoreGui["Natural Disaster Survival"]:Destroy() script:Destroy()end)
-
-CreditAD:addTextbox("FeedBack/suggestions and why to change it", "", function(value) FeedBack = value end)
-
-CreditAD:addButton("Send FeedBack", function() SendDiscord("GUI: Universal".."\n GameId: "..game.GameId.."\n PlaceId: "..game.PlaceId.."\n JobId: "..game.JobId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n FeedBack: \n\n"..FeedBack, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkzMDA5MzE0MzA0MzY4NzEwL3FzcHJxUlJDQ3QwX3k1UGNBQjFsbFpDc2hUMUY3UFg5NUxJNTN2U2EwUkgydy1uVWtZOTB2QndKY2pHQmdyUnBaNnBW")) UI:Notify("Sent!", "I will hopefully look and consider this later") end)
-
-CreditAD:addTextbox("Add Script: Paste script to add to bloxain", "", function(value) AddGame = value end)
-
-CreditAD:addButton("Send Script", function() SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkyOTkwNTE5NzgzMzI5ODIyL2xuSkhfbkEzak5Ud3BuLVdKZ3VtM3d5d2ZEX0F4bW5ReFpIa2p2OW53eUpSWjBSWlhNaHF6Q2ZlQmVMTFJsbGRpU1dO")) UI:Notify("Sent!", "This is checked then(Hopefully) added to bloxain in the next update") end)
-
-CreditAD:addButton("Copy Discord", function() setclipboard("https://discord.gg/PPFYacGb2b") UI:Notify("Copyed!", "you can paste the link in your browser") end)
-
-CreditAD:addButton("Copy YouTube", function() setclipboard("https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ") UI:Notify("Copyed!", "you can paste the link in your browser") end)
-
-UI:SelectPage(main, true)
-
---             functions
----------------------------------------''
-game.Players.LocalPlayer.PlayerGui.MainGui.SurviversPage.Changed:Connect(function()
-	if Vote then
-		if game.Players.LocalPlayer.PlayerGui.MainGui.SurviversPage.Visible then
-			game.Players.LocalPlayer.PlayerGui.MainGui.MapVotePage.Visible = true
-		end
-	end
-end)
-
+-----------------------
 function AntiAll(Toggle)
+	if not FristTIme then
+		FristTIme = true
+		return
+	end
 	if Toggle then
 		if FakeCharacter then
 			FakeCharacter:Destroy()
@@ -254,18 +52,158 @@ function AntiAll(Toggle)
 	game.Players.LocalPlayer.Character = RealCharacter
 	workspace.Camera.CameraSubject = RealCharacter.Humanoid
 end
+-----------------------
+
+for i, v in pairs(Libary.GetChar():GetChildren()) do
+	if v:IsA("Accessory") then
+		table.insert(Accessorys, 1, v.Name)
+	end
+end
+
+if Libary.GetChar().Humanoid.UseJumpPower == false then
+	jumpPower = 7
+	useJumpPower = false
+end
+
+local Window = UI:MakeWindow({Name = "Natural Disaster Survival", HidePremium = false, SaveConfig = true, ConfigFolder = "BloxainHub\Saves", IntroEnabled = Libary.PlayInto, IntroText = Libary.IntroName})
+
+local Main = Window:MakeTab({Name = "Main", Icon = "", PremiumOnly = false})
+
+local GameAd = Window:MakeTab({Name = "Game", Icon = "", PremiumOnly = false})
+
+local FE = Window:MakeTab({Name = "FE Scripts", Icon = "", PremiumOnly = false})
+
+local Disaster = Window:MakeTab({Name = "Natural Disasters", Icon = "", PremiumOnly = false})
+
+local Settings = Window:MakeTab({Name = "Settings", Icon = "", PremiumOnly = false})
+
+local Credits = Window:MakeTab({Name = "FeedBack", Icon = "", PremiumOnly = false})
+
+
+Main:AddButton({Name = "save location", Callback = function() col = Libary.GetChar().HumanoidRootPart.Position end})
+
+Main:AddButton({Name = "Load location", Callback = function() Libary.TpPlayer(col) end})
+
+Main:AddButton({Name = "Clear Platforms", Callback = function() clearplatforms() end})
+
+Main:AddButton({Name = "Reset Camera", Callback = function() Fixcamera() end})
+
+Main:AddToggle({Name = "noclip", Flag = "Noclip", Default = false, Save = true})
+
+Main:AddToggle({Name = "Inf jump", Flag = "inf jump", Default = false, Save = true})
+
+Main:AddToggle({Name = "click teleport", Flag = "ClickOn", Default = false, Save = true})
+
+Main:AddToggle({Name = "alt click delete", Flag = "clickdelete", Default = false, Save = true})
+
+Main:AddToggle({Name = "spawn platform", Flag = "spawnplatform", Default = false, Save = true})
+
+Main:AddToggle({Name = "awalys enable shiftlock", Flag = "enableshiftlock", Default = false, Save = true,})
+
+Main:AddToggle({Name = "Anti AFK", Flag = "antiafk", Default = false, Save = true})
+
+Main:AddToggle({Name = "Unlock Zomm Distance", Flag = "unlockzoom", Default = false, Save = true, Callback = function(Value) if Value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end end})
+
+Main:AddBind({Name = "Hide UI", Flag = "Hide UI Key", Default = Enum.KeyCode.F4, Hold = false, Callback = function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end})
+
+Main:AddSlider({Name = "Player Speed", Flag = "PlayerSpeed", Min = 16, Max = 300, Default = 16, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Player Speed", Callback = function(Value) Libary.GetChar().Humanoid.WalkSpeed = Value end})
+
+Main:AddSlider({Name = "Player jumpPower", Flag = "PlayerJump", Min = jumpPower, Max = 300, Default = jumpPower, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Player jumpPower", Callback = function(Value) Libary.GetChar().Humanoid.JumpPower = Value end})
+
+
+GameAd:AddTextbox({Name = "Player", Default = "", TextDisappear = true, Callback = function(Value) Selectedplayer = FindPlayer(Value) end})
+
+GameAd:AddButton({Name = "teleport to player", Callback = function() Libary.TpPlayer(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end})
+
+GameAd:AddToggle({Name = "Hitbox expander", Flag = "Hitbox", Default = false, Save = false, Callback = function(Value) hitboxenabled = Value if Value == false then for i,v in next, game:GetService('Players'):GetPlayers() do if v ~= Player then if not v.Character:FindFirstChild("HumanoidRootPart") then return end v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2) v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end end})
+
+
+GameAd:AddSlider({Name = "Fps Cap", Min = 60, Max = 1000, Default = 60, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Fps Cap", Callback = function(Value) setfpscap(Value) end})
+
+GameAd:AddSlider({Name = "Gravity", Min = 0, Max = 196.2, Default = 196.2, Color = Color3.fromRGB(255,255,255), Increment = .1, ValueName = "Gravity", Callback = function(Value) workspace.Gravity = Value end})
+
+GameAd:AddToggle({Name = "Remove Fog", Default = false, Save = false, Callback = function(Value) if Value == true then game.Lighting.FogEnd = math.huge SavedFog = game.Lighting.FogEnd return end game.Lighting.FogEnd = SavedFog end})
+
+GameAd:AddButton({Name = "PERMATE remove texutres", Callback = function() RemoveTexures() end})
+
+
+FE:AddButton({Name = "Grow(body Scale:All 100% except BodyProportionScale: 0%) ONLY ARTHO", Callback = function() Grow() end})
+
+FE:AddDropdown({Name = "Accessory(for FE Scripts)", Default = "", Options = Accessorys, Callback = function(Value) _G.Bloxain1 = Value end})
+
+FE:AddButton({Name = "FE Demon Script(cose a good accessory", Callback = function() loadstring(game:HttpGet("https://drive.google.com/uc?export=download&id=1n2LZELzJb7NsGO17eLKCXSu5-cHrIg0u"))() end})
+
+
+Disaster:AddToggle({Name = "MapVote", Flag = "MapVote", Default = false, Save = true})
+
+Disaster:AddToggle({Name = "No Fall Damage", Flag = "NoFall", Default = false, Save = true})
+
+Disaster:AddToggle({Name = "Awalys Win", Flag = "Win", Default = false, Save = false})
+
+Disaster:AddToggle({Name = "Anti Acid Disaster", Flag = "AntiA", Default = false, Save = true})
+
+Disaster:AddToggle({Name = "Anti Vius Disaster", Flag = "AntiV", Default = false, Save = true})
+
+Disaster:AddToggle({Name = "Anti Tsunami Disaster", Flag = "AntiT", Default = false, Save = true})
+
+Disaster:AddToggle({Name = "No Disaster Screen Thing", Flag = "AntiS", Default = false, Save = true})
+
+Disaster:AddToggle({Name = "No Disaster Could", Flag = "AntiC", Default = false, Save = true})
+
+Disaster:AddToggle({Name = "Anti All(Fall, disasters, ect INVISABLE)", Flag = "AntiAll", Default = false, Save = false, Callback = function(Value) AntiAll(Value) end})
+
+
+Settings:AddSlider({Name = "Platform Size", Flag = "Platformsize", Save = true, Min = 1, Max = 100, Default = 6, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Platform Size"})
+
+Settings:AddSlider({Name = "Hitbox size", Flag = "HitboxSize", Save = true, Min = 1, Max = 100, Default = 6, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Hitbox size"})
+
+Settings:AddToggle({Name = "Use Display Names", Flag = "UseDispayNames", Default = false, Save = true, Callback = function(Value) UseDisplayNames = Value end})
+
+Settings:AddBind({Name = "spawn platform", Flag = "SpawnPlatform Key",  Default = Enum.KeyCode.Q, Hold = false, Save = true, Callback = function() if UI.Flags["spawnplatform"].Value then Spawnplatform() end end})
+
+Settings:AddBind({Name = "click teleport", Flag = "ClickTp Key", Default = Enum.KeyCode.LeftControl, Hold = false, Save = true})
+
+Settings:AddButton({Name = "Kill GUI", Callback = function() UI:Destroy() end})
+
+
+Credits:AddTextbox({Name = "FeedBack/suggestions and why to change it", Default = "", Flag = "Feedback", TextDisappear = true, Callback = function(Value) FeedBack = Value end})
+
+Credits:AddButton({Name = "Send FeedBack", Callback = function() Libary.SendDiscord("GUI: Universal".."\n GameId: "..game.GameId.."\n PlaceId: "..game.PlaceId.."\n JobId: "..game.JobId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n FeedBack: \n\n"..FeedBack) UI:MakeNotification({Name = "Sent!", Content = "I will hopefully look and consider this later", Time = 5}) end})
+
+Credits:AddTextbox({Name = "Add Script: Paste script to add to bloxain", Flag = "SendScript", Default = "", TextDisappear = true, Callback = function(Value) AddGame = Value end})
+
+Credits:AddButton({Name = "Send Script", Callback = function() Libary.SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame) UI:MakeNotification({Name = "Sent!", Content = "This is checked then(Hopefully) added to bloxain in the next update", Time = 5}) end})
+
+Credits:AddButton({Name = "Copy Discord", Callback = function() setclipboard(Libary.Discord) UI:Notify("Copyed!", "you can paste the link in your browser") end})
+
+Credits:AddButton({Name = "Copy YouTube", Callback = function() setclipboard(Libary.Youtube) UI:Notify("Copyed!", "you can paste the link in your browser") end})
+
+Credits:AddParagraph("Credits & Info",[["Team - Me(not even the docs)
+LIBARYS OrionLib / Veny x
+INFO - this code is open source for script creators and Game Devs(yes i hope game devs patch this script to better there game and my ablitys to script) my spelling sucks"]])
+
+--             functions
+---------------------------------------''
+game.Players.LocalPlayer.PlayerGui.MainGui.SurviversPage.Changed:Connect(function()
+	if UI.Flags["MapVote"].Value then
+		if game.Players.LocalPlayer.PlayerGui.MainGui.SurviversPage.Visible then
+			game.Players.LocalPlayer.PlayerGui.MainGui.MapVotePage.Visible = true
+		end
+	end
+end)
+
 workspace.Structure.DescendantAdded:Connect(function(part)
-	if AntiAcid then
+	if UI.Flags["AntiA"].Value then
 		if part.Name == "AcidRain" then
 			part:Destroy()
 		end
 	end
-	if AntiVius then
+	if UI.Flags["AntiV"].Value then
 		if part.Name == "Virus" then
 			part:Destroy()
 		end
 	end
-	if AntiTsunami then
+	if UI.Flags["AntiT"].Value then
 		if part.Name == "TsunamiWave" then
 			part:Destroy()
 		end
@@ -369,37 +307,23 @@ function toggleUI(show)
 	game.CoreGui.ThemeProvider.Enabled = show
 end
 
-function GetCharacter()
-	return game.Players.LocalPlayer.Character
-end
-
-function SendDiscord(Message, WebhookURL)
-	local Data = {
-		["content"] = Message,
-		["username"] = Player.Name
-	}
-
-	local Response = syn.request({
-		Url = WebhookURL,
-		Method = "POST",
-		Headers = {
-			["Content-Type"] = "application/json"  -- When sending JSON, set this!
-		},
-		Body = game:GetService("HttpService"):JSONEncode(Data)
-	})
-
-	print(Response.StatusCode)
-end
-
-function Teleport(pos)
-	if clickon == true then
-		local Char = GetCharacter()
-		if Char then
-			Char:MoveTo(pos)
-		end
+function Fixcamera()
+	for i, v in pairs(workspace:GetChildren()) do
+		if v:IsA("Camera") then
+			v.HeadScale = 1
+			v.CameraSubject = Libary.GetChar().Humanoid
+			v.CameraType = Enum.CameraType.Custom
+			v.DiagonalFieldOfView = 143.882
+			v.FieldOfView = 70
+			v.FieldOfViewMode = Enum.FieldOfViewMode.Vertical
+			v.MaxAxisFieldOfView = 116.156
+			game.Players.LocalPlayer.CameraMaxZoomDistance = 128
+			game.Players.LocalPlayer.CameraMinZoomDistance = 0.5
+			game.Players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
+			game.Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
+		end 
 	end
 end
-
 
 function FindPlayer(target)
 	if UseDisplayNames == true then
@@ -417,73 +341,67 @@ function FindPlayer(target)
 	end
 end
 
-function Spawnplatform()
-	if platform == true then
-		if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
-			local Clone = Instance.new("Part")
-			Clone.Parent = workspace
-			Clone.Anchored = true
-			Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
-			Clone.Size = Vector3.new(Size, 1, Size)
-			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
-		else
-			local Clone = Instance.new("Part")
-			Clone.Parent = workspace
-			Clone.Anchored = true
-			Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
-			Clone.Size = Vector3.new(Size, 1, Size)
-			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
+function Spawnplatform(Transparency)
+	local Clone = Instance.new("Part")
+	Clone.Parent = workspace
+	Clone.Anchored = true
+	Clone.Size = Vector3.new(UI.Flags["Platformsize"].Value, 1, UI.Flags["Platformsize"].Value)
+	Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
+	Clone.Transparency = Transparency
+
+	if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
+		Clone.Position = Player.Character["Left Leg"].Position
+	else
+		Clone.Position = Player.Character["LeftFoot"].Position
+	end
+	return Clone
+end
+
+function RemoveTexures()
+	for i, v in pairs(workspace:GetDescendants()) do
+		if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("WedgePart") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+			v.Material = Enum.Material.SmoothPlastic
 		end
 	end
+
+	workspace.DescendantAdded:Connect(function(v)
+		if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("WedgePart") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+			v.Material = Enum.Material.SmoothPlastic
+		end
+	end)
 end
 
 -----------------------------------EVENTS----------------------------------------------------------------------------------------------------
 
 Mouse.Button1Down:connect(function()
-	if deleteon == true then
+	if UI.Flags["clickdelete"].Value == true then
 		if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
 		if not Mouse.Target then return end
 		Mouse.Target:Destroy()
 	end 
 end)
 
-local VirtualUser=game:service'VirtualUser'
-game:service'Players'.LocalPlayer.Idled:connect(function()
-	if AntiAFK == true then
+game.Players.LocalPlayer.Idled:connect(function()
+	if UI.Flags["antiafk"].Value == true then
 		VirtualUser:CaptureController()
 		VirtualUser:ClickButton2(Vector2.new())
 	end
 end)
 
-UIS.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
-		Teleport(Mouse.Hit.p)
-	end
-end)
 
-UIS.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton2 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
-		firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Mouse.Hit, 1)
-		wait(0.1)
-		firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Mouse.Hit, 0)
+Mouse.Button1Down:Connect(function()
+	if not game:GetService("UserInputService"):IsKeyDown(UI.Flags["ClickTp Key"].Value) then return end
+	local temp = game.Players.LocalPlayer:GetMouse().Hit.p
+	repeat wait() until workspace:FindFirstChild(game.Players.LocalPlayer.Name)
+	if UI.Flags["ClickOn"].Value then
+		game.Players.LocalPlayer.Character:MoveTo(temp)
 	end
 end)
 
 -----------------------------------Run service----------------------------------------------------------------------------------------------------
-
-game:GetService('RunService').Stepped:connect(function()
-	tick()
-	if noclip then
-		if game:GetService("Players").LocalPlayer.Character ~= nil then
-			for _, child in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-				if child:IsA("BasePart") and child.CanCollide == true then
-					child.CanCollide = false
-				end
-			end
-		end
-	end
-	
-	if NoScreen then
+runservice.Stepped:connect(function()
+	if not ScriptRunning then return end
+	if UI.Flags["AntiS"].Value then
 		if game.Players.LocalPlayer.PlayerGui:FindFirstChild("BlizzardGui") then
 			game.Players.LocalPlayer.PlayerGui.BlizzardGui:Destroy()
 		end
@@ -491,169 +409,102 @@ game:GetService('RunService').Stepped:connect(function()
 			game.Players.LocalPlayer.PlayerGui.SandStormGui:Destroy()
 		end
 	end
-	
-	if NoCloud then
+
+	if UI.Flags["AntiC"].Value then
 		if workspace.Structure:FindFirstChild("Cloud") then
 			workspace.Structure.Cloud.Transparency = 1
 		end
 	end
-	
-	if AntiAlll then
+
+	if UI.Flags["AntiAll"].Value then
 		RealCharacter:MoveTo(workspace.Tower.Steps.StepPart.Position)
 	end
-	
-	if AwalysWin then
+
+	if UI.Flags["Win"].Value then
 		game.Players.LocalPlayer.Character:MoveTo(workspace.Tower.Steps.StepPart.Position)
 	end
-	
-	if unlockzoom then
-		game.Players.LocalPlayer.CameraMaxZoomDistance = 99999
-	end
 
-	if jumpPower ~= 50 or jumpPower ~= 7 then
-		game.Players.LocalPlayer.Character.Humanoid.JumpPower = jumpPower
-	end
-
-	if walkspeed ~= 16 then
-		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
-	end
-
-	if Fall then
+	if UI.Flags["NoFall"].Value then
 		if game.Players.LocalPlayer.Character:FindFirstChild("FallDamageScript") then
 			game.Players.LocalPlayer.Character.FallDamageScript:Destroy()
 		end
 	end
 
-	if UserInput:IsKeyDown(Enum.KeyCode.Space) then
-		if Infjump == true then
-			if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
-				local Clone = Instance.new("Part")
-				Clone.Parent = workspace
-				Clone.Anchored = true
-				Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
-				Clone.Size = Vector3.new(6, 1, 6)
-				Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
-				Clone.Transparency = 1
-				wait()
-				Clone:Destroy()
+	if UI.Flags["Noclip"].Value then
+		for _, child in pairs(Libary.GetChar():GetDescendants()) do
+			if child:IsA("BasePart") and child.CanCollide == true then
+				child.CanCollide = false
+			end
+		end
+	end
+
+	if UI.Flags["enableshiftlock"].Value then
+		game.Players.LocalPlayer.DevEnableMouseLock = true
+	end
+
+	if UI.Flags["unlockzoom"].Value then
+		game.Players.LocalPlayer.CameraMaxZoomDistance = 99999
+	end
+
+	if UI.Flags["inf jump"].Value then
+		if Inputservice:IsKeyDown(Enum.KeyCode.Space) then
+			local temp = Spawnplatform(1)
+			task.wait(.03)
+			temp:Destroy()
+		end
+	end
+
+	if UI.Flags["Hitbox"].Value then
+		for i,v in next, game:GetService('Players'):GetPlayers() do
+			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+				pcall(function()
+					v.Character.HumanoidRootPart.Size = Vector3.new(HeadSize,HeadSize,HeadSize)
+					v.Character.HumanoidRootPart.Transparency = 0.8
+					v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")
+					v.Character.HumanoidRootPart.Material = "Neon"
+					v.Character.HumanoidRootPart.CanCollide = false
+				end)
+			end
+		end
+	end
+end) runservice.RenderStepped:Connect(function()
+	if UI.Flags["Hitbox"].Value then
+		for i,v in next, game:GetService('Players'):GetPlayers() do
+			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+				pcall(function()
+					v.Character.HumanoidRootPart.Size = Vector3.new(UI.Flags["HitboxSize"].Value,UI.Flags["HitboxSize"].Value,UI.Flags["HitboxSize"].Value)
+					v.Character.HumanoidRootPart.Transparency = 0.8
+					v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")
+					v.Character.HumanoidRootPart.Material = "Neon"
+					v.Character.HumanoidRootPart.CanCollide = false
+				end)
+			end
+		end
+	end
+end)
+
+function CharLoaded(Char)
+	Char.Humanoid.Changed:Connect(function()
+		if UI.Flags["PlayerJump"].Value ~= 50 and UI.Flags["PlayerJump"].Value ~= 7 then
+			if useJumpPower then
+				Char.Humanoid.JumpPower = UI.Flags["PlayerJump"].Value
 			else
-				local Clone = Instance.new("Part")
-				Clone.Parent = workspace
-				Clone.Anchored = true
-				Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
-				Clone.Size = Vector3.new(6, 1, 6)
-				Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
-				Clone.Transparency = 1
-				wait()
-				Clone:Destroy()
+				Char.Humanoid.JumpHeight = UI.Flags["PlayerJump"].Value
 			end
 		end
-	end
-end)
-
-UserInput.InputBegan:Connect(function(input , gameProccesedevent)
-	if gameProccesedevent then
-	else
-		if input.KeyCode == Enum.KeyCode.Space then
-			if Infjump == true then
-				if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
-					local Clone = Instance.new("Part")
-					Clone.Parent = workspace
-					Clone.Anchored = true
-					Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
-					Clone.Size = Vector3.new(6, 1, 6)
-					Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
-					Clone.Transparency = 1
-					wait(0.1)
-					Clone:Destroy()
-				else
-					local Clone = Instance.new("Part")
-					Clone.Parent = workspace
-					Clone.Anchored = true
-					Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
-					Clone.Size = Vector3.new(6, 1, 6)
-					Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
-					Clone.Transparency = 1
-					wait(0.1)
-					Clone:Destroy()
-				end
-			end
-		end		
-	end
-
-end)
-
-function KillPlayer()
-	local player = game.Players.LocalPlayer
-	if not firetouchinterest then
-		UI:Notify("Upgrade exploit.", "Your exploit requires firetouchinterest!")
-		return
-	end
-	local target = Selectedplayer
-	player.Character.Humanoid.Name = 1
-	local l = player.Character["1"]:Clone()
-	l.Parent = player.Character
-	l.Name = "Humanoid"
-	wait(.2)
-	player.Character["1"]:Destroy()
-	workspace.CurrentCamera.CameraSubject = player.Character
-	player.Character.Humanoid.DisplayDistanceType = "None"
-	player.Character.Humanoid:UnequipTools()
-	local v = player.Backpack:FindFirstChildOfClass("Tool")
-	if not v then
-		UI:Notify("Please get a tool.", "Tool not found!")
-		return
-	end
-	v.Parent = player.Character
-	v.Parent = player.Character.HumanoidRootPart
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 0)
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 1)
-	pcall(function() player.Character.HumanoidRootPart.CFrame = CFrame.new(0, workspace.FallenPartsDestroyHeight + 5, 0) end)
-	wait(.3)
-	player.Character:Remove()
-	player.CharacterAdded:Wait()
-end
-
-
-function BringPlayer()
-	local CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-	local Target = Selectedplayer
-	for i,x in pairs(game.Players:GetPlayers()) do
-		if x.Name == Target then
-			game:GetService("Players").LocalPlayer.Character.Humanoid:UnequipTools()
-			local Humanoid = game:GetService("Players").LocalPlayer.Character.Humanoid:Clone()
-			Humanoid.BreakJointsOnDeath = false
-			game.Players.LocalPlayer.Character.Animate.Disabled = true
-			game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
-			Humanoid.Parent = game:GetService("Players").LocalPlayer.Character
-			for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-				if v:IsA("Tool") then
-					game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChildOfClass("Tool"))
-					firetouchinterest(v.Handle,x.Character.HumanoidRootPart,0)
-				end
-			end
+		if UI.Flags["PlayerSpeed"].Value ~= 16 then
+			Char.Humanoid.WalkSpeed = UI.Flags["PlayerSpeed"].Value
 		end
-	end
-	game.Players.LocalPlayer.CharacterAdded:Wait():WaitForChild("Humanoid")
-	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame
+	end)
+	Char.Humanoid.Died:Connect(function()
+		ScriptRunning = false
+	end)
 end
+CharLoaded(Libary.GetChar())
+game.Players.LocalPlayer.CharacterAdded:Connect(function(Char)
+	Char:WaitForChild("Humanoid")
+	CharLoaded(Char)
+	ScriptRunning = true
+end)
 
-function GiveTool()
-	local player = game.Players.LocalPlayer
-	local target = Selectedplayer
-	player.Character.Humanoid.Name = 1
-	local l = player.Character["1"]:Clone()
-	l.Parent = player.Character
-	l.Name = "Humanoid"
-	wait(.2)
-	player.Character["1"]:Destroy()
-	player.Character.Humanoid.DisplayDistanceType = "None"
-	player.Character.Humanoid:UnequipTools()
-	local v = player.Backpack:FindFirstChildOfClass("Tool")
-	if not v then
-		UI:Notify("Please get a tool.", "Tool not found!")
-		return
-	end
-	v.Parent = player.Character
-	v.Parent = player.Character.HumanoidRootPart
-end
+UI:Init()
