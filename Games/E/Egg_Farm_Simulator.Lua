@@ -1,225 +1,169 @@
 local col = nil
-local clickon = false
-local deleteon = false
-local platform = false
-local noclip = false
-local Infjump = false
-local UIS = game:GetService("UserInputService")
+local Selectedplayer = nil
+local HideUItoggle = false
+local useJumpPower = true
+local hitboxenabled = false
+local ScriptRunning  = true
+local UseDisplayNames = false
 local Size = 6
+local HeadSize = 20
+local SavedFog = 100000
+local AddGame = ""
+local FeedBack = ""
 local Player = game.Players.LocalPlayer
 local Mouse = Player:GetMouse()
-local Selectedplayer = nil
-local firetouchinterest = firetouchinterest or fake_touch or nil
-local UseDisplayNames = false
-local AntiAFK = false
-local shiftlock = false
-local unlockzoom = false
-local walkspeed = 16
-local jumpPower = 50
-local HideUItoggle = false
-local autofarm = false
-local automeat = false
-local AutoLevel = false
-local AutoTrain = false
-local AutoAchive = false
-local AutoBuyHeros = false
-local AutoDaimonds = false
-local Time = os.time()
-local wait1 = 0
+local VirtualUser = game:service'VirtualUser'
+local runservice = game:GetService'RunService'
+local Inputservice = game:GetService'UserInputService'
+local UI = loadstring(readfile("BloxainHub/Modules/UI.Lua"))()
+local Libary = loadstring(readfile("BloxainHub/Modules/Main.Lua"))()
 local hideUIData = {}
 local Accessorys = {}
-local Libary = loadstring(readfile("Bloxhub#7364/Modules/Main.Lua"))()
-local DataHandler = require(game.ReplicatedStorage.Modules.DataHandler);
-function LoadData()
-	if not isfile("Bloxhub#7364/Saves/EggFarm.Lua") then
-		return
-	else
-		local data = game:GetService("HttpService"):JSONDecode(readfile("Bloxhub#7364/Saves/EggFarm.Lua"))
-		Size = data.Size
-		UseDisplayNames = data.UseDisplayNames
-		AntiAFK = data.AntiAFK
-		clickon = clickon
-		deleteon = data.deleteon
-		platform = data.platform
-		noclip = data.noclip
-		Infjump = data.Infjump
-		shiftlock = data.shiftlock
-		unlockzoom = unlockzoom
-	end
-end
+local keys = {"F4", "Q", "F3"}
+local Themes = {
+	["Background"] = Color3.fromRGB(24, 24, 24),
+	["Glow"] = Color3.fromRGB(0, 0, 0),
+	["Accent"] = Color3.fromRGB(10, 10, 10),
+	["LightContrast"] = Color3.fromRGB(43, 43, 43),
+	["DarkContrast"] = Color3.fromRGB(14, 14, 14),  
+	["TextColor"] = Color3.fromRGB(255, 255, 255)
+}
 
-function SaveData()
-	local datatosave = {
-		["Size"] = Size,
-		["UseDisplayNames"] = UseDisplayNames,
-		["AntiAFK"] = AntiAFK,
-		["clickon"] = clickon,
-		["deleteon"] = deleteon,
-		["platform"] = platform,
-		["noclip"] = noclip,
-		["Infjump"] = Infjump,
-		["unlockzoom"] = unlockzoom,
-		["shiftlock"] = shiftlock
-		
-	}
-	writefile("Bloxhub#7364/Saves/EggFarm.Lua", game:GetService("HttpService"):JSONEncode(datatosave))
-end
+repeat task.wait() until Libary.GetChar()
 
-
-LoadData()
-
-for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+for i, v in pairs(Libary.GetChar():GetChildren()) do
 	if v:IsA("Accessory") then
 		table.insert(Accessorys, 1, v.Name)
 	end
 end
 
-if game.Players.LocalPlayer.Character.Humanoid.UseJumpPower == false then
+if Libary.GetChar().Humanoid.UseJumpPower == false then
 	jumpPower = 7
+	useJumpPower = false
 end
 
-UserInput = game:GetService("UserInputService")
+local Window = UI:MakeWindow({Name = "Egg Farm Simulator Gui", HidePremium = false, SaveConfig = true, ConfigFolder = "BloxainHub\Saves", IntroEnabled = Libary.PlayInto, IntroText = Libary.IntroName})
 
---Hold CLTR and click to delete parts (you need to rejoin if you delete something wrong)
-local Plr = game:GetService("Players").LocalPlayer
-local Mouse = Plr:GetMouse()
+local Main = Window:MakeTab({Name = "Main", Icon = "", PremiumOnly = false})
 
+local GameAd = Window:MakeTab({Name = "Game", Icon = "", PremiumOnly = false})
 
+local Egg = Window:MakeTab({Name = "Egg Farm", Icon = "", PremiumOnly = false})
 
-local Venyx = loadstring(readfile("Bloxhub#7364/Venyx_UI.Lua"))()
-local UI = Venyx.new("Egg Farm Simulator Gui")
-local Themes = {
-	Background = Color3.fromRGB(24, 24, 24),
-	Glow = Color3.fromRGB(0, 0, 0),
-	Accent = Color3.fromRGB(10, 10, 10),
-	LightContrast = Color3.fromRGB(188, 51, 54),
-	DarkContrast = Color3.fromRGB(14, 14, 14),  
-	TextColor = Color3.fromRGB(255, 255, 255)
-}
+local FE = Window:MakeTab({Name = "FE Scripts", Icon = "", PremiumOnly = false})
 
-local main = UI:addPage("Main")
-local AD = main:addSection("additional features")
-local MainGame = main:addSection("Game")
-local localplayer = main:addSection("localplayer")
+local Settings = Window:MakeTab({Name = "Settings", Icon = "", PremiumOnly = false})
 
-local EggPage = UI:addPage("Egg Farm")
-local EggFarm = EggPage:addSection("AutoFarm + more")
-
-local server = UI:addPage("Server")
-local Splayer = server:addSection("Players")
-
-local FePage = UI:addPage("FE Scripts")
-local FE = FePage:addSection("Scripts(good Exploit Reqiured) sometimes synapse x")
-
-local theme = UI:addPage("Settings")
-local Confic = theme:addSection("Config")
-local Colors = theme:addSection("Colors")
-
-local CreditPage = UI:addPage("FeedBack")
-local CreditAD = CreditPage:addSection("Credits: Bloxain -- Code, GreenDyno -- UI Synapse Reqired to Send")
+local Credits = Window:MakeTab({Name = "FeedBack", Icon = "", PremiumOnly = false})
 
 
+Main:AddButton({Name = "save location", Callback = function() col = Libary.GetChar().HumanoidRootPart.Position end})
 
-localplayer:addSlider("Player Speed", 16, 16, 300, function(value) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value walkspeed = value end)
+Main:AddButton({Name = "Load location", Callback = function() Libary.TpPlayer(col) end})
 
-localplayer:addSlider("Player jumpPower", jumpPower, jumpPower, 300, function(value) game.Players.LocalPlayer.Character.Humanoid.JumpPower = value jumpPower = value end)
+Main:AddButton({Name = "Clear Platforms", Callback = function() clearplatforms() end})
 
-MainGame:addSlider("Gravity", 196.2, 0, 196.2, function(value) workspace.Gravity = value end)
+Main:AddButton({Name = "Reset Camera", Callback = function() Fixcamera() end})
 
-AD:addButton("save location", function() col = workspace[game.Players.LocalPlayer.Name].HumanoidRootPart.Position end)
+Main:AddToggle({Name = "noclip", Flag = "Noclip", Default = false, Save = true})
 
-AD:addButton("Load location", function() workspace[game.Players.LocalPlayer.Name]:MoveTo(col) end)
+Main:AddToggle({Name = "Inf jump", Flag = "inf jump", Default = false, Save = true})
 
-AD:addButton("Clear Platforms", function() clearplatforms() end)
+Main:AddToggle({Name = "click teleport", Flag = "ClickOn", Default = false, Save = true})
 
-AD:addToggle("noclip", noclip, function(value) noclip = value end)
+Main:AddToggle({Name = "alt click delete", Flag = "clickdelete", Default = false, Save = true})
 
-AD:addToggle("Inf jump", Infjump,function(value) Infjump = value end)
+Main:AddToggle({Name = "spawn platform", Flag = "spawnplatform", Default = false, Save = true})
 
-AD:addToggle("cntrl click teleport", clickon, function(value) clickon = value end)
+Main:AddToggle({Name = "awalys enable shiftlock", Flag = "enableshiftlock", Default = false, Save = true,})
 
-AD:addToggle("alt click delete", deleteon, function(value) deleteon = value end)
+Main:AddToggle({Name = "Anti AFK", Flag = "antiafk", Default = false, Save = true, Callback = function(Value) AntiAFK = Value end})
 
-AD:addToggle("spawn platform", platform, function(value) platform = value end)
+Main:AddToggle({Name = "Unlock Zomm Distance", Flag = "unlockzoom", Default = false, Save = true, Callback = function(Value) if Value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = Value end})
 
-AD:addToggle("awalys enable shiftlock", shiftlock, function(value) shiftlock = value end)
+Main:AddBind({Name = "Hide UI", Flag = "Hide UI Key", Default = Enum.KeyCode.F4, Hold = false, Callback = function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end})
 
-AD:addToggle("Anti AFK", AntiAFK, function(value) AntiAFK = value end)
+Main:AddSlider({Name = "Player Speed", Flag = "PlayerSpeed", Min = 16, Max = 300, Default = 16, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Player Speed", Callback = function(Value) Libary.GetChar().Humanoid.WalkSpeed = Value end})
 
-AD:addToggle("Hide UI", HideUIs, function(value) AntiAFK = value end)
-
-AD:addToggle("Unlock Zomm Distance", false, function(value) if value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = value end)
-
-AD:addKeybind("Hide UI", nil, function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end)
-
-EggFarm:addButton("Find Empty Farm", function() for i, v in pairs(game:GetService("Workspace").Farms:GetChildren()) do if v.Owner.Value == nil then Libary.TpPlayer(v.Sign.Position) end end end)
-
-EggFarm:addButton("Get Dimonds", function() GetDimonds() end)
-
-EggFarm:addButton("Upgrade Heroes", function() Train() end)
-
-EggFarm:addButton("Tp To Farm", function() Libary.TpPlayer(GetFarm().Info.Position) end)
-
-EggFarm:addToggle("Autofarm(simple)", autofarm, function(value) autofarm = value end)
-
-EggFarm:addToggle("Autofarm(Advanced movement enabled buggy)", autofarm, function(value) autofarm = value Libary.MangeFakePlayer(value) end)
-
-EggFarm:addToggle("AutoMeat(advanced autofarm recommended)", automeat, function(value) automeat = value end)
-
-EggFarm:addToggle("AutoLevelUp(advanced autofarm recommended)", AutoLevel, function(value) AutoLevel = value end)
-
-EggFarm:addToggle("Auto Upgrade Heroes", AutoTrain, function(value) AutoTrain = value  end)
-
-EggFarm:addToggle("auto cellect achivements", AutoAchive, function(value) AutoAchive = value end)
-
-EggFarm:addToggle("auto Buy Heroes(idk if work)", AutoBuyHeros, function(value) AutoBuyHeros = value end)
-
-EggFarm:addToggle("auto Cellect Daimonds", AutoDaimonds, function(value) AutoDaimonds = value end)
-
-Splayer:addTextbox("Player", Size, function(text) FindPlayer(text) end)
-
-Splayer:addButton("teleport to player", function() Libary.TpPlayer(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end)
-
-FE:addButton("Grow(body Scale:All 100% except BodyProportionScale: 0%) ONLY ARTHO", function() Grow() end)
-
-FE:addDropdown("Accessory(for FE Scripts", Accessorys, nil, function(value) _G.Bloxain1 = value end)
-
-FE:addButton("FE Demon Script(chose a good accessory", function() loadstring(game:HttpGet("https://drive.google.com/uc?export=download&id=1n2LZELzJb7NsGO17eLKCXSu5-cHrIg0u"))() end)
-
-Confic:addTextbox("Platform size", Size, function(value) Size = value end)
-
-Confic:addToggle("Use Display Names", UseDisplayNames, function(value) UseDisplayNames = value end)
-
-Confic:addKeybind("spawn platform key", Enum.KeyCode.Q, function() Spawnplatform()() end)
-
-Confic:addButton("Save", function() SaveData() end)
-
-for theme, color in pairs(Themes) do
-	Colors:addColorPicker(theme, color, function(color3) UI:setTheme(theme, color3) end) -- // Adding a color picker for each type of theme customisable
-end
+Main:AddSlider({Name = "Player jumpPower", Flag = "PlayerJump", Min = jumpPower, Max = 300, Default = jumpPower, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Player jumpPower", Callback = function(Value) Libary.GetChar().Humanoid.JumpPower = Value end})
 
 
-Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() end)
+GameAd:AddTextbox({Name = "Player", Default = "", TextDisappear = true, Callback = function(Value) Selectedplayer = FindPlayer(Value) end})
 
-Colors:addButton("Kill GUI", function() game.CoreGui["universal Gui"]:Destroy() script:Destroy()end)
+GameAd:AddButton({Name = "teleport to player", Callback = function() Libary.TpPlayer(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end})
 
-Colors:addKeybind("Toggle UI Keybind", Enum.KeyCode.F3, function() UI:toggle() end)
+GameAd:AddToggle({Name = "Hitbox expander", Flag = "Hitbox", Default = false, Save = false, Callback = function(Value) hitboxenabled = Value if Value == false then for i,v in next, game:GetService('Players'):GetPlayers() do if v ~= Player then if not v.Character:FindFirstChild("HumanoidRootPart") then return end v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2) v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end end})
 
-Colors:addButton("Kill GUI", function() game.CoreGui["universal Gui"]:Destroy() script:Destroy()end)
 
-CreditAD:addTextbox("FeedBack/suggestions and why to change it", "", function(value) FeedBack = value end)
+GameAd:AddSlider({Name = "Fps Cap", Min = 60, Max = 1000, Default = 60, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Fps Cap", Callback = function(Value) setfpscap(Value) end})
 
-CreditAD:addButton("Send FeedBack", function() SendDiscord("GUI: Universal".."\n GameId: "..game.GameId.."\n PlaceId: "..game.PlaceId.."\n JobId: "..game.JobId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n FeedBack: \n\n"..FeedBack, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkzMDA5MzE0MzA0MzY4NzEwL3FzcHJxUlJDQ3QwX3k1UGNBQjFsbFpDc2hUMUY3UFg5NUxJNTN2U2EwUkgydy1uVWtZOTB2QndKY2pHQmdyUnBaNnBW")) UI:Notify("Sent!", "I will hopefully look and consider this later") end)
+GameAd:AddSlider({Name = "Gravity", Min = 0, Max = 196.2, Default = 196.2, Color = Color3.fromRGB(255,255,255), Increment = .1, ValueName = "Gravity", Callback = function(Value) workspace.Gravity = Value end})
 
-CreditAD:addTextbox("Add Script: Paste script to add to bloxain", "", function(value) AddGame = value end)
+GameAd:AddToggle({Name = "Remove Fog", Default = false, Save = false, Callback = function(Value) if Value == true then game.Lighting.FogEnd = math.huge SavedFog = game.Lighting.FogEnd return end game.Lighting.FogEnd = SavedFog end})
 
-CreditAD:addButton("Send Script", function() SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame, syn.crypt.base64.decode("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvOTkyOTkwNTE5NzgzMzI5ODIyL2xuSkhfbkEzak5Ud3BuLVdKZ3VtM3d5d2ZEX0F4bW5ReFpIa2p2OW53eUpSWjBSWlhNaHF6Q2ZlQmVMTFJsbGRpU1dO")) UI:Notify("Sent!", "This is checked then(Hopefully) added to bloxain in the next update") end)
+GameAd:AddButton({Name = "PERMATE remove texutres", Callback = function() RemoveTexures() end})
 
-CreditAD:addButton("Copy Discord", function() setclipboard("https://discord.gg/PPFYacGb2b") UI:Notify("Copyed!", "you can paste the link in your browser") end)
 
-CreditAD:addButton("Copy YouTube", function() setclipboard("https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ") UI:Notify("Copyed!", "you can paste the link in your browser") end)
+FE:AddButton({Name = "Grow(body Scale:All 100% except BodyProportionScale: 0%) ONLY ARTHO", Callback = function() Grow() end})
 
-UI:SelectPage(main, true)
+FE:AddDropdown({Name = "Accessory(for FE Scripts)", Default = "", Options = Accessorys, Callback = function(Value) _G.Bloxain1 = Value end})
+
+FE:AddButton({Name = "FE Demon Script(cose a good accessory", Callback = function() loadstring(game:HttpGet("https://drive.google.com/uc?export=download&id=1n2LZELzJb7NsGO17eLKCXSu5-cHrIg0u"))() end})
+
+
+Egg:AddButton({Name = "Find Empty Farm", Callback = function() for i, v in pairs(game:GetService("Workspace").Farms:GetChildren()) do if v.Owner.Value == nil then Libary.TpPlayer(v.Sign.Position) end end end})
+
+Egg:AddButton({Name = "Get Dimonds", Callback = function() GetDimonds() end})
+
+Egg:AddButton({Name = "Upgrade Heroes", Callback = function() Train() end})
+
+Egg:AddButton({Name = "Tp To Farm", Callback = function() Libary.TpPlayer(GetFarm().Info.Position) end})
+
+Egg:AddToggle({Name = "Autofarm(simple)", Flag = "autofarm", Default = false, Save = false})
+
+Egg:AddToggle({Name = "Autofarm(Advanced movement enabled buggy)", Flag = "Autofarm2", Default = false, Save = false, Callback = function(Value) Libary.MangeFakePlayer(Value) end})
+
+Egg:AddToggle({Name = "AutoMeat(advanced autofarm recommended)", Flag = "automeat", Default = false, Save = false})
+
+Egg:AddToggle({Name = "AutoLevelUp(advanced autofarm recommended)", Flag = "levlup", Default = false, Save = false})
+
+Egg:AddToggle({Name = "Auto Upgrade Heroes", Flag = "UpHero", Default = false, Save = false})
+
+Egg:AddToggle({Name = "auto cellect achivements", Flag = "collect Ach", Default = false, Save = false})
+
+Egg:AddToggle({Name = "auto Buy Heroes(idk if work)", Flag = "Bheros", Default = false, Save = false})
+
+Egg:AddToggle({Name = "auto Cellect Daimonds", Flag = "Cdim", Default = false, Save = false})
+
+
+Settings:AddSlider({Name = "Platform Size", Flag = "Platformsize", Save = true, Min = 1, Max = 100, Default = 6, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Platform Size"})
+
+Settings:AddSlider({Name = "Hitbox size", Flag = "HitboxSize", Save = true, Min = 1, Max = 100, Default = 6, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Hitbox size"})
+
+Settings:AddToggle({Name = "Use Display Names", Flag = "UseDispayNames", Default = false, Save = true, Callback = function(Value) UseDisplayNames = Value end})
+
+Settings:AddBind({Name = "spawn platform", Flag = "SpawnPlatform Key",  Default = Enum.KeyCode.Q, Hold = false, Save = true, Callback = function() if UI.Flags["spawnplatform"].Value then Spawnplatform() end end})
+
+Settings:AddBind({Name = "click teleport", Flag = "ClickTp Key", Default = Enum.KeyCode.LeftControl, Hold = false, Save = true})
+
+Settings:AddButton({Name = "Kill GUI", Callback = function() UI:Destroy() end})
+
+
+Credits:AddTextbox({Name = "FeedBack/suggestions and why to change it", Default = "", Flag = "Feedback", TextDisappear = true, Callback = function(Value) FeedBack = Value end})
+
+Credits:AddButton({Name = "Send FeedBack", Callback = function() Libary.SendDiscord("GUI: Universal".."\n GameId: "..game.GameId.."\n PlaceId: "..game.PlaceId.."\n JobId: "..game.JobId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n FeedBack: \n\n"..FeedBack) UI:MakeNotification({Name = "Sent!", Content = "I will hopefully look and consider this later", Time = 5}) end})
+
+Credits:AddTextbox({Name = "Add Script: Paste script to add to bloxain", Flag = "SendScript", Default = "", TextDisappear = true, Callback = function(Value) AddGame = Value end})
+
+Credits:AddButton({Name = "Send Script", Callback = function() Libary.SendDiscord("GameId: "..game.GameId.."\n link: https://www.roblox.com/games/"..game.PlaceId.."\n Script: "..AddGame) UI:MakeNotification({Name = "Sent!", Content = "This is checked then(Hopefully) added to bloxain in the next update", Time = 5}) end})
+
+Credits:AddButton({Name = "Copy Discord", Callback = function() setclipboard(Libary.Discord) UI:Notify("Copyed!", "you can paste the link in your browser") end})
+
+Credits:AddButton({Name = "Copy YouTube", Callback = function() setclipboard(Libary.Youtube) UI:Notify("Copyed!", "you can paste the link in your browser") end})
+
+Credits:AddParagraph("Credits & Info",[["Team - Me(not even the docs)
+LIBARYS OrionLib / Veny x
+INFO - this code is open source for script creators and Game Devs(yes i hope game devs patch this script to better there game and my ablitys to script) my spelling sucks"]])
 
 --             functions
 ---------------------------------------''
@@ -352,7 +296,7 @@ function Fixcamera()
 	for i, v in pairs(workspace:GetChildren()) do
 		if v:IsA("Camera") then
 			v.HeadScale = 1
-			v.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+			v.CameraSubject = Libary.GetChar().Humanoid
 			v.CameraType = Enum.CameraType.Custom
 			v.DiagonalFieldOfView = 143.882
 			v.FieldOfView = 70
@@ -364,24 +308,6 @@ function Fixcamera()
 			game.Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
 		end 
 	end
-end
-
-function SendDiscord(Message, WebhookURL)
-	local Data = {
-		["content"] = Message,
-		["username"] = Player.Name
-	}
-
-	local Response = syn.request({
-		Url = WebhookURL,
-		Method = "POST",
-		Headers = {
-			["Content-Type"] = "application/json"  -- When sending JSON, set this!
-		},
-		Body = game:GetService("HttpService"):JSONEncode(Data)
-	})
-
-	print(Response.StatusCode)
 end
 
 function FindPlayer(target)
@@ -400,85 +326,72 @@ function FindPlayer(target)
 	end
 end
 
-function Spawnplatform()
-	if platform == true then
-		if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
-			local Clone = Instance.new("Part")
-			Clone.Parent = workspace
-			Clone.Anchored = true
-			Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
-			Clone.Size = Vector3.new(Size, 1, Size)
-			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
-		else
-			local Clone = Instance.new("Part")
-			Clone.Parent = workspace
-			Clone.Anchored = true
-			Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
-			Clone.Size = Vector3.new(Size, 1, Size)
-			Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
+function Spawnplatform(Transparency)
+	local Clone = Instance.new("Part")
+	Clone.Parent = workspace
+	Clone.Anchored = true
+	Clone.Size = Vector3.new(UI.Flags["Platformsize"].Value, 1, UI.Flags["Platformsize"].Value)
+	Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhj"
+	Clone.Transparency = Transparency
+
+	if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
+		Clone.Position = Player.Character["Left Leg"].Position
+	else
+		Clone.Position = Player.Character["LeftFoot"].Position
+	end
+	return Clone
+end
+
+function RemoveTexures()
+	for i, v in pairs(workspace:GetDescendants()) do
+		if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("WedgePart") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+			v.Material = Enum.Material.SmoothPlastic
 		end
 	end
+
+	workspace.DescendantAdded:Connect(function(v)
+		if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("WedgePart") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+			v.Material = Enum.Material.SmoothPlastic
+		end
+	end)
 end
 
 -----------------------------------EVENTS----------------------------------------------------------------------------------------------------
 
 Mouse.Button1Down:connect(function()
-	if deleteon == true then
+	if UI.Flags["clickdelete"].Value == true then
 		if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftAlt) then return end
 		if not Mouse.Target then return end
 		Mouse.Target:Destroy()
 	end 
 end)
 
-local VirtualUser=game:service'VirtualUser'
-game:service'Players'.LocalPlayer.Idled:connect(function()
-	if AntiAFK == true then
+game.Players.LocalPlayer.Idled:connect(function()
+	if UI.Flags["antiafk"].Value == true then
 		VirtualUser:CaptureController()
-		VirtualUser:ClickButton2(Vector2.new(27, 22))
+		VirtualUser:ClickButton2(Vector2.new())
 	end
 end)
 
 
-UIS.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
-		Libary.TpPlayer(Mouse.Hit.p)
+Mouse.Button1Down:Connect(function()
+	if not game:GetService("UserInputService"):IsKeyDown(UI.Flags["ClickTp Key"].Value) then return end
+	local temp = game.Players.LocalPlayer:GetMouse().Hit.p
+	repeat wait() until workspace:FindFirstChild(game.Players.LocalPlayer.Name)
+	if UI.Flags["ClickOn"].Value then
+		game.Players.LocalPlayer.Character:MoveTo(temp)
 	end
 end)
 
 -----------------------------------Run service----------------------------------------------------------------------------------------------------
-game:GetService('RunService').RenderStepped:connect(function()
-	if hitboxenabled then
-		for i,v in next, game:GetService('Players'):GetPlayers() do
-			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
-				pcall(function()
-					v.Character.HumanoidRootPart.Size = Vector3.new(HeadSize,HeadSize,HeadSize)
-					v.Character.HumanoidRootPart.Transparency = 0.8
-					v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")
-					v.Character.HumanoidRootPart.Material = "Neon"
-					v.Character.HumanoidRootPart.CanCollide = false
-				end)
-			end
-		end
-	end
-end)
-
-game:GetService('RunService').Stepped:connect(function()
-
-	if noclip then
-		if game:GetService("Players").LocalPlayer.Character ~= nil then
-			for _, child in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-				if child:IsA("BasePart") and child.CanCollide == true then
-					child.CanCollide = false
-				end
-			end
-		end
-	end
-
-	if autofarm then
+runservice.Stepped:connect(function()
+	if not ScriptRunning then return end
+	
+	if UI.Flags["autofarm"].Value or UI.Flags["Autofarm2"].Value then
 		game.ReplicatedStorage.Events.Weapon:FireServer("self", "219629d5067eddcdce55ed7968e9b53f") -- This script was generated by Hydroxide's RemoteSpy: https://github.com/Upbolt/Hydroxide
 	end
 
-	if automeat then
+	if UI.Flags["automeat"].Value then
 		local Farm = GetFarm()
 		if Farm:FindFirstChild("Meat") then
 			if Farm.Meat.Transparency == 0 then
@@ -489,8 +402,8 @@ game:GetService('RunService').Stepped:connect(function()
 			end
 		end
 	end
-	
-	if AutoLevel then
+
+	if UI.Flags["levlup"].Value then
 		local farm = GetFarm()
 		if farm:FindFirstChild("Chicken") then
 			if farm.Chicken:FindFirstChild("Mana") then
@@ -518,177 +431,106 @@ game:GetService('RunService').Stepped:connect(function()
 			end
 		end
 	end
-	
-	if shiftlock then
-		game.Players.LocalPlayer.DevEnableMouseLock = true
-	end
-	
-	if AutoDaimonds then
+
+	if UI.Flags["Cdim"].Value then
 		GetDimonds()
 	end
+	
+	if UI.Flags["Noclip"].Value then
+		for _, child in pairs(Libary.GetChar():GetDescendants()) do
+			if child:IsA("BasePart") and child.CanCollide == true then
+				child.CanCollide = false
+			end
+		end
+	end
 
-	if unlockzoom then
+	if UI.Flags["enableshiftlock"].Value then
+		game.Players.LocalPlayer.DevEnableMouseLock = true
+	end
+
+	if UI.Flags["unlockzoom"].Value then
 		game.Players.LocalPlayer.CameraMaxZoomDistance = 99999
 	end
 
-	if jumpPower ~= 50 or jumpPower ~= 7 then
-		game.Players.LocalPlayer.Character.Humanoid.JumpPower = jumpPower
+	if UI.Flags["inf jump"].Value then
+		if Inputservice:IsKeyDown(Enum.KeyCode.Space) then
+			local temp = Spawnplatform(1)
+			task.wait(.03)
+			temp:Destroy()
+		end
 	end
 
-	if walkspeed ~= 16 then
-		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
+	if UI.Flags["Hitbox"].Value then
+		for i,v in next, game:GetService('Players'):GetPlayers() do
+			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+				pcall(function()
+					v.Character.HumanoidRootPart.Size = Vector3.new(HeadSize,HeadSize,HeadSize)
+					v.Character.HumanoidRootPart.Transparency = 0.8
+					v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")
+					v.Character.HumanoidRootPart.Material = "Neon"
+					v.Character.HumanoidRootPart.CanCollide = false
+				end)
+			end
+		end
 	end
-
-	if shiftlock == true then
-		game.Players.LocalPlayer.DevEnableMouseLock = true
+end) runservice.RenderStepped:Connect(function()
+	if UI.Flags["Hitbox"].Value then
+		for i,v in next, game:GetService('Players'):GetPlayers() do
+			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+				pcall(function()
+					v.Character.HumanoidRootPart.Size = Vector3.new(UI.Flags["HitboxSize"].Value,UI.Flags["HitboxSize"].Value,UI.Flags["HitboxSize"].Value)
+					v.Character.HumanoidRootPart.Transparency = 0.8
+					v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")
+					v.Character.HumanoidRootPart.Material = "Neon"
+					v.Character.HumanoidRootPart.CanCollide = false
+				end)
+			end
+		end
 	end
+end)
 
-	if UserInput:IsKeyDown(Enum.KeyCode.Space) then
-		if Infjump == true then
-			if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
-				local Clone = Instance.new("Part")
-				Clone.Parent = workspace
-				Clone.Anchored = true
-				Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
-				Clone.Size = Vector3.new(6, 1, 6)
-				Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
-				Clone.Transparency = 1
-				wait()
-				Clone:Destroy()
+function CharLoaded(Char)
+	Char.Humanoid.Changed:Connect(function()
+		if UI.Flags["PlayerJump"].Value ~= 50 and UI.Flags["PlayerJump"].Value ~= 7 then
+			if useJumpPower then
+				Char.Humanoid.JumpPower = UI.Flags["PlayerJump"].Value
 			else
-				local Clone = Instance.new("Part")
-				Clone.Parent = workspace
-				Clone.Anchored = true
-				Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
-				Clone.Size = Vector3.new(6, 1, 6)
-				Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
-				Clone.Transparency = 1
-				wait()
-				Clone:Destroy()
+				Char.Humanoid.JumpHeight = UI.Flags["PlayerJump"].Value
 			end
+		end
+		if UI.Flags["PlayerSpeed"].Value ~= 16 then
+			Char.Humanoid.WalkSpeed = UI.Flags["PlayerSpeed"].Value
+		end
+	end)
+	Char.Humanoid.Died:Connect(function()
+		ScriptRunning = false
+	end)
+end
+CharLoaded(Libary.GetChar())
+game.Players.LocalPlayer.CharacterAdded:Connect(function(Char)
+	Char:WaitForChild("Humanoid")
+	CharLoaded(Char)
+	ScriptRunning = true
+end)
+
+local temp = Instance.new("BindableEvent")
+temp.Event:Connect(function()
+	if not ScriptRunning then return end
+	while wait(10) do
+		if UI.Flags["UpHero"].Value then
+			Train()
+		end
+
+		if UI.Flags["collect Ach"].Value then
+			getAchivements()
+		end
+
+		if UI.Flags["Bheros"].Value then
+			local amount = GetFarm().Heroes:GetChildren()
+			local ohTable3 = {}
+			game:GetService("ReplicatedStorage").Events.Heroes:FireServer("Train", #amount + 1, ohTable3, 1)
 		end
 	end
 end)
-
-UserInput.InputBegan:Connect(function(input , gameProccesedevent)
-	if gameProccesedevent then
-	else
-		if input.KeyCode == Enum.KeyCode.Space then
-			if Infjump == true then
-				if game.Players.LocalPlayer.Character:FindFirstChild("Left Leg") then
-					local Clone = Instance.new("Part")
-					Clone.Parent = workspace
-					Clone.Anchored = true
-					Clone.Position = game.Players.LocalPlayer.Character["Left Leg"].Position
-					Clone.Size = Vector3.new(6, 1, 6)
-					Clone.Name = "falksjdhflkjasdhflkjasdhflkjasdfhjsfdgsd"
-					Clone.Transparency = 1
-					wait(0.1)
-					Clone:Destroy()
-				else
-					local Clone = Instance.new("Part")
-					Clone.Parent = workspace
-					Clone.Anchored = true
-					Clone.Position = game.Players.LocalPlayer.Character["LeftFoot"].Position
-					Clone.Size = Vector3.new(6, 1, 6)
-					Clone.Name = "falksjdhflkjasdhflkjasdhflkjsfdgsdfgasdfhj"
-					Clone.Transparency = 1
-					wait(0.1)
-					Clone:Destroy()
-				end
-			end
-		end		
-	end
-
-end)
-
-function KillPlayer()
-	local player = game.Players.LocalPlayer
-	if not firetouchinterest then
-		UI:Notify("Upgrade exploit.", "Your exploit requires firetouchinterest!")
-		return
-	end
-	local target = Selectedplayer
-	player.Character.Humanoid.Name = 1
-	local l = player.Character["1"]:Clone()
-	l.Parent = player.Character
-	l.Name = "Humanoid"
-	wait(.2)
-	player.Character["1"]:Destroy()
-	workspace.CurrentCamera.CameraSubject = player.Character
-	player.Character.Humanoid.DisplayDistanceType = "None"
-	player.Character.Humanoid:UnequipTools()
-	local v = player.Backpack:FindFirstChildOfClass("Tool")
-	if not v then
-		UI:Notify("Please get a tool.", "Tool not found!")
-		return
-	end
-	v.Parent = player.Character
-	v.Parent = player.Character.HumanoidRootPart
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 0)
-	firetouchinterest(target.Character.HumanoidRootPart, v.Handle, 1)
-	pcall(function() player.Character.HumanoidRootPart.CFrame = CFrame.new(0, workspace.FallenPartsDestroyHeight + 5, 0) end)
-	wait(.3)
-	player.Character:Remove()
-	player.CharacterAdded:Wait()
-end
-
-
-function BringPlayer()
-	local CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-	local Target = Selectedplayer
-	for i,x in pairs(game.Players:GetPlayers()) do
-		if x.Name == Target then
-			game:GetService("Players").LocalPlayer.Character.Humanoid:UnequipTools()
-			local Humanoid = game:GetService("Players").LocalPlayer.Character.Humanoid:Clone()
-			Humanoid.BreakJointsOnDeath = false
-			game.Players.LocalPlayer.Character.Animate.Disabled = true
-			game:GetService("Players").LocalPlayer.Character.Humanoid:Destroy()
-			Humanoid.Parent = game:GetService("Players").LocalPlayer.Character
-			for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-				if v:IsA("Tool") then
-					game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChildOfClass("Tool"))
-					firetouchinterest(v.Handle,x.Character.HumanoidRootPart,0)
-				end
-			end
-		end
-	end
-	game.Players.LocalPlayer.CharacterAdded:Wait():WaitForChild("Humanoid")
-	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame
-end
-
-function GiveTool()
-	local player = game.Players.LocalPlayer
-	local target = Selectedplayer
-	player.Character.Humanoid.Name = 1
-	local l = player.Character["1"]:Clone()
-	l.Parent = player.Character
-	l.Name = "Humanoid"
-	wait(.2)
-	player.Character["1"]:Destroy()
-	player.Character.Humanoid.DisplayDistanceType = "None"
-	player.Character.Humanoid:UnequipTools()
-	local v = player.Backpack:FindFirstChildOfClass("Tool")
-	if not v then
-		UI:Notify("Please get a tool.", "Tool not found!")
-		return
-	end
-	v.Parent = player.Character
-	v.Parent = player.Character.HumanoidRootPart
-end
-
-while wait(10) do
-	if AutoTrain then
-		Train()
-	end
-	
-	if AutoAchive then
-		getAchivements()
-	end
-	
-	if AutoBuyHeros then
-		local amount = GetFarm().Heroes:GetChildren()
-		local ohTable3 = {}
-		game:GetService("ReplicatedStorage").Events.Heroes:FireServer("Train", #amount + 1, ohTable3, 1)
-	end
-end
+temp:Fire()
+UI:Init()
