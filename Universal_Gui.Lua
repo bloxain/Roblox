@@ -1,5 +1,6 @@
 local col = nil
 local Selectedplayer = nil
+local Start = false
 local HideUItoggle = false
 local useJumpPower = true
 local hitboxenabled = false
@@ -42,6 +43,37 @@ if Libary.GetChar().Humanoid.UseJumpPower == false then
 	useJumpPower = false
 end
 
+------ 
+function CreateBypass(Obj, Proporty, ReturnValue, DISSABLE)
+	local gameMT = getrawmetatable(Obj.Parent)
+	local psuedoEnv = {
+		["__index"] = gameMT.__index
+	}
+	setreadonly(gameMT, false)
+	----------------------------------------------- Gavity Bypass
+	gameMT.__index = newcclosure(function(self, index, ...)
+		if self == Obj then
+			if index == Proporty and not checkcaller() and not DISSABLE then
+				return ReturnValue
+			end
+		end
+		return psuedoEnv.__index(self, index, ...)
+	end)
+	-----------------------------------------------
+	setreadonly(gameMT, true)
+
+	local Control = Instance.new('BindableEvent');
+	Control.Event:Connect(function(message, data)
+		if message == "Dissable" then
+			DISSABLE = data
+		elseif message == 'set' then
+			ReturnValue = data
+		end
+	end)
+	return Control
+end
+------
+
 local Window = UI:MakeWindow({Name = "universal Gui", HidePremium = false, SaveConfig = true, ConfigFolder = "BloxainHub\Saves", IntroEnabled = Libary.PlayInto, IntroText = Libary.IntroName})
 
 local Main = Window:MakeTab({Name = "Main", Icon = "", PremiumOnly = false})
@@ -49,6 +81,8 @@ local Main = Window:MakeTab({Name = "Main", Icon = "", PremiumOnly = false})
 local GameAd = Window:MakeTab({Name = "Game", Icon = "", PremiumOnly = false})
 
 local FE = Window:MakeTab({Name = "FE Scripts", Icon = "", PremiumOnly = false})
+
+local Bypass = Window:MakeTab({Name = "AC Bypass", Icon = "", PremiumOnly = true})
 
 local Settings = Window:MakeTab({Name = "Settings", Icon = "", PremiumOnly = false})
 
@@ -77,7 +111,7 @@ Main:AddToggle({Name = "awalys enable shiftlock", Flag = "enableshiftlock", Defa
 
 Main:AddToggle({Name = "Anti AFK", Flag = "antiafk", Default = false, Save = true})
 
-Main:AddToggle({Name = "Unlock Zomm Distance", Flag = "unlockzoom", Default = false, Save = true, Callback = function(Value) if Value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = Value end})
+Main:AddToggle({Name = "Unlock Zomm Distance", Flag = "unlockzoom", Default = false, Save = true, Callback = function(Value) if not Start then return end if Value == false then game.Players.LocalPlayer.CameraMaxZoomDistance = 128 end unlockzoom = Value end})
 
 Main:AddBind({Name = "Hide UI", Flag = "Hide UI Key", Default = Enum.KeyCode.F4, Hold = false, Callback = function() toggleUI(HideUItoggle) HideUItoggle = not HideUItoggle end})
 
@@ -90,7 +124,7 @@ GameAd:AddTextbox({Name = "Player", Default = "", TextDisappear = true, Callback
 
 GameAd:AddButton({Name = "teleport to player", Callback = function() Libary.TpPlayer(workspace[Selectedplayer.Name].HumanoidRootPart.Position) end})
 
-GameAd:AddToggle({Name = "Hitbox expander", Flag = "Hitbox", Default = false, Save = false, Callback = function(Value) hitboxenabled = Value if Value == false then for i,v in next, game:GetService('Players'):GetPlayers() do if v ~= Player then if not v.Character:FindFirstChild("HumanoidRootPart") then return end v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2) v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end end})
+GameAd:AddToggle({Name = "Hitbox expander", Flag = "Hitbox", Default = false, Save = false, Callback = function(Value) if not Start then return end hitboxenabled = Value if Value == false then for i,v in next, game:GetService('Players'):GetPlayers() do if v ~= Player then if not v.Character:FindFirstChild("HumanoidRootPart") then return end v.Character.HumanoidRootPart.Size = Vector3.new(2,1,2) v.Character.HumanoidRootPart.Transparency = 1	v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really white")	v.Character.HumanoidRootPart.Material = "Neon" v.Character.HumanoidRootPart.CanCollide = false end end end end})
 
 
 GameAd:AddSlider({Name = "Fps Cap", Min = 60, Max = 1000, Default = 60, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Fps Cap", Callback = function(Value) setfpscap(Value) end})
@@ -100,6 +134,17 @@ GameAd:AddSlider({Name = "Gravity", Min = 0, Max = 196.2, Default = 196.2, Color
 GameAd:AddToggle({Name = "Remove Fog", Default = false, Save = false, Callback = function(Value) if Value == true then game.Lighting.FogEnd = math.huge SavedFog = game.Lighting.FogEnd return end game.Lighting.FogEnd = SavedFog end})
 
 GameAd:AddButton({Name = "PERMATE remove texutres", Callback = function() RemoveTexures() end})
+
+
+Bypass:AddLabel("NOT 100% USE ALT | amd toggleing off is ehh")
+
+Bypass:AddButton({Name = "ACIVATE", Callback = function() GravityControl = CreateBypass(workspace, 'Gravity', workspace.Gravity, true) CharLoaded(Libary.GetChar()) end})
+
+Bypass:AddToggle({Name = "Gravity", Default = false, Save = false, Callback = function(Value) if not Start then return end GravityControl:Fire('Dissable', not Value) end})
+
+Bypass:AddToggle({Name = "WalkSpeed", Flag = 'WalkBypass', Default = false, Save = false, Callback = function(Value) if not Start then return end walkspeedbypass:Fire('Dissable', not Value) end})
+
+Bypass:AddToggle({Name = "JumpPower", Flag = 'JumpBypass', Default = false, Save = false, Callback = function(Value) if not Start then return end jumphightbypass:Fire('Dissable', not Value) jumpPowerbypass:Fire('Dissable', not Value) end})
 
 
 FE:AddButton({Name = "Grow(body Scale:All 100% except BodyProportionScale: 0%) ONLY ARTHO", Callback = function() Grow() end})
@@ -347,7 +392,7 @@ runservice.Stepped:connect(function()
 	if UI.Flags["unlockzoom"].Value then
 		game.Players.LocalPlayer.CameraMaxZoomDistance = 99999
 	end
-	
+
 	if UI.Flags["inf jump"].Value then
 		if Inputservice:IsKeyDown(Enum.KeyCode.Space) then
 			local temp = Spawnplatform(1)
@@ -355,7 +400,7 @@ runservice.Stepped:connect(function()
 			temp:Destroy()
 		end
 	end
-	
+
 	if UI.Flags["Hitbox"].Value then
 		for i,v in next, game:GetService('Players'):GetPlayers() do
 			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
@@ -386,6 +431,9 @@ end) runservice.RenderStepped:Connect(function()
 end)
 
 function CharLoaded(Char)
+	walkspeedbypass = CreateBypass(Char.Humanoid, 'WalkSpeed', Char.Humanoid, UI.Flags["WalkBypass"].Value)
+	jumpPowerbypass = CreateBypass(Char.Humanoid, 'JumpPower', Char.Humanoid, UI.Flags["JumpBypass"].Value)
+	jumphightbypass = CreateBypass(Char.Humanoid, 'JumpHeight', Char.Humanoid, UI.Flags["JumpBypass"].Value)
 	Char.Humanoid.Changed:Connect(function()
 		if UI.Flags["PlayerJump"].Value ~= 50 and UI.Flags["PlayerJump"].Value ~= 7 then
 			if useJumpPower then
@@ -409,4 +457,5 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function(Char)
 	ScriptRunning = true
 end)
 
-UI:Init() 	 
+UI:Init()
+Start = true
