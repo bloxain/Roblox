@@ -32,6 +32,11 @@ function module.GetChar()
 	if workspace:FindFirstChild(game.Players.LocalPlayer.Name) and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
 		return game.Players.LocalPlayer.Character
 	end
+	if workspace:FindFirstChild('Characters') then
+		if workspace.Characters:FindFirstChild(game.Players.LocalPlayer.Name) and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+			return game.Players.LocalPlayer.Character
+		end
+	end
 	return false
 end
 
@@ -74,7 +79,6 @@ function module.SendDiscord(Message)
 		Body = game:GetService("HttpService"):JSONEncode(Data)
 	})
 end
-
 
 module.FakeCharacter = nil
 module.RealCharacter = module.GetChar()
