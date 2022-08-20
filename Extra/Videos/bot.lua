@@ -38,6 +38,7 @@ function Control(Name)
 		local Root2 = game.Players.LocalPlayer.Character.HumanoidRootPart
 		while task.wait() do
 			Root2.CFrame = Root.CFrame
+			Root2.Velocity = Root.Velocity
 			local AnimationTracks = Hum.Animator:GetPlayingAnimationTracks()
 			local AnimationTracks2 = Hum2.Animator:GetPlayingAnimationTracks()
 			
