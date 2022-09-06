@@ -1,5 +1,4 @@
--- Get Rid Of Warnings
-local syn = nil
+
 local pixelwith = 1
 local mouse = game.Players.LocalPlayer:GetMouse()
 local Tweem = game.TweenService
