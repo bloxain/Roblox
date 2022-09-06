@@ -126,7 +126,9 @@ function UI:MakeNotification(Table)
 		Notification:Destroy()
 	end)
 end
-
+function UI:Init()
+	
+end
 function UI:MakeWindow(Table)
 	local UIScreen = Instance.new("ScreenGui")
 	local Window = Instance.new("Frame")
