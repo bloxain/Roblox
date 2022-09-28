@@ -121,8 +121,4 @@ if moredata then
 	end
 end
 
-Info.Text = 'Luanching...'
-
-loadstring(readfile("BloxainHub/Modules/GameFinder.Lua"))()
-
 Updater:Destroy()
