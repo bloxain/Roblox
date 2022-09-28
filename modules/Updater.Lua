@@ -58,7 +58,15 @@ function Update()
 	task.wait(.1)
 end
 
-local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
+if not writefile then
+	local Files = {}
+	getgenv().writefile = function(path, data) Files[path] = data end
+	getgenv().makefolder = function()  end
+	getgenv().isfolder = function() return false  end
+	getgenv().readfile = function(Path) return Files[Path]  end
+	getgenv().delfolder = function()  end
+end
+local Github = _G.versoin[2]..'Games/'
 
 Show(14)
 if isfolder("BloxainHub") then
@@ -91,19 +99,19 @@ writefile("BloxainHub/Tower_Simulator.Lua", game:HttpGet(Github.."T/Tower_Simula
 Update()
 writefile("BloxainHub/Egg_Farm_Simulator.Lua", game:HttpGet(Github.."E/Egg_Farm_Simulator.Lua"))
 Update()
-writefile("BloxainHub/Universal_Gui.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Universal_Gui.Lua"))
+writefile("BloxainHub/Universal_Gui.Lua", game:HttpGet(Github.."Universal_Gui.Lua"))
 Update()
-writefile("BloxainHub/cart_ride_around_used_car_battery.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Games/C/cart_ride_around_used_car_battery.Lua"))
+writefile("BloxainHub/cart_ride_around_used_car_battery.Lua", game:HttpGet(Github.."Games/C/cart_ride_around_used_car_battery.Lua"))
 Update()
-writefile("BloxainHub/Natural_Disaster_Survival.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Games/N/Natural%20Disaster%20Survival.Lua"))
+writefile("BloxainHub/Natural_Disaster_Survival.Lua", game:HttpGet(Github.."Games/N/Natural%20Disaster%20Survival.Lua"))
 Update()
-writefile("BloxainHub/Modules/UI.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/UI.Lua"))
+writefile("BloxainHub/Modules/UI.Lua", game:HttpGet(Github.."modules/UI.Lua"))
 Update()
-writefile("BloxainHub/Modules/GameFinder.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Game_Finder.Lua"))
+writefile("BloxainHub/Modules/GameFinder.Lua", game:HttpGet(Github.."modules/Game_Finder.Lua"))
 Update()
-writefile("BloxainHub/Modules/progressBar.lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/progressBar.lua"))
+writefile("BloxainHub/Modules/progressBar.lua", game:HttpGet(Github.."modules/progressBar.lua"))
 Update()
-writefile("BloxainHub/Modules/Main.Lua", game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Main.Lua"))
+writefile("BloxainHub/Modules/Main.Lua", game:HttpGet(Github.."modules/Main.Lua"))
 Update()
 
 if moredata then
