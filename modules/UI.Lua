@@ -1,5 +1,3 @@
--- Get Rid Of Warnings
-local syn = nil
 local pixelwith = 1
 local mouse = game.Players.LocalPlayer:GetMouse()
 local Tweem = game.TweenService
@@ -1477,100 +1475,100 @@ function UI:MakeWindow(Table, SaveFolder)
 	return WindowReturn
 end
 
---return UI
+return UI
 
-local Window = UI:MakeWindow({Name = 'Test'}, 'test')
-local Tab = Window:MakeTab({Name = 'TestTab'})
-local Tab2 = Window:MakeTab({Name = 'textBox'})
+--local Window = UI:MakeWindow({Name = 'Test'}, 'test')
+--local Tab = Window:MakeTab({Name = 'TestTab'})
+--local Tab2 = Window:MakeTab({Name = 'textBox'})
 
-local Temp = Tab:AddButton({
-	Name = "Kill",
-	Callback = function()
-		Window:Delete()
-	end    
-})
+--local Temp = Tab:AddButton({
+--	Name = "Kill",
+--	Callback = function()
+--		Window:Delete()
+--	end    
+--})
 
-local Temp17 = Tab:AddButton({
-	Name = "Save",
-	Callback = function()
-		Save(UI.Flags, 'test')
-	end    
-})
+--local Temp17 = Tab:AddButton({
+--	Name = "Save",
+--	Callback = function()
+--		Save(UI.Flags, 'test')
+--	end    
+--})
 
-local Temp2 = Tab:AddButton({
-	Name = "Delete me",
-	Callback = function()
-		Window:Delete()
-	end    
-})
+--local Temp2 = Tab:AddButton({
+--	Name = "Delete me",
+--	Callback = function()
+--		Window:Delete()
+--	end    
+--})
 
-local Temp3 = Tab:AddToggle({
-	Name = "KillUI",
-	Flag = 'test',
-	Callback = function(Value)
-		print(Value)
-	end  
-})
+--local Temp3 = Tab:AddToggle({
+--	Name = "KillUI",
+--	Flag = 'test',
+--	Callback = function(Value)
+--		print(Value)
+--	end  
+--})
 
-Tab:AddButton({
-	Name = "Set Value",
-	Callback = function()
-		Temp:Set('kill UI')
-		Temp2:Delete()
-		Temp3:Set({Name = 'to pro', Value = true})
-	end    
-})
+--Tab:AddButton({
+--	Name = "Set Value",
+--	Callback = function()
+--		Temp:Set('kill UI')
+--		Temp2:Delete()
+--		Temp3:Set({Name = 'to pro', Value = true})
+--	end    
+--})
 
- local temp4 = Tab2:AddTextbox({
-	Name = "text box",
-	Default = "default box input",
-	TextDisappear = true,
-	Flag = 'text',
-	Callback = function(Value)
-		print(Value)
-	end	  
-})
+-- local temp4 = Tab2:AddTextbox({
+--	Name = "text box",
+--	Default = "default box input",
+--	TextDisappear = true,
+--	Flag = 'text',
+--	Callback = function(Value)
+--		print(Value)
+--	end	  
+--})
 
-Tab2:AddButton({
-	Name = "Set Value",
-	Callback = function()
-		print(UI.Flags['test'].Value)
-		temp4:Set({Name = 'to pro', Text = 'changed'})
-	end    
-})
+--Tab2:AddButton({
+--	Name = "Set Value",
+--	Callback = function()
+--		print(UI.Flags['test'].Value)
+--		temp4:Set({Name = 'to pro', Text = 'changed'})
+--	end    
+--})
 
-Tab:AddBind({
-	Name = "Bind",
-	Default = Enum.KeyCode.E,
-	Hold = false,
-	Callback = function()
-		print("press")
-	end    
-})
+--Tab:AddBind({
+--	Name = "Bind",
+--	Default = Enum.KeyCode.E,
+--	Hold = false,
+--	Callback = function()
+--		print("press")
+--	end    
+--})
 
-Tab2:AddSlider({
-	Name = "Slider" ,
-	Min = -20,
-	Max = 20,
-	Increment = 5
-})
+--Tab2:AddSlider({
+--	Name = "Slider" ,
+--	Min = -20,
+--	Max = 20,
+--	Increment = 5
+--})
 
-Tab:AddSlider({
-	Name = "Slider" ,
-	Min = -20,
-	Max = 20,
-	Default = 0,
-	Increment = 0.25
-})
+--Tab:AddSlider({
+--	Name = "Slider" ,
+--	Min = -20,
+--	Max = 20,
+--	Default = 0,
+--	Increment = 0.25
+--})
 
-Tab:AddDropdown({
-	Name = "Dropdown",
-	Default = "1",
-	Options = {"1", "2"},
-	Callback = function(Value)
-		print(Value)
-	end    
-})
+--Tab:AddDropdown({
+--	Name = "Dropdown",
+--	Default = "1",
+--	Options = {"1", "2"},
+--	Callback = function(Value)
+--		print(Value)
+--	end    
+--})
 
 --[[
 Name = <string> - The name of the dropdown.
