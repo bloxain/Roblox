@@ -141,9 +141,9 @@ function UI:MakeNotification(Table)
 end
 
 function UI:MakeWindow(Table, SaveFolder)
-	if isfile(SaveFolder..'/'..game.GameId) then
-		UI.Flags = game.HttpService:JSONDecode(readfile(SaveFolder..'/'..game.GameId))
-	end
+--	if isfile(SaveFolder..'/'..game.GameId) then
+	--	UI.Flags = game.HttpService:JSONDecode(readfile(SaveFolder..'/'..game.GameId))
+--	end
 	local UIScreen = Instance.new("ScreenGui")
 	local Window = Instance.new("Frame")
 	local TopBar = Instance.new("Frame")
@@ -578,7 +578,7 @@ function UI:MakeWindow(Table, SaveFolder)
 			Clickable.Position = UDim2.new(0, 7, 0, 1)
 			Clickable.Size = UDim2.new(0, 348, 0, 28)
 			Clickable.Font = Enum.Font.SourceSans
-			Clickable.Text = "TextBox"
+			Clickable.Text = Table.Name
 			Clickable.TextColor3 = Color3.fromRGB(255, 255, 255)
 			Clickable.TextSize = 20.000
 			Clickable.TextXAlignment = Enum.TextXAlignment.Left
@@ -824,9 +824,10 @@ function UI:MakeWindow(Table, SaveFolder)
 			local Label = Instance.new("Frame")
 			local Color = Instance.new("Frame")
 			local View = Instance.new("TextBox")
+			
 
-			Label.Name = Table.Name
-			Label.Parent = game.StarterGui.UI.Window.Page
+			Label.Name = 'info'
+			Label.Parent = Page
 			Label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			Label.Size = UDim2.new(0, 358, 0, 32)
 
@@ -997,7 +998,7 @@ function UI:MakeWindow(Table, SaveFolder)
 				end
 			end
 			
-			local function UpdateSlider(value)
+			local function UpdateSlider(value, Change)
 				local bar = Bar
 				local percent = (mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X
 				
@@ -1009,11 +1010,13 @@ function UI:MakeWindow(Table, SaveFolder)
 				value = value or math.floor(Table.Min + (Table.Max - Table.Min) * percent)
 				value = Round(value, Table.Increment)
 				Input.Text = value
-				SetValues(value)
+				if not Change then
+					SetValues(value)
+				end
 				Tweem:Create(Fill, ANIMSPEED, {Size = UDim2.new(percent, 0, 0, 4)}):Play()
 				return value
 			end
-			UpdateSlider(Table.Default)
+			UpdateSlider(Table.Default, true)
 			Input.Changed:Connect(function(property)
 				if Input[property] == Input.Text and tonumber(Input.Text) then
 					print(UpdateSlider(Input.Text))
