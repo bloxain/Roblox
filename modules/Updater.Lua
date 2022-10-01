@@ -43,7 +43,6 @@ AddAmount1 = 0
 NewSize = 0
 precent = 0
 title = ""
-
 function Show(Amount)
 	AddAmount1 = 100 / Amount
 	AddAmount = 300 / Amount
@@ -68,7 +67,7 @@ if not writefile then
 end
 local Github = _G.versoin[2]..'Games/'
 
-Show(14)
+Show(15)
 if isfolder("BloxainHub") then
 	if isfolder("BloxainHub/Saves") then
 		moredata = {}
@@ -113,12 +112,7 @@ writefile("BloxainHub/Modules/progressBar.lua", game:HttpGet(_G.versoin[2].."mod
 Update()
 writefile("BloxainHub/Modules/Main.Lua", game:HttpGet(_G.versoin[2].."modules/Main.Lua"))
 Update()
-
-if moredata then
-	for i = 1, #moredata do
-		writefile(moredata[i].Path, moredata[i].Data)
-		print(moredata[i].Data)
-	end
-end
+writefile("BloxainHub/Modules/Versoin.lua", _G.versoin[1])
+Update()
 
 Updater:Destroy()
