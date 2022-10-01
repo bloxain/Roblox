@@ -630,7 +630,7 @@ function UI:MakeWindow(Table)
 			Clickable.Position = UDim2.new(0, 7, 0, 1)
 			Clickable.Size = UDim2.new(0, 348, 0, 28)
 			Clickable.Font = Enum.Font.SourceSans
-			Clickable.Text = "TextBox"
+			Clickable.Text = Table.Name
 			Clickable.TextColor3 = Color3.fromRGB(255, 255, 255)
 			Clickable.TextSize = 20.000
 			Clickable.TextXAlignment = Enum.TextXAlignment.Left
@@ -840,12 +840,15 @@ function UI:MakeWindow(Table)
 			return functions
 		end
 
-		function Tab:AddLabel(Table)
+		function Tab:AddLabel(Name)
 			local Label = Instance.new("Frame")
 			local Color = Instance.new("Frame")
 			local View = Instance.new("TextLabel")
-
-			Label.Name = Table.Name
+			if not Name then
+				Name = 'nil'
+			end
+			
+			Label.Name = Name
 			Label.Parent = Page
 			Label.BackgroundColor3 = UI.Theme.Boarder
 			Label.Size = UDim2.new(0, 358, 0, 32)
@@ -857,7 +860,7 @@ function UI:MakeWindow(Table)
 			Color.Position = UDim2.new(0, pixelwith, 0, pixelwith)
 			Color.Size = UDim2.new(0, 358 - pixelwith * 2, 0, 32 - pixelwith * 2)
 
-			View.Name = Table.Name
+			View.Name = Name
 			View.Parent = Color
 			View.Active = true
 			View.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
