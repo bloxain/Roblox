@@ -115,4 +115,11 @@ Update()
 writefile("BloxainHub/Modules/Versoin.lua", _G.versoin[1])
 Update()
 
+if moredata then
+	for i = 1, #moredata do
+		writefile(moredata[i].Path, moredata[i].Data)
+		print(moredata[i].Data)
+	end
+end
+
 Updater:Destroy()
