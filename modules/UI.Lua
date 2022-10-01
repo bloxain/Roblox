@@ -141,9 +141,9 @@ function UI:MakeNotification(Table)
 end
 
 function UI:MakeWindow(Table, SaveFolder)
---	if isfile(SaveFolder..'/'..game.GameId) then
-	--	UI.Flags = game.HttpService:JSONDecode(readfile(SaveFolder..'/'..game.GameId))
---	end
+	if isfile(SaveFolder..'/'..game.GameId) then
+		UI.Flags = game.HttpService:JSONDecode(readfile(SaveFolder..'/'..game.GameId))
+	end
 	local UIScreen = Instance.new("ScreenGui")
 	local Window = Instance.new("Frame")
 	local TopBar = Instance.new("Frame")
@@ -527,7 +527,6 @@ function UI:MakeWindow(Table, SaveFolder)
 				Toggle:Destroy()
 				SetCanvasSize(Page)
 			end
-			Data['functions'] = functions
 			return functions
 		end
 		
