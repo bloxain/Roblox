@@ -2,7 +2,7 @@ local pixelwith = 1
 local mouse = game.Players.LocalPlayer:GetMouse()
 local Tweem = game.TweenService
 local UserInputService = game:GetService('UserInputService')
-local Elements = {}
+local SaveFolder;
 -- global
 local NotificationsOffset = -.063
 local ANIMSPEED = TweenInfo.new(0.1)
@@ -10,9 +10,9 @@ local ANIMSPEED = TweenInfo.new(0.1)
 local function SetCanvasSize(Frame)
 	local YSize = 0
 	local padding 
-		if Frame:FindFirstChild('UIListLayout') then padding = Frame.UIListLayout.Padding.Offset else padding = 4 end
+	if Frame.UIListLayout then padding = Frame.UIListLayout.Padding.Offset else padding = 4 end
 	for i, v in next, Frame:GetChildren() do
-		if v.ClassName ~= 'UIListLayout' and v.ClassName ~= 'ObjectValue' and v.Visible then
+		if v.ClassName == 'Frame' and v.Visible then
 			YSize = YSize + v.Size.Y.Offset + padding
 		end
 	end
@@ -31,18 +31,6 @@ local function Round(number, idk)
 		return math.floor(number) * idk
 	end
 end
-
-local function ElementChanged(FlagData)
-	
-end
-
-local function Save(Table, Folder)
-	if not isfolder(Folder) then
-		makefolder(Folder)
-	end
-	writefile(Folder..'/'..tostring(game.GameId), game.HttpService:JSONEncode(table)) -- this thing runs the entire thing
-end
-
 local function SearchElement(Text, Element)
 	local epik = false
 	if Text ~= '' then
@@ -66,6 +54,16 @@ local function SearchElement(Text, Element)
 		SetCanvasSize(Element)
 	end
 	return epik
+end
+
+local function SaveData(Table)
+	if not SaveFolder then
+		return
+	end
+	if not isfolder(SaveFolder) then
+		makefolder(SaveFolder)
+	end
+	writefile(SaveFolder..'/'..tostring(game.GameId)..'.Txt', game.HttpService:JSONEncode(Table))
 end
 
 local UI = {Flags = {}, Theme = {Boarder = Color3.fromRGB(255, 255, 255)}}
@@ -111,7 +109,7 @@ function UI:MakeNotification(Table)
 	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Title.TextSize = 25.000
 	Title.TextXAlignment = Enum.TextXAlignment.Left
-	
+
 	Content.Name = "Content"
 	Content.Parent = Notification_Frame
 	Content.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -125,10 +123,10 @@ function UI:MakeNotification(Table)
 	Content.TextWrapped = true
 	Content.TextXAlignment = Enum.TextXAlignment.Left
 	Content.TextYAlignment = Enum.TextYAlignment.Top
-	
+
 	Instance.new('UICorner', Notification_Frame)
 	Instance.new('UICorner', Image)
-	
+
 	task.spawn(function()
 		NotificationsOffset += .063
 		Tweem:Create(Notification_Frame, ANIMSPEED, {Position = UDim2.new(.914, 0, .934 - NotificationsOffset, 0)}):Play()
@@ -139,11 +137,14 @@ function UI:MakeNotification(Table)
 		Notification:Destroy()
 	end)
 end
+function UI:Init()
 
-function UI:MakeWindow(Table, SaveFolder)
---	if isfile(SaveFolder..'/'..game.GameId) then
-	--	UI.Flags = game.HttpService:JSONDecode(readfile(SaveFolder..'/'..game.GameId))
---	end
+end
+function UI:MakeWindow(Table)
+	SaveFolder = Table.ConfigFolder 
+	if isfile(Table.ConfigFolder..'/'..game.GameId..'.Txt') then
+		UI.Flags = game.HttpService:JSONDecode(readfile(Table.ConfigFolder..'/'..game.GameId..'.Txt'))
+	end
 	local UIScreen = Instance.new("ScreenGui")
 	local Window = Instance.new("Frame")
 	local TopBar = Instance.new("Frame")
@@ -155,12 +156,12 @@ function UI:MakeWindow(Table, SaveFolder)
 	local UIListLayout_2 = Instance.new("UIListLayout")
 	local Divider_2 = Instance.new("Frame")
 	local Storage = Instance.new('Folder')
-	
+
 	local SelectedPage = nil
 	if syn and syn.protect_gui then
 		syn.protect_gui(UIScreen)
 	end
-	
+
 	UIScreen.Name = Table.Name
 	UIScreen.Parent = game.CoreGui
 	UIScreen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -211,7 +212,7 @@ function UI:MakeWindow(Table, SaveFolder)
 	Pages.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Pages.BackgroundTransparency = 1.000
 	Pages.Position = UDim2.new(0, 20, 0, 40)
-	Pages.Size = UDim2.new(0.261, 0, 0.867, 0)
+	Pages.Size = UDim2.new(155, 0, 260, 0)
 	Pages.CanvasPosition = Vector2.new(0, 2.30769229)
 	Pages.ScrollBarThickness = 3
 	Pages.CanvasSize = UDim2.new(0, 0, 0, 0)
@@ -231,32 +232,72 @@ function UI:MakeWindow(Table, SaveFolder)
 	Divider_2.BackgroundColor3 = UI.Theme.Boarder
 	Divider_2.Position = UDim2.new(0, 0, 0, 40)
 	Divider_2.Size = UDim2.new(1, 0, 0, 1)
-	
+
 	Storage.Name = 'Pages'
-	
 	Instance.new('UICorner', Window)
 	Instance.new('UICorner', Search)
-	
+
 	Search.Changed:Connect(function(istext)
-		if Search[istext] == Search.Text and SelectedPage then
-			SearchElement(Search.Text, SelectedPage.Page)
+		if Search[istext] == Search.Text then
 			for i, v in next, Storage:GetChildren() do
-				if SearchElement(Search.Text, v) and v ~= SelectedPage.Page then
+				if SearchElement(Search.Text, v) and loadstring('if SelectedPage and v == SelectedPage.Page then return false else return true end')() == true then
 					Tweem:Create(v.Page.Value, ANIMSPEED, {TextColor3 = Color3.fromRGB(170, 255, 0)}):Play()
+					v.Page.Value.PageColorsave.Value = true
 				else
 					Tweem:Create(v.Page.Value, ANIMSPEED, {TextColor3 = Color3.fromRGB(198, 198, 198)}):Play()
+					v.Page.Value.PageColorsave.Value = false
 				end
+			end
+			if SelectedPage and SelectedPage.Page then
+				SearchElement(Search.Text, SelectedPage.Page)
 			end
 		end
 	end)
-	
-	TopBar.InputBegan:Connect(function(key)
-		if key.UserInputType == Enum.UserInputType.MouseButton1 then
-			local x, y = mouse.X, mouse.Y
-			repeat Window.Position = UDim2.fromOffset(x - mouse.X, y - mouse.Y) until not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
+
+	local gui = Window
+	local dragging
+	local dragInput
+	local dragStart
+	local startPos
+	local function Lerp(a, b, m)
+		return a + (b - a) * m
+	end;
+	local lastMousePos
+	local lastGoalPos
+	local DRAG_SPEED = (8); -- // The speed of the UI darg.
+	local function Update(dt)
+		if not (startPos) then return end;
+		if not (dragging) and (lastGoalPos) then
+			gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, lastGoalPos.X.Offset, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, lastGoalPos.Y.Offset, dt * DRAG_SPEED))
+			return 
+		end;
+		local delta = (lastMousePos - UserInputService:GetMouseLocation())
+		local xGoal = (startPos.X.Offset - delta.X);
+		local yGoal = (startPos.Y.Offset - delta.Y);
+		lastGoalPos = UDim2.new(startPos.X.Scale, xGoal, startPos.Y.Scale, yGoal)
+		gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, xGoal, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, yGoal, dt * DRAG_SPEED))
+	end;
+	TopBar.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = gui.Position
+			lastMousePos = UserInputService:GetMouseLocation()
+
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
 		end
 	end)
-	
+	TopBar.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+	game["Run Service"].Heartbeat:Connect(Update)
+
 	task.spawn(function()
 		local isscaling = false
 		local defaluatcursor = mouse.Icon
@@ -276,12 +317,12 @@ function UI:MakeWindow(Table, SaveFolder)
 			local check = Window.Position.Y.Offset + Window.Size.Y.Offset
 			local check2 = Window.Position.Y.Offset
 			local check3 = Window.Position.Y.Offset + Window.Size.X.Offset
-			if mousepos >= check - 10 and mousepos <= check + 10 and mousepos2 >= check3 and check3 then
+			if mousepos >= check - 10 and mousepos <= check + 10 and mousepos2 >= check3 and check3 and not dragging then
 				if UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
 					local temp = mouse.Y
 					local oldSizeY = Window.Size.Y.Offset
 					local oldSizeX = Window.Size.X.Offset
-					repeat Window.Size = UDim2.fromOffset(oldSizeX, oldSizeY + mouse.Y - temp) setmouse() if SelectedPage then SelectedPage.Page.Size = UDim2.fromOffset(367, Window.Size.Y.Offset - 45) end task.wait() until not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
+					repeat Window.Size = UDim2.fromOffset(oldSizeX, oldSizeY + mouse.Y - temp) setmouse() Pages.Size = UDim2.fromOffset(155, Window.Size.X.Offset - 40) if SelectedPage then SelectedPage.Page.Size = UDim2.fromOffset(367, Window.Size.Y.Offset - 45) end task.wait() until not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
 				end
 				setmouse()
 			else
@@ -293,6 +334,7 @@ function UI:MakeWindow(Table, SaveFolder)
 						SetCanvasSize(SelectedPage.Page)
 						SetCanvasSize(Pages)
 					end
+					Pages.Size = UDim2.fromOffset(155, Window.Size.X.Offset - 40)
 					Asset.Parent = nil
 					for i, v in next, Storage:GetChildren() do
 						v.Size = UDim2.fromOffset(367, Window.Size.Y.Offset - 45)
@@ -302,7 +344,7 @@ function UI:MakeWindow(Table, SaveFolder)
 			task.wait()
 		end
 	end)
-	
+
 	local WindowReturn = {element = Window}
 	function WindowReturn:Delete()
 		UIScreen:Destroy()
@@ -310,7 +352,7 @@ function UI:MakeWindow(Table, SaveFolder)
 	if not Table.Image then
 		Table.Image = ''
 	end
-	
+
 	function WindowReturn:MakeTab(Table)
 		local Page = Instance.new("ScrollingFrame")
 		local UIListLayout_3 = Instance.new("UIListLayout")
@@ -318,6 +360,7 @@ function UI:MakeWindow(Table, SaveFolder)
 		local PageButton = Instance.new("TextButton")
 		local PageValue = Instance.new('ObjectValue')
 		local PageButtonValue = Instance.new('ObjectValue')
+		local Savecolor = Instance.new('BoolValue')
 
 		Page.Name = "Page"
 		Page.Parent = Storage
@@ -329,12 +372,12 @@ function UI:MakeWindow(Table, SaveFolder)
 		Page.Size = UDim2.new(0, 367, 0, 253)
 		Page.ScrollBarThickness = 0
 		Page.CanvasSize = UDim2.new(0, 0, 0, 0)
-		
+
 		PageButtonHolder.Parent = Pages
 		PageButtonHolder.Transparency = 1
 		PageButtonHolder.Name = 'PageHolder'
 		PageButtonHolder.Size = UDim2.new(0, 147, 0, 30)
-		
+
 		PageButton.Parent = PageButtonHolder
 		PageButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 		PageButton.BackgroundTransparency = 1.000
@@ -355,20 +398,29 @@ function UI:MakeWindow(Table, SaveFolder)
 		PageButtonValue.Parent = Page
 		PageButtonValue.Value = PageButton
 		
+		Savecolor.Name = 'PageColorsave'
+		Savecolor.Parent = PageButton
+		Savecolor.Value = false
+
 		PageValue.Name = 'Page'
 		PageValue.Parent = PageButton
 		PageValue.Value = Page
+
 		PageButton.MouseButton1Click:Connect(function()
 			Page.Parent = Window
 			PageButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 			Tweem:Create(PageButton, ANIMSPEED, {Position = UDim2.fromOffset(15, 0), TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
 			if SelectedPage and SelectedPage.Page ~= Page then
 				SelectedPage['Page'].Parent = Storage
-				Tweem:Create(SelectedPage.Button, ANIMSPEED, {Position = UDim2.fromOffset(0, 0), TextColor3 = Color3.fromRGB(198, 198, 198)}):Play()
+				if SelectedPage.Button.PageColorsave.Value then
+					Tweem:Create(SelectedPage.Button, ANIMSPEED, {Position = UDim2.fromOffset(0, 0), TextColor3 = Color3.fromRGB(170, 255, 0)}):Play()
+				else
+					Tweem:Create(SelectedPage.Button, ANIMSPEED, {Position = UDim2.fromOffset(0, 0), TextColor3 = Color3.fromRGB(198, 198, 198)}):Play()
+				end
 			end
 			SelectedPage = {Page = Page, Button = PageButton}
 		end)
-		
+
 		local Tab = {element = SelectedPage}
 		function Tab:AddButton(Table)
 			local Button = Instance.new("Frame")
@@ -403,7 +455,10 @@ function UI:MakeWindow(Table, SaveFolder)
 			if Clickable.TextBounds.X > 358 then
 				Clickable.TextScaled = true
 			end
-			
+			if game.TextService:GetTextSize(Clickable.Text, 15, Enum.Font.Legacy, Vector2.new(1000000000, 100000)).X > 358 then
+				Clickable.TextScaled = true
+			end
+
 			Instance.new('UICorner', Button)
 			Instance.new('UICorner', Color)
 			Instance.new('UICorner', Clickable)
@@ -417,17 +472,11 @@ function UI:MakeWindow(Table, SaveFolder)
 				Button:Destroy()
 				SetCanvasSize(Page)
 			end
-			function functions:Fire()
-				if Table.Callback then
-					Table.Callback()
-				end
-			end
 			return functions
 		end
-		
+
 		function Tab:AddToggle(Table)
 			local Toggled = false
-			local Data = nil
 			if Table.Default then
 				Toggled = true
 			end
@@ -440,13 +489,12 @@ function UI:MakeWindow(Table, SaveFolder)
 					FlagTable.Save = true
 				end
 				UI.Flags[Table.Flag] = FlagTable
-				Data = UI.Flags[Table.Flag]
 			elseif UI.Flags[Table.Flag] then
 				Data = UI.Flags[Table.Flag]
 				Toggled = Data.Value
 			end
 			FlagTable = {}
-			
+
 			local Toggle = Instance.new("Frame")
 			local Color = Instance.new("Frame")
 			local Clickable = Instance.new("TextButton")
@@ -481,22 +529,23 @@ function UI:MakeWindow(Table, SaveFolder)
 			Holder.BackgroundColor3 = Color3.fromRGB(52, 52, 52)
 			Holder.Position = UDim2.new(0, 292, 0, 4)
 			Holder.Size = UDim2.new(0, 54, 0, 22)
-			
+
 			Slider.Parent = Holder
 			Slider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			Slider.Size = UDim2.new(0, 30, 0, 22)
 			if Toggled then
 				Slider.Position = UDim2.new(0, 24, 0, 0)
-			end if Clickable.TextBounds.X > 358 then
+			end if game.TextService:GetTextSize(Clickable.Text, 15, Enum.Font.Legacy, Vector2.new(1000000000, 100000)).X > 358 then
 				Clickable.TextScaled = true
 			end
+
 			Instance.new('UICorner', Toggle)
 			Instance.new('UICorner', Color)
 			Instance.new('UICorner', Clickable)
 			Instance.new('UICorner', Holder)
 			Instance.new('UICorner', Slider)
 			SetCanvasSize(Page)
-			
+
 			local function toggle()
 				if Toggled then
 					Toggled = false
@@ -506,12 +555,15 @@ function UI:MakeWindow(Table, SaveFolder)
 					Tweem:Create(Slider, ANIMSPEED, {Position = UDim2.fromOffset(24, 0)}):Play()
 				end
 				if Table.Flag then
-					Data.Value = Toggled
+					UI.Flags[Table.Flag].Value = Toggled
 				end if Table.Callback then
 					Table.Callback(Toggled)
 				end
+				SaveData(UI.Flags)
 			end
+
 			Clickable.MouseButton1Click:Connect(toggle)
+
 			local functions = {Element = Toggle}
 			function functions:Set(Table)
 				if Table.Name then
@@ -529,21 +581,23 @@ function UI:MakeWindow(Table, SaveFolder)
 			end
 			return functions
 		end
-		
+
 		function Tab:AddTextbox(Table)
 			local TextBox = Instance.new("Frame")
 			local Color = Instance.new("Frame")
 			local Clickable = Instance.new("TextButton")
 			local Input = Instance.new("TextBox")
-			local Data = nil
 			if not Table.Default then
 				Table.Default = ''
 			end
-			if not Table.Placeholdertext then
-				Table.Placeholdertext = ''
+
+			if not Table.PlaceText then
+				Table.PlaceText = ''
 			end
+
+
 			local FlagTable = {
-				Value = Input.Text,
+				Value = Table.Default,
 				Save = true
 			}
 			if Table.Flag and not UI.Flags[Table.Flag] then
@@ -551,13 +605,11 @@ function UI:MakeWindow(Table, SaveFolder)
 					FlagTable.Save = true
 				end
 				UI.Flags[Table.Flag] = FlagTable
-				Data = UI.Flags[Table.Flag]
 			elseif UI.Flags[Table.Flag] then
 				Data = UI.Flags[Table.Flag]
 				Table.Default = Data.Value
 			end
 			FlagTable = {}
-
 			--Properties:
 
 			TextBox.Name = Table.Name
@@ -578,7 +630,7 @@ function UI:MakeWindow(Table, SaveFolder)
 			Clickable.Position = UDim2.new(0, 7, 0, 1)
 			Clickable.Size = UDim2.new(0, 348, 0, 28)
 			Clickable.Font = Enum.Font.SourceSans
-			Clickable.Text = Table.Name
+			Clickable.Text = "TextBox"
 			Clickable.TextColor3 = Color3.fromRGB(255, 255, 255)
 			Clickable.TextSize = 20.000
 			Clickable.TextXAlignment = Enum.TextXAlignment.Left
@@ -590,7 +642,7 @@ function UI:MakeWindow(Table, SaveFolder)
 			Input.Position = UDim2.new(0, 263, 0, 4)
 			Input.Selectable = false
 			Input.Size = UDim2.new(0, 85, 0, 22)
-			Input.PlaceholderText = Table.Placeholdertext
+			Input.PlaceholderText = Table.PlaceText
 			Input.Text = Table.Default
 			Input.TextColor3 = Color3.fromRGB(255, 255, 255)
 			Input.TextSize = 10.000
@@ -599,7 +651,7 @@ function UI:MakeWindow(Table, SaveFolder)
 			if Clickable.TextBounds.X > 358 then
 				Clickable.TextScaled = true
 			end
-			
+
 			Clickable.MouseButton1Click:Connect(function()
 				Input:CaptureFocus()
 				Tweem:Create(Input, ANIMSPEED, {Position = UDim2.fromOffset(173, 4), Size = UDim2.fromOffset(175, 22)}):Play()
@@ -613,17 +665,18 @@ function UI:MakeWindow(Table, SaveFolder)
 					Table.Callback(Input.Text)
 				end
 				if Table.Flag then
-					Data.Value = Input.Text
+					UI.Flags[Table.Flag].Value = Input.Text
 				end
+				SaveData(UI.Flags)
 			end)
-			
+
 
 			Instance.new('UICorner', TextBox)
 			Instance.new('UICorner', Color)
 			Instance.new('UICorner', Clickable)
 			Instance.new('UICorner', TextBox)
 			SetCanvasSize(Page)
-			
+
 			local functions = {Element = TextBox}
 			function functions:Set(Table)
 				if Table.Name then
@@ -632,6 +685,7 @@ function UI:MakeWindow(Table, SaveFolder)
 				end
 				if Table.Text then
 					Input.Text = Table.Text
+					SaveData(UI.Flags)
 				end if Table.Placeholdertext then
 					Input.PlaceholderText = Table.Placeholdertext
 				end
@@ -642,7 +696,7 @@ function UI:MakeWindow(Table, SaveFolder)
 			end
 			return functions
 		end
-		
+
 		function Tab:AddBind(Table)
 			local KeyBind = Instance.new("Frame")
 			local Color = Instance.new("Frame")
@@ -650,9 +704,8 @@ function UI:MakeWindow(Table, SaveFolder)
 			local Key = Instance.new("TextLabel")
 			local Trigger = nil
 			local PickNewKey = 1
-			local Data = nil
 			if not Table.Hold then
-				
+
 			end if not Table.Default then
 				Table.Default = 'None'
 			else
@@ -660,7 +713,7 @@ function UI:MakeWindow(Table, SaveFolder)
 				Table.Default = Table.Default.Name
 				PickNewKey = 0
 			end
-			
+
 			local FlagTable = {
 				Value = Table.Default,
 				Save = false
@@ -668,18 +721,21 @@ function UI:MakeWindow(Table, SaveFolder)
 			if Table.Default == 'None' then
 				FlagTable.Value = nil
 			end
-			
 			if Table.Flag and not UI.Flags[Table.Flag] then
 				if Table.Save then
 					FlagTable.Save = true
 				end
 				UI.Flags[Table.Flag] = FlagTable
-				Data = UI.Flags[Table.Flag]
 			elseif UI.Flags[Table.Flag] then
 				Data = UI.Flags[Table.Flag]
-				Trigger = Enum.KeyCode[Data.Value]
+				if Data.Value and Data.Value ~= '' then
+					Trigger = Enum.KeyCode[Data.Value]
+					PickNewKey = 0
+					Table.Default = Data.Value
+				end
 			end
 			FlagTable = {}
+
 			KeyBind.Name = Table.Name
 			KeyBind.Parent = Page
 			KeyBind.BackgroundColor3 = UI.Theme.Boarder
@@ -708,6 +764,7 @@ function UI:MakeWindow(Table, SaveFolder)
 			Key.BackgroundColor3 = Color3.fromRGB(52, 52, 52)
 			Key.Position = UDim2.new(0, 303, 0, 5)
 			Key.Size = UDim2.new(0, 45, 0, 22)
+			Key.Font = Enum.Font.Legacy
 			Key.Text = Table.Default
 			Key.TextColor3 = Color3.fromRGB(255, 255, 255)
 			Key.TextSize = 10.000
@@ -715,7 +772,11 @@ function UI:MakeWindow(Table, SaveFolder)
 			if Clickable.TextBounds.X > 358 then
 				Clickable.TextScaled = true
 			end
-			
+			local function SetSize()
+				local temp = game.TextService:GetTextSize(Key.Text, 10, Enum.Font.Legacy, Vector2.new(1000000000, 100000))
+				Tweem:Create(Key, ANIMSPEED, {Size = UDim2.fromOffset(temp.X + 15, 22), Position = UDim2.fromOffset(348 - temp.X - 15, 5)}):Play()
+			end
+
 			game:GetService('UserInputService').InputBegan:Connect(function(key, gameProcessedEvent)
 				key = key.KeyCode
 				if key == Trigger then
@@ -730,16 +791,22 @@ function UI:MakeWindow(Table, SaveFolder)
 					if Table.Flag then
 						UI.Flags[Table.Flag].Value = key.Name
 					end
+					SetSize()
+					SaveData(UI.Flags)
 				end
 			end)
-			
+
 			Clickable.MouseButton1Click:Connect(function()
 				if PickNewKey == 1 then
 					Key.Text = '...'
 					PickNewKey = 3
+					SetSize()
+					SaveData(UI.Flags)
 				elseif PickNewKey == 0 then
 					Trigger = nil
 					Key.Text = 'None'
+					SetSize()
+					SaveData(UI.Flags)
 					PickNewKey = 1
 					if Table.Flag then
 						if Table.Flag then
@@ -752,15 +819,18 @@ function UI:MakeWindow(Table, SaveFolder)
 			Instance.new('UICorner', KeyBind)
 			Instance.new('UICorner', Color)
 			Instance.new('UICorner', Clickable)
+			Instance.new('UICorner', Key)
 			SetCanvasSize(Page)
+			SetSize()
 			local functions = {Element = KeyBind}
 			function functions:Set(Table)
 				if Table.Name then
 					Clickable.Text = Table.Name
 					KeyBind.Name = Table.Name
 				end if Table.Key then
-					Trigger = Table.Key.Name
+					Trigger = Table.Key
 					Key.Text = Table.Key.Name
+					SetSize()
 				end
 			end
 			function functions:Delete()
@@ -769,14 +839,14 @@ function UI:MakeWindow(Table, SaveFolder)
 			end
 			return functions
 		end
-		
+
 		function Tab:AddLabel(Table)
 			local Label = Instance.new("Frame")
 			local Color = Instance.new("Frame")
 			local View = Instance.new("TextLabel")
 
 			Label.Name = Table.Name
-			Label.Parent = game.StarterGui.UI.Window.Page
+			Label.Parent = Page
 			Label.BackgroundColor3 = UI.Theme.Boarder
 			Label.Size = UDim2.new(0, 358, 0, 32)
 
@@ -802,43 +872,44 @@ function UI:MakeWindow(Table, SaveFolder)
 			Instance.new('UICorner', Label)
 			Instance.new('UICorner', Color)
 			Instance.new('UICorner', View)
-			if View.TextBounds.X > 358 then
+			if game.TextService:GetTextSize(View.Text, 15, Enum.Font.Legacy, Vector2.new(1000000000, 100000)).X > 358 then
 				View.TextScaled = true
 			end
-			
+
 			SetCanvasSize(Page)
 			local functions = {Element = View}
 			function functions:Set(Text)
 				View.Text = Text
 				Label.Name = Text
 			end
-			
+
 			function functions:Delete()
 				Label:Destroy()
 				SetCanvasSize(Page)
 			end
 			return functions
 		end
-		
-		function Tab:AddParagraph(Table)
-			local Label = Instance.new("Frame")
+
+		function Tab:AddParagraph(Table, whyjustdumb)
+			local Paragraph = Instance.new("Frame")
 			local Color = Instance.new("Frame")
-			local View = Instance.new("TextBox")
-			
+			local View = Instance.new("TextLabel")
+			local text = whyjustdumb or Table.Content
+			local text2 = Table.Content or Table
 
-			Label.Name = 'info'
-			Label.Parent = Page
-			Label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-			Label.Size = UDim2.new(0, 358, 0, 32)
+			Paragraph.Name = text2
+			Paragraph.Parent = Page
+			Paragraph.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+			Paragraph.Size = UDim2.new(0, 358, 0, 32)
 
-			Color.Name = "ButtonColor"
-			Color.Parent = Label
+			Color.Name = "Color"
+			Color.Parent = Paragraph
 			Color.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 			Color.BorderColor3 = Color3.fromRGB(27, 42, 53)
 			Color.Position = UDim2.new(0, pixelwith, 0, pixelwith)
 			Color.Size = UDim2.new(0, 358 - pixelwith * 2, 0, 32 - pixelwith * 2)
 
-			View.Name = Table.Name
+			View.Name = 'no text or error'
 			View.Parent = Color
 			View.Active = true
 			View.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
@@ -847,37 +918,53 @@ function UI:MakeWindow(Table, SaveFolder)
 			View.Size = UDim2.new(0, 348, 0, 28)
 			View.Font = Enum.Font.SourceSans
 			View.TextColor3 = Color3.fromRGB(255, 255, 255)
-			View.TextSize = 20.000
+			View.TextSize = 15.000
 			View.TextXAlignment = Enum.TextXAlignment.Left
+			View.TextYAlignment = Enum.TextYAlignment.Top
 			View.TextWrapped = true
 
-			Instance.new('UICorner', Label)
+			Instance.new('UICorner', Paragraph)
 			Instance.new('UICorner', Color)
-			Instance.new('UICorner', View)
-			if View.TextBounds.X > 358 then
-				View.TextScaled = true
-			end
-			
-			
+			Instance.new('UICorner', View)	
 			local function SetText(Text)
+				local TextBounds = game.TextService:GetTextSize(Text, 15, Enum.Font.Legacy, Vector2.new(384, 100000000))		
 				View.Text = Text
+				View.Size = UDim2.fromOffset(TextBounds.X, TextBounds.Y)
+				Color.Size = UDim2.fromOffset(pixelwith * 2 + TextBounds.X, pixelwith * 2 + TextBounds.Y)
+				Paragraph.Size = UDim2.fromOffset(TextBounds.X,TextBounds.Y)
 			end
+			SetText(text)
 
 			SetCanvasSize(Page)
 			local functions = {Element = View}
 			function functions:Set(Text)
 				View.Text = Text
-				Label.Name = Text
+				Paragraph.Name = Text
 			end
 
 			function functions:Delete()
-				Label:Destroy()
+				Paragraph:Destroy()
 				SetCanvasSize(Page)
 			end
 		end
-		
+
 		function Tab:AddSlider(Table)
-			local Data = nil
+			local FlagTable = {
+				Value = Table.Default,
+				Save = false
+			}
+
+			if Table.Flag and not UI.Flags[Table.Flag] then
+				if Table.Save then
+					FlagTable.Save = true
+				end
+				UI.Flags[Table.Flag] = FlagTable
+			elseif UI.Flags[Table.Flag] then
+				Data = UI.Flags[Table.Flag]
+				Table.Default = Data.Value
+			end
+			FlagTable = {}
+
 			if not Table.Min then
 				Table.Min = 0
 			end
@@ -890,31 +977,7 @@ function UI:MakeWindow(Table, SaveFolder)
 			if not Table.Increment then
 				Table.Increment = 1
 			end
-			
-			local FlagTable = {
-				Value = Table.Default,
-				Save = false
-			}
 
-			if Table.Flag then
-				if Table.Save then
-					FlagTable.Save = true
-				end
-				UI.Flags[Table.Flag] = FlagTable
-			end
-			
-			if Table.Flag and not UI.Flags[Table.Flag] then
-				if Table.Save then
-					FlagTable.Save = true
-				end
-				UI.Flags[Table.Flag] = FlagTable
-				Data = UI.Flags[Table.Flag]
-			elseif UI.Flags[Table.Flag] then
-				Data = UI.Flags[Table.Flag]
-				Table.Default = Data.Value
-			end
-			
-			FlagTable = {}
 			local Slider = Instance.new("Frame")
 			local Color = Instance.new("Frame")
 			local View = Instance.new("TextLabel")
@@ -955,7 +1018,7 @@ function UI:MakeWindow(Table, SaveFolder)
 			Bar.Position = UDim2.new(0, 7, 0, 30)
 			Bar.Size = UDim2.new(0, 342, 0, 4)
 			Bar.Transparency = 1
-			
+
 			Fill.Name = "Fill"
 			Fill.Parent = Bar
 			Fill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -984,7 +1047,7 @@ function UI:MakeWindow(Table, SaveFolder)
 			Instance.new('UICorner', Bar)
 			Instance.new('UICorner', Fill)
 			Instance.new('UICorner', Pointer)
-			if View.TextBounds.X > 358 then
+			if game.TextService:GetTextSize(View.Text, 15, Enum.Font.Legacy, Vector2.new(1000000000, 100000)).X > 200 then
 				View.TextScaled = true
 			end
 			SetCanvasSize(Page)
@@ -997,11 +1060,11 @@ function UI:MakeWindow(Table, SaveFolder)
 					UI.Flags[Table.Flag].Value = num
 				end
 			end
-			
-			local function UpdateSlider(value, Change)
+
+			local function UpdateSlider(value, change)
 				local bar = Bar
 				local percent = (mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X
-				
+
 				if value then
 					percent = (value - Table.Min) / (Table.Max - Table.Min)
 				end
@@ -1010,8 +1073,9 @@ function UI:MakeWindow(Table, SaveFolder)
 				value = value or math.floor(Table.Min + (Table.Max - Table.Min) * percent)
 				value = Round(value, Table.Increment)
 				Input.Text = value
-				if not Change then
-					SetValues(value)
+				if not change  then 
+					SetValues(value) 
+					SaveData(UI.Flags)
 				end
 				Tweem:Create(Fill, ANIMSPEED, {Size = UDim2.new(percent, 0, 0, 4)}):Play()
 				return value
@@ -1019,16 +1083,16 @@ function UI:MakeWindow(Table, SaveFolder)
 			UpdateSlider(Table.Default, true)
 			Input.Changed:Connect(function(property)
 				if Input[property] == Input.Text and tonumber(Input.Text) then
-					print(UpdateSlider(Input.Text))
+					UpdateSlider(Input.Text)
 				end
 			end)
-			
+
 			Slider.InputBegan:Connect(function(userinput)
 				if userinput.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
 				repeat UpdateSlider() task.wait() until not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
 				UpdateSlider()
 			end)
-			
+
 			local functions = {Element = Slider}
 			function functions:Set(changes)
 				if changes.Name then
@@ -1045,37 +1109,28 @@ function UI:MakeWindow(Table, SaveFolder)
 			end
 			return functions
 		end
-		
+
 		function Tab:AddDropdown(Table)
-			local Data = nil
 			local FlagTable = {
 				Value = Table.Default,
 				Save = false
 			}
-			
-			if Table.Flag then
-				if Table.Save then
-					FlagTable.Save = true
-				end
-				UI.Flags[Table.Flag] = FlagTable
-			end
+
 			if Table.Flag and not UI.Flags[Table.Flag] then
 				if Table.Save then
 					FlagTable.Save = true
 				end
 				UI.Flags[Table.Flag] = FlagTable
-				Data = UI.Flags[Table.Flag]
 			elseif UI.Flags[Table.Flag] then
 				Data = UI.Flags[Table.Flag]
 				Table.Default = Data.Value
 			end
 			FlagTable = {}
 
-			
 			if not Table.Options then
 				Table.Options = {nil, nil}
 			end
-			
+
 			local DropDown = Instance.new("Frame")
 			local Color = Instance.new("Frame")
 			local Clickable = Instance.new("TextButton")
@@ -1149,7 +1204,7 @@ function UI:MakeWindow(Table, SaveFolder)
 			Instance.new('UICorner', DropDown)
 			Instance.new('UICorner', Color)
 			Instance.new('UICorner', Input)
-			if Clickable.TextBounds.X > 358 then
+			if game.TextService:GetTextSize(Clickable.Text, 15, Enum.Font.Legacy, Vector2.new(1000000000, 100000)).X > 358 then
 				Clickable.TextScaled = true
 			end
 			local Selected = Table.Default or ''
@@ -1176,7 +1231,7 @@ function UI:MakeWindow(Table, SaveFolder)
 				local Button = Instance.new("Frame")
 				local ButtonColor_2 = Instance.new("Frame")
 				local Clickable_2 = Instance.new("TextButton")
-				
+
 				Button.Name = Name
 				Button.Parent = ScrollingFrame
 				Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1214,6 +1269,7 @@ function UI:MakeWindow(Table, SaveFolder)
 					if Table.Callback then
 						Table.Callback(Name)
 					end
+					SaveData(UI.Flags)
 				end)
 			end
 			local function FormatTable(TABLE)
@@ -1234,12 +1290,12 @@ function UI:MakeWindow(Table, SaveFolder)
 				end
 				return returntable
 			end
-			
+
 			for i, v in next, FormatTable(Table.Options) do
 				AddButton(v)
 			end
 			SetCanvasSize(ScrollingFrame)
-			
+
 			Clickable.MouseButton1Click:Connect(function()
 				if Open then
 					Opendrop(false)
@@ -1247,18 +1303,18 @@ function UI:MakeWindow(Table, SaveFolder)
 					Opendrop(true)
 				end
 			end)
-			
+
 			Input.Focused:Connect(function()
 				Input.Text = ''
 				Opendrop(true)
 			end)
-			
+
 			Input.Changed:Connect(function(istext)
 				if Input[istext] == Input.Text then
 					SearchElement(Input.Text, ScrollingFrame)
 				end
 			end)
-			
+
 			local functions = {Element = DropDown}
 			function functions:Set(changes)
 				if changes.Name then
@@ -1280,197 +1336,8 @@ function UI:MakeWindow(Table, SaveFolder)
 			end
 			return functions
 		end
-		
---		function Tab:AddColorPicker(Table)
---			local FlagTable = {
---				Value = Table.Default,
---				Save = false
---			}
 
---			if Table.Flag then
---				if Table.Save then
---					FlagTable.Save = true
---				end
---				UI.Flags[Table.Flag] = FlagTable
---			end
 
---			if not Table.Options then
---				Table.Options = {nil, nil}
---			end
-			
---			local draggingColor, draggingCanvas
---			local hue, sat, brightness = 0, 0, 1
---			local color3 = Table.Default or Color3.fromRGB(255, 255, 255)
---			local rgb = {
---				r = 255,
---				g = 255,
---				b = 255
---			}
-			
---			local Colorpicker = Instance.new("Frame")
---			local Color = Instance.new("Frame")
---			local Clickable = Instance.new("TextButton")
---			local Arrow = Instance.new("TextLabel")
---			local Picker = Instance.new("Frame")
---			local Cursor = Instance.new("Frame")
---			local Cursorv2 = Instance.new("Frame")
---			local UIGradient = Instance.new("UIGradient")
---			local i_dont_know = Instance.new("Frame")
---			local UIGradient_2 = Instance.new("UIGradient")
-
---			Colorpicker.Name = Table.Name
---			Colorpicker.Parent = Page
---			Colorpicker.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
---			Colorpicker.Size = UDim2.new(0, 358, 0, 32)
-
---			Color.Name = "Color"
---			Color.Parent = Colorpicker
---			Color.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
---			Color.BorderColor3 = Color3.fromRGB(27, 42, 53)
---			Color.Position = UDim2.new(0, pixelwith, 0, pixelwith)
---			Color.Size = UDim2.new(0, 358 - pixelwith * 2, 0, 32 - pixelwith * 2)
---			Color.ClipsDescendants = true
-
---			Clickable.Name = "Clickable"
---			Clickable.Parent = Color
---			Clickable.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
---			Clickable.Position = UDim2.new(0, 7, 0, 1)
---			Clickable.Size = UDim2.new(0, 348, 0, 28)
---			Clickable.AutoButtonColor = false
---			Clickable.Font = Enum.Font.SourceSans
---			Clickable.Text = Table.Name
---			Clickable.TextColor3 = Color3.fromRGB(255, 255, 255)
---			Clickable.TextSize = 20.000
---			Clickable.TextXAlignment = Enum.TextXAlignment.Left
-
---			Arrow.Name = "Arrow"
---			Arrow.Parent = Color
---			Arrow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
---			Arrow.BackgroundTransparency = 1.000
---			Arrow.Position = UDim2.new(0, 327, 0, 4)
---			Arrow.Rotation = 90.000
---			Arrow.Size = UDim2.new(0, 20, 0, 20)
---			Arrow.Font = Enum.Font.SourceSans
---			Arrow.Text = ">"
---			Arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
---			Arrow.TextSize = 25.000
-			
---			Picker.Name = "Picker"
---			Picker.Parent = game.StarterGui.UI.Window.Page.ColorPicker.ButtonColor
---			Picker.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
---			Picker.Position = UDim2.new(0.0168539323, 0, 0.23648648, 0)
---			Picker.Size = UDim2.new(0, 311, 0, 105)
-
---			UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 62, 197)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 62, 197))}
---			UIGradient.Offset = Vector2.new(100, 1000)
---			UIGradient.Parent = Picker
-
---			i_dont_know.Name = "i_dont_know"
---			i_dont_know.Parent = Picker
---			i_dont_know.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
---			i_dont_know.Position = UDim2.new(1.02265251, 0, 0, 0)
---			i_dont_know.Size = UDim2.new(0, 25, 0, 105)
-
---			UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 62, 197)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 62, 197))}
---			UIGradient_2.Offset = Vector2.new(100, 1000)
---			UIGradient_2.Parent = i_dont_know
-			
---			Cursor.Name = "Cursor"
---			Cursor.Parent = game.StarterGui.UI.Window.Page.ColorPicker.ButtonColor.Picker
---			Cursor.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
---			Cursor.Position = UDim2.new(0, 100, 0, 50)
---			Cursor.Size = UDim2.new(0, 10, 0, 10)
-			
---			Cursor.Name = "Cursor"
---			Cursor.Parent = game.StarterGui.UI.Window.Page.ColorPicker.ButtonColor.Picker.i_dont_know
---			Cursor.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
---			Cursor.Position = UDim2.new(0, 0, 0.476190478, 0)
---			Cursor.Size = UDim2.new(0, 25, 0, 0)
-			
---			SetCanvasSize(Page)
---			Instance.new('UICorner', Colorpicker)
---			Instance.new('UICorner', Color)
---			Instance.new('UICorner', Picker)
---			Instance.new('UICorner', i_dont_know)
---			Instance.new('UICorner', Picker)
-			
---			if Clickable.TextBounds.X > 358 then
---z				Clickable.TextScaled = true
---			end
-			
---			local Open = false
---			local function Opendrop(Openn)
---				Open = Openn
---				if Openn then
---					Tweem:Create(Colorpicker, ANIMSPEED, {Size = UDim2.fromOffset(358, 150)}):Play()
---					Tweem:Create(Color, ANIMSPEED, {Size = UDim2.fromOffset(358 - pixelwith * 2, 150 - pixelwith * 2)}):Play()
---					Tweem:Create(Arrow, ANIMSPEED, {Rotation = 90}):Play()
---					task.wait(0.1)
---					SetCanvasSize(Page)
---				else
---					Tweem:Create(Colorpicker, ANIMSPEED, {Size = UDim2.fromOffset(358, 32)}):Play()
---					Tweem:Create(Color, ANIMSPEED, {Size = UDim2.fromOffset(358 - pixelwith * 2, 32 - pixelwith * 2)}):Play()
---					Tweem:Create(Arrow, ANIMSPEED, {Rotation = 270}):Play()
---					task.wait(0.1)
---					SetCanvasSize(Page)
---				end
---			end
-			
---			Picker.MouseButton1Down:Connect(function()
---				draggingCanvas = true
-
---				while draggingCanvas do
-
---					local x, y = mouse.X, mouse.Y
-
---					sat = math.clamp((x - Picker.X) / Picker.X, 0, 1)
---					brightness = 1 - math.clamp((y - Picker.Y) / Picker.Y, 0, 1)
-
---					color3 = Color3.fromHSV(hue, sat, brightness)
-
---					for i, prop in pairs({"r", "g", "b"}) do
---						rgb[prop] = color3[prop:upper()] * 255
---					end
-
---					self:updateColorPicker(Colorpicker, nil, {hue, sat, brightness}) -- roblox is literally retarded
---					Tweem:Create(Cursor, ANIMSPEED {Position = UDim2.new(sat, 0, 1 - brightness, 0)}) -- overwrite
---					if Table.CallBack then
---						Table.CallBack(Color3)
---					end
---				end
---			end)
-
-			
---			Clickable.MouseButton1Click:Connect(function()
---				if Open then
---					Opendrop(false)
---				else
---					Opendrop(true)
---				end
---			end)
-
---			local functions = {Element = Colorpicker}
---			function functions:Set(changes)
---				if changes.Name then
---					Clickable.Text = changes.Name
---					Colorpicker.Name = changes.Name
---				end
---				if changes.Value then
---					Selected = changes.Value
---				end
---				if changes.Open then
---					Opendrop(changes.Open)
---					Open = changes.Open
---				end
---			end
---			function functions:Delete()
---				Colorpicker:Destroy()
---				SetCanvasSize(Page)
---			end
---			return functions
---		end
-		
-		
 		SetCanvasSize(Pages)
 		return Tab
 	end
@@ -1479,7 +1346,7 @@ end
 
 return UI
 
---local Window = UI:MakeWindow({Name = 'Test'}, 'test')
+--local Window = UI:MakeWindow({Name = 'Test'})
 --local Tab = Window:MakeTab({Name = 'TestTab'})
 --local Tab2 = Window:MakeTab({Name = 'textBox'})
 
@@ -1487,13 +1354,6 @@ return UI
 --	Name = "Kill",
 --	Callback = function()
 --		Window:Delete()
---	end    
---})
-
---local Temp17 = Tab:AddButton({
---	Name = "Save",
---	Callback = function()
---		Save(UI.Flags, 'test')
 --	end    
 --})
 
@@ -1572,9 +1432,9 @@ return UI
 --	end    
 --})
 
---[[
-Name = <string> - The name of the dropdown.
-Default = <string> - The default value of the dropdown.
-Options = <table> - The options in the dropdown.
-Callback = <function> - The function of the dropdown.
-]]
+------[[
+----Name = <string> - The name of the dropdown.
+----Default = <string> - The default value of the dropdown.
+----Options = <table> - The options in the dropdown.
+----Callback = <function> - The function of the dropdown.
+----]]
