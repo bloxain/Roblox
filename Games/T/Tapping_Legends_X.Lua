@@ -348,9 +348,17 @@ end)
 task.spawn(function()
 	while true do
 		if UI.Flags.Extract.Value then
-			Rebirth()
+			Extract()
 		end
 		task.wait(UI.Flags.ExtractTime.Value)
+	end
+end)
+task.spawn(function()
+	while true do
+		if UI.Flags.TimeBased.Value then
+			Rebirth()
+		end
+		task.wait(UI.Flags.RebithTime.Value)
 	end
 end)
 task.spawn(function()
