@@ -1205,7 +1205,7 @@ function UI:MakeWindow(Table)
 			Input.Position = UDim2.new(0, 231, 0, 4)
 			Input.Selectable = false
 			Input.Size = UDim2.new(0, 85, 0, 22)
-			Input.PlaceholderText = "test"
+			Input.PlaceholderText = ""
 			Input.Text = Table.Default or ""
 			Input.TextColor3 = Color3.fromRGB(255, 255, 255)
 			Input.TextSize = 10.000
