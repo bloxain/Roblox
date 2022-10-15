@@ -2,6 +2,7 @@ local WaitTime = 10;
 local WaitTime2 = .1;
 local EggFarm = true
 local tapvalue= ''
+local UI = loadstring(readfile("BloxainHub/Modules/UI.Lua"))()
 
 local Tap = game.ReplicatedStorage.Remotes.Tap;
 local Rep = game.ReplicatedStorage.Remotes;
@@ -122,7 +123,7 @@ end
 local function FarmEggs(seconds)
 	GotoEgg()
 	for i = 1, seconds - 5 do
-		Rep.BuyEgg:InvokeServer(FindEggFromLand(GetUnlockedWorld()[1]).Name, 3)
+		Rep.BuyEgg:InvokeServer(FindEggFromLand(GetUnlockedWorld()[1]).Name, tonumber(UI.Flags.EggAmount.Value))
 		task.wait(1)
 	end
 	DeleteUnsedPets()
@@ -215,14 +216,7 @@ end
 
 
 
-
-
-
-
-
-local UI = loadstring(readfile("BloxainHub/Modules/UI.Lua"))()
-
-local Window = UI:MakeWindow({Name = 'Tapping sim X', ConfigFolder = 'BloxainHub/Saves'})
+local Window = UI:MakeWindow({Name = 'Tapping Legends X', ConfigFolder = 'BloxainHub/Saves'})
 local Home = Window:MakeTab({Name = 'Home'})
 Home:AddParagraph({Content = 'Credit to Bloxain and Legoned king...\n lets talk man you hate for no reason bruh\n anyway this was made for me to beat him'})
 Home:AddToggle({Name = 'AutoTap', Flag = 'AutoTap', Default = true, Save = true})
@@ -265,7 +259,7 @@ Eggs:AddLabel('Egg Settings')
 Eggs:AddDropdown({Name = 'Egg', Options = HandleEggs(), Flag = 'Egg', Save = true})
 Eggs:AddDropdown({Name = 'Amount', Options = {'1', '3', '4'}, Flag = 'EggAmount', Save = true})
 Eggs:AddToggle({Name = 'Enabled', Flag = 'EggsToggle', Callback = function(Value) if not Value then return end if UI.Flags.Land.Value == 'MAX' then GotoEgg() return end GotoEgg(UI.Flags.Egg.Value) end, Save = true})
-Eggs:AddToggle({Name = 'Delete Bad pets(you can still lock them)', Flag = 'DeletePets', Default = true})
+Eggs:AddToggle({Name = 'Delete Bad pets(you can still lock them)', Default = '3', Flag = 'DeletePets', Default = true})
 Eggs:AddLabel('Coins')
 Eggs:AddDropdown({Name = 'Land', Options = HandleLand(), Flag = 'Land', Save = true})
 Eggs:AddToggle({Name = 'Enabled', Flag = 'CoinsEnabled', Callback = function(value) if not value then return end if UI.Flags.Land.Value == 'MAX' then GotoEgg() return end GotoEgg(UI.Flags.Land.Value) end, Save = true})
@@ -277,7 +271,7 @@ task.spawn(function()
 			if UI.Flags.Egg.Value == 'MAX' then
 				GotoEgg()
 				for i = 1, UI.Flags.sessoin.Value do
-					Rep.BuyEgg:InvokeServer(FindEggFromLand(GetUnlockedWorld()[1]).Name, 3)
+					Rep.BuyEgg:InvokeServer(FindEggFromLand(GetUnlockedWorld()[1]).Name, tonumber(UI.Flags.EggAmount.Value))
 					task.wait(1)
 				end
 				if UI.Flags.EggsToggle.Value then
