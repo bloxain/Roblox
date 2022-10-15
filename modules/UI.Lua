@@ -512,7 +512,7 @@ function UI:MakeWindow(Table)
 				Value = Toggled,
 				Save = false
 			}
-			if Table.Flag and not UI.Flags[Table.Flag] or UI.Flags[Table.Flag].Save == false then
+			if Table.Flag and not UI.Flags[Table.Flag] or Table.Flag and UI.Flags[Table.Flag].Save == false then
 				if Table.Save then
 					FlagTable.Save = true
 				end
@@ -628,7 +628,7 @@ function UI:MakeWindow(Table)
 				Value = Table.Default,
 				Save = true
 			}
-			if Table.Flag and not UI.Flags[Table.Flag] or UI.Flags[Table.Flag].Save == false then
+			if Table.Flag and not UI.Flags[Table.Flag] or Table.Flag and UI.Flags[Table.Flag].Save == false then
 				if Table.Save then
 					FlagTable.Save = true
 				end
@@ -749,7 +749,7 @@ function UI:MakeWindow(Table)
 			if Table.Default == 'None' then
 				FlagTable.Value = nil
 			end
-			if Table.Flag and not UI.Flags[Table.Flag] or UI.Flags[Table.Flag].Save == false then
+			if Table.Flag and not UI.Flags[Table.Flag] or Table.Flag and UI.Flags[Table.Flag].Save == false then
 				if Table.Save then
 					FlagTable.Save = true
 				end
@@ -988,7 +988,7 @@ function UI:MakeWindow(Table)
 				Save = false
 			}
 
-			if Table.Flag and not UI.Flags[Table.Flag] or UI.Flags[Table.Flag].Save == false then
+			if Table.Flag and not UI.Flags[Table.Flag] or Table.Flag and UI.Flags[Table.Flag].Save == false then
 				if Table.Save then
 					FlagTable.Save = true
 				end
@@ -1150,7 +1150,7 @@ function UI:MakeWindow(Table)
 				Save = false
 			}
 
-			if Table.Flag and not UI.Flags[Table.Flag] or UI.Flags[Table.Flag].Save == false then
+			if Table.Flag and not UI.Flags[Table.Flag] then
 				if Table.Save then
 					FlagTable.Save = true
 				end
