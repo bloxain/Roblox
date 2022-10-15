@@ -67,7 +67,7 @@ if not writefile then
 end
 local Github = _G.versoin[2]..'Games/'
 
-Show(15)
+Show(16)
 if isfolder("BloxainHub") then
 	if isfolder("BloxainHub/Saves") then
 		moredata = {}
@@ -103,6 +103,8 @@ Update()
 writefile("BloxainHub/cart_ride_around_used_car_battery.Lua", game:HttpGet(Github.."C/cart_ride_around_used_car_battery.Lua"))
 Update()
 writefile("BloxainHub/Natural_Disaster_Survival.Lua", game:HttpGet(Github.."N/Natural%20Disaster%20Survival.Lua"))
+Update()
+writefile("BloxainHub/Tapping_Legends_X.Lua", game:HttpGet(Github.."T/Tapping_Legends_X.Lua"))
 Update()
 writefile("BloxainHub/Modules/UI.Lua", game:HttpGet(_G.versoin[2].."modules/UI.Lua"))
 Update()
