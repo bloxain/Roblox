@@ -1,3 +1,16 @@
+--[[
+ 2022 - 2022 Bloxain Team(only mel)
+ INTENTES / why we created this?
+ 
+ its like orain(prob misspelled it)  but it has a few probloms
+ 1. cant save every saveable data type(this can)
+ 2. it does calls fumcsoins whem loaded(issue since we use to use veny x)
+ 
+ and lastly it did not have a search and if I am every gonna create inf yeaid GUI versoin it would need
+ also toggles are checkboxes so we fixed that
+ OPEN SOURCE
+]]
+
 local pixelwith = 1
 local mouse = game.Players.LocalPlayer:GetMouse()
 local Tweem = game.TweenService
@@ -352,6 +365,21 @@ function UI:MakeWindow(Table)
 	if not Table.Image then
 		Table.Image = ''
 	end
+	
+	function WindowReturn:Toggle()
+		if UI.Open then
+			UI.SavedWindowSize = Window.Size.Y.Offset
+			Tweem:Create(Window, ANIMSPEED, {Size = UDim2.fromOffset(Window.Size.X.Offset, 0)}):Play()
+			task.wait(.1)
+			Window.Visible = false
+			UI.Open = false
+		else
+			Window.Visible = true
+			Tweem:Create(Window, ANIMSPEED, {Size = UDim2.fromOffset(Window.Size.X.Offset, UI.SavedWindowSize)}):Play()
+			UI.Open = true
+		end
+
+	end UI.Open = true
 
 	function WindowReturn:MakeTab(Table)
 		local Page = Instance.new("ScrollingFrame")
@@ -484,12 +512,12 @@ function UI:MakeWindow(Table)
 				Value = Toggled,
 				Save = false
 			}
-			if Table.Flag and not UI.Flags[Table.Flag] then
+			if Table.Flag and not UI.Flags[Table.Flag] or UI.Flags[Table.Flag].Save == false then
 				if Table.Save then
 					FlagTable.Save = true
 				end
 				UI.Flags[Table.Flag] = FlagTable
-			elseif UI.Flags[Table.Flag] then
+			elseif UI.Flags[Table.Flag] and UI.Flags[Table.Flag].Save then
 				Data = UI.Flags[Table.Flag]
 				Toggled = Data.Value
 			end
@@ -570,7 +598,7 @@ function UI:MakeWindow(Table)
 					Clickable.Text = Table.Name
 					Toggle.Name = Table.Name
 				end
-				if Table.Value then
+				if Table.Value ~= nil then
 					Toggled = not Table.Value
 					toggle()
 				end
@@ -600,12 +628,12 @@ function UI:MakeWindow(Table)
 				Value = Table.Default,
 				Save = true
 			}
-			if Table.Flag and not UI.Flags[Table.Flag] then
+			if Table.Flag and not UI.Flags[Table.Flag] or UI.Flags[Table.Flag].Save == false then
 				if Table.Save then
 					FlagTable.Save = true
 				end
 				UI.Flags[Table.Flag] = FlagTable
-			elseif UI.Flags[Table.Flag] then
+			elseif UI.Flags[Table.Flag] and UI.Flags[Table.Flag].Save then
 				Data = UI.Flags[Table.Flag]
 				Table.Default = Data.Value
 			end
@@ -705,7 +733,6 @@ function UI:MakeWindow(Table)
 			local Trigger = nil
 			local PickNewKey = 1
 			if not Table.Hold then
-
 			end if not Table.Default then
 				Table.Default = 'None'
 			else
@@ -716,23 +743,27 @@ function UI:MakeWindow(Table)
 
 			local FlagTable = {
 				Value = Table.Default,
-				Save = false
+				Save = false,
+				Stage = 1
 			}
 			if Table.Default == 'None' then
 				FlagTable.Value = nil
 			end
-			if Table.Flag and not UI.Flags[Table.Flag] then
+			if Table.Flag and not UI.Flags[Table.Flag] or UI.Flags[Table.Flag].Save == false then
 				if Table.Save then
 					FlagTable.Save = true
 				end
 				UI.Flags[Table.Flag] = FlagTable
-			elseif UI.Flags[Table.Flag] then
+			elseif UI.Flags[Table.Flag] and UI.Flags[Table.Flag].Save then
 				Data = UI.Flags[Table.Flag]
-				if Data.Value and Data.Value ~= '' then
-					Trigger = Enum.KeyCode[Data.Value]
-					PickNewKey = 0
-					Table.Default = Data.Value
-				end
+				Table.Default = Data.Value
+				Trigger = nil
+				pcall(function() 
+					if Enum.KeyCode[Data.Value] then
+						Trigger = Enum.KeyCode[Data.Value]
+					end	
+				end)
+				PickNewKey = Data.Stage
 			end
 			FlagTable = {}
 
@@ -788,10 +819,11 @@ function UI:MakeWindow(Table)
 					Trigger = key
 					Key.Text = key.Name
 					PickNewKey = 0
-					if Table.Flag then
-						UI.Flags[Table.Flag].Value = key.Name
-					end
 					SetSize()
+					if Table.Flag and not save then
+						UI.Flags[Table.Flag].Value = Key.Text
+						UI.Flags[Table.Flag].Stage = PickNewKey
+					end
 					SaveData(UI.Flags)
 				end
 			end)
@@ -801,18 +833,16 @@ function UI:MakeWindow(Table)
 					Key.Text = '...'
 					PickNewKey = 3
 					SetSize()
-					SaveData(UI.Flags)
 				elseif PickNewKey == 0 then
 					Trigger = nil
 					Key.Text = 'None'
-					SetSize()
-					SaveData(UI.Flags)
 					PickNewKey = 1
-					if Table.Flag then
-						if Table.Flag then
-							UI.Flags[Table.Flag].Value = nil
-						end
+					SetSize()
+					if Table.Flag and not save then
+						UI.Flags[Table.Flag].Value = Key.Text
+						UI.Flags[Table.Flag].Stage = PickNewKey
 					end
+					SaveData(UI.Flags)
 				end
 			end)
 
@@ -868,9 +898,10 @@ function UI:MakeWindow(Table)
 			View.Selectable = true
 			View.Size = UDim2.new(0, 348, 0, 28)
 			View.Font = Enum.Font.SourceSans
-			View.TextColor3 = Color3.fromRGB(255, 255, 255)
+			View.TextColor3 = Color3.fromRGB(0, 255, 0)
 			View.TextSize = 20.000
 			View.TextXAlignment = Enum.TextXAlignment.Left
+			View.Text = Name
 
 			Instance.new('UICorner', Label)
 			Instance.new('UICorner', Color)
@@ -957,12 +988,12 @@ function UI:MakeWindow(Table)
 				Save = false
 			}
 
-			if Table.Flag and not UI.Flags[Table.Flag] then
+			if Table.Flag and not UI.Flags[Table.Flag] or UI.Flags[Table.Flag].Save == false then
 				if Table.Save then
 					FlagTable.Save = true
 				end
 				UI.Flags[Table.Flag] = FlagTable
-			elseif UI.Flags[Table.Flag] then
+			elseif UI.Flags[Table.Flag] and UI.Flags[Table.Flag].Save then
 				Data = UI.Flags[Table.Flag]
 				Table.Default = Data.Value
 			end
@@ -1119,12 +1150,12 @@ function UI:MakeWindow(Table)
 				Save = false
 			}
 
-			if Table.Flag and not UI.Flags[Table.Flag] then
+			if Table.Flag and not UI.Flags[Table.Flag] or UI.Flags[Table.Flag].Save == false then
 				if Table.Save then
 					FlagTable.Save = true
 				end
 				UI.Flags[Table.Flag] = FlagTable
-			elseif UI.Flags[Table.Flag] then
+			elseif UI.Flags[Table.Flag] and UI.Flags[Table.Flag].Save then
 				Data = UI.Flags[Table.Flag]
 				Table.Default = Data.Value
 			end
@@ -1175,7 +1206,7 @@ function UI:MakeWindow(Table)
 			Input.Selectable = false
 			Input.Size = UDim2.new(0, 85, 0, 22)
 			Input.PlaceholderText = "test"
-			Input.Text = ""
+			Input.Text = Table.Default or ""
 			Input.TextColor3 = Color3.fromRGB(255, 255, 255)
 			Input.TextSize = 10.000
 			Input.TextWrapped = true
@@ -1348,96 +1379,3 @@ function UI:MakeWindow(Table)
 end
 
 return UI
-
---local Window = UI:MakeWindow({Name = 'Test'})
---local Tab = Window:MakeTab({Name = 'TestTab'})
---local Tab2 = Window:MakeTab({Name = 'textBox'})
-
---local Temp = Tab:AddButton({
---	Name = "Kill",
---	Callback = function()
---		Window:Delete()
---	end    
---})
-
---local Temp2 = Tab:AddButton({
---	Name = "Delete me",
---	Callback = function()
---		Window:Delete()
---	end    
---})
-
---local Temp3 = Tab:AddToggle({
---	Name = "KillUI",
---	Flag = 'test',
---	Callback = function(Value)
---		print(Value)
---	end  
---})
-
---Tab:AddButton({
---	Name = "Set Value",
---	Callback = function()
---		Temp:Set('kill UI')
---		Temp2:Delete()
---		Temp3:Set({Name = 'to pro', Value = true})
---	end    
---})
-
--- local temp4 = Tab2:AddTextbox({
---	Name = "text box",
---	Default = "default box input",
---	TextDisappear = true,
---	Flag = 'text',
---	Callback = function(Value)
---		print(Value)
---	end	  
---})
-
---Tab2:AddButton({
---	Name = "Set Value",
---	Callback = function()
---		print(UI.Flags['test'].Value)
---		temp4:Set({Name = 'to pro', Text = 'changed'})
---	end    
---})
-
---Tab:AddBind({
---	Name = "Bind",
---	Default = Enum.KeyCode.E,
---	Hold = false,
---	Callback = function()
---		print("press")
---	end    
---})
-
---Tab2:AddSlider({
---	Name = "Slider" ,
---	Min = -20,
---	Max = 20,
---	Increment = 5
---})
-
---Tab:AddSlider({
---	Name = "Slider" ,
---	Min = -20,
---	Max = 20,
---	Default = 0,
---	Increment = 0.25
---})
-
---Tab:AddDropdown({
---	Name = "Dropdown",
---	Default = "1",
---	Options = {"1", "2"},
---	Callback = function(Value)
---		print(Value)
---	end    
---})
-
-------[[
-----Name = <string> - The name of the dropdown.
-----Default = <string> - The default value of the dropdown.
-----Options = <table> - The options in the dropdown.
-----Callback = <function> - The function of the dropdown.
-----]]
