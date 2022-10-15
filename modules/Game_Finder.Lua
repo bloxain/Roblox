@@ -183,6 +183,7 @@ local GamesArrary = {
 	{668582985, true, true, "Egg Farm Simulator", "MADE BY ME everything my script have plus autofarm get daimonds faster kill and more", "Egg_Farm_Simulator.Lua"},
 	{65241, true, true, "Natural Disaster Survival", "autofarm anti anoyying screens no cloud FE script", "Natural_Disaster_Survival.Lua"},
 	{2891148074, true, true, "cart ride around used car battery", "Trolling GUI good for speeding carts or just winning the game its a fun GUI to use and has every func yull ever need!", "cart_ride_around_used_car_battery.Lua"},
+	{3321455016, true, true, "Tapping Legends X", "A Great Script for FULLY AUTOMATIC autofarming not to replace a human but do some stuff", "Tapping_Legends_X.Lua"},
 	{911750776, false, false, "Broken Bonesl", "A script for Broken Bones with inf money(thats all i use it for) once pressed end the round", "https://pastebin.com/raw/bFu2yg8n"},
 	{210851291, false, false, "BABFT", "This Script has autofarm teamchanging godmode and more its better than anything i could do so i put it here", "https://raw.githubusercontent.com/RegularVynixu/Vynixius/main/Build%20A%20Boat%20For%20Treasure/BABFT"},
 	{110181652, false, false, "Epic MiniGames", "this script can cheat almost all the minigames and it very usefull becuse it is not a cheaply Gui and had some fetures(works with universal Gui For Extra Fetures", "https://raw.githubusercontent.com/SlamminPig/rblxgames/main/Epic%20Minigames/EpicMinigamesGUI"},
@@ -190,8 +191,8 @@ local GamesArrary = {
 	{601130232, false, false, "Bee Swarm Simulator", "Sent by someone idk what it dose", "https://raw.githubusercontent.com/Boxking776/kocmoc/main/kocmoc-remastered.lua"},
 	{1659645941, false, false, "Ilands", "PACKED with feture teleports autofarm crop farming building bow aimbot selling buying clearing junk and is overall packed with fetures", "http://void-scripts.com/Scripts/islands_new.lua"},
 	{540856839, false, false, "Trueser Hunt", "idk sent by someone", "https://drive.google.com/uc?export=download&id=1xeauG47nspgBlMKxXP304-NZHYwhIa53"},
-	{73885730, false, false, "Prison Life Gui", "Gun modding, anti arrest, anti tase, anti(everything basicly), kill all and more", "https://pastebin.com/raw/mHfK0Xk4"},
-	{3321455016, false, false, "Tapping Legends X", "auto farm, auto egg, all with a nice UI made by CPU_Accelerator", "https://pastebin.com/raw/vADzHCsB"}
+	--	{3321455016, false, false, "Tapping Legends X", "auto farm, auto egg, all with a nice UI made by CPU_Accelerator", "https://pastebin.com/raw/vADzHCsB"},
+	{73885730, false, false, "Prison Life Gui", "Gun modding, anti arrest, anti tase, anti(everything basicly), kill all and more", "https://pastebin.com/raw/mHfK0Xk4"}
 }
 
 
@@ -199,7 +200,7 @@ function Run()
 	for i = 1, #GamesArrary do
 		local temp = GamesArrary[i]
 		if temp[1] == game.GameId then
-		
+
 			if temp[2] and temp[3] then
 				PickScript:Destroy()			
 				loadstring(readfile("BloxainHub/"..temp[6]))()
