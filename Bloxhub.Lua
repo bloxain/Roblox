@@ -7,3 +7,4 @@ if pcall(function()
 		end end) == false then
 	loadstring(game:HttpGet(_G.versoin[2].."modules/Updater.Lua"))()
 end
+loadstring(readfile("BloxainHub/Modules/GameFinder.Lua"))()
