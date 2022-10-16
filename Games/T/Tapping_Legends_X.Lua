@@ -105,7 +105,7 @@ local function GotoEgg(egg)
 	else
 		for i, v in next, game.Players.LocalPlayer.PlayerGui.Menus.Teleporter.Frame.List.TemplateList:GetChildren() do
 			if v.ClassName == 'ImageLabel' and v.Background.Locked.Visible == false then
-				if string.find(egg, v.Name) then
+				if string.find(egg, v.Name) or egg == 'Basic Egg' and v.Name == 'Spawn' then
 					world = {v.Name, i - 1}
 				end
 			end
@@ -205,7 +205,7 @@ local function HandleLand(ToFnd)
 	local ARRAY = {}
 	ARRAY[100] = 'MAX'
 	for i, v in next, game.Players.LocalPlayer.PlayerGui.Menus.Teleporter.Frame.List.TemplateList:GetChildren() do
-		if v.ClassName == 'ImageLabel' and v.Background.Locked.Visible == false then
+		if v.ClassName == 'ImageLabel' then
 			CoinsList[v.Name] = {v.Name, i - 1}
 			ARRAY[i] = v.Name
 		end
@@ -220,6 +220,7 @@ local Window = UI:MakeWindow({Name = 'Tapping Legends X', ConfigFolder = 'Bloxai
 local Home = Window:MakeTab({Name = 'Home'})
 Home:AddParagraph({Content = 'Credit to Bloxain and Legoned king...\n lets talk man you hate for no reason bruh\n anyway this was made for me to beat him'})
 Home:AddToggle({Name = 'AutoTap', Flag = 'AutoTap', Default = true, Save = true})
+Home:AddToggle({Name = 'AntiAFK', Flag = 'AntiAfk', Default = true, Save = true})
 Home:AddToggle({Name = 'Dissable Popups', Flag = 'DissablePopups', Default = false, Save = true})
 Home:AddBind({Name = 'Toggle UI', Flag = 'ToggleUIKey', Default = Enum.KeyCode.F3, Callback = function() Window:Toggle() end, Save = true})
 
@@ -265,6 +266,14 @@ Eggs:AddDropdown({Name = 'Land', Options = HandleLand(), Flag = 'Land', Save = t
 Eggs:AddToggle({Name = 'Enabled', Flag = 'CoinsEnabled', Callback = function(value) if not value then return end if UI.Flags.Land.Value == 'MAX' then GotoEgg() return end GotoEgg(UI.Flags.Land.Value) end, Save = true})
 Eggs:AddSlider({Min = 30, Max = 300, Default = 60, Flag = 'sessoin', Name = 'delay between delete switch ect', Save = true})
 
+local VirtualUser=game:service'VirtualUser'
+game:service'Players'.LocalPlayer.Idled:connect(function()
+	if UI.Flags.AntiAfk.Value == true then
+		VirtualUser:CaptureController()
+		VirtualUser:ClickButton2(Vector2.new())
+	end
+end)
+
 task.spawn(function()
 	while true do
 		if UI.Flags.EggsToggle.Value and UI.Flags.CoinsEnabled.Value then
@@ -274,7 +283,7 @@ task.spawn(function()
 					Rep.BuyEgg:InvokeServer(FindEggFromLand(GetUnlockedWorld()[1]).Name, tonumber(UI.Flags.EggAmount.Value))
 					task.wait(1)
 				end
-				if UI.Flags.EggsToggle.Value then
+				if UI.Flags.DeletePets.Value then
 					DeleteUnsedPets()
 				end
 			else
@@ -283,7 +292,7 @@ task.spawn(function()
 					Rep.BuyEgg:InvokeServer(UI.Flags.Egg.Value, tonumber(UI.Flags.EggAmount.Value))
 					task.wait(1) 
 				end
-				if UI.Flags.EggsToggle.Value then
+				if UI.Flags.DeletePets.Value then
 					DeleteUnsedPets()
 				end
 			end
@@ -293,7 +302,7 @@ task.spawn(function()
 		elseif UI.Flags.EggsToggle.Value then
 			if UI.Flags.Egg.Value == 'MAX' then
 				FarmEggs(UI.Flags.sessoin.Value)
-				if UI.Flags.EggsToggle.Value then
+				if UI.Flags.DeletePets.Value then
 					DeleteUnsedPets()
 				end
 			else
@@ -301,14 +310,14 @@ task.spawn(function()
 					Rep.BuyEgg:InvokeServer(UI.Flags.Egg.Value, tonumber(UI.Flags.EggAmount.Value))
 					task.wait(1) 
 				end
-				if UI.Flags.EggsToggle.Value then
+				if UI.Flags.DeletePets.Value then
 					DeleteUnsedPets()
 				end
 			end
 		elseif UI.Flags.CoinsEnabled.Value then
 			pcall(function()
 				task.wait(UI.Flags.sessoin.Value - 1.1)
-				if UI.Flags.Egg.Value == 'MAX' then
+				if UI.Flags.Land.Value == 'MAX' then
 					FarmCoins(3)
 				else
 					local CoinPack = workspace.Drops[UI.Flags.Land.Value]:FindFirstChildOfClass('Model'):Clone()
@@ -348,17 +357,19 @@ end)
 task.spawn(function()
 	while true do
 		if UI.Flags.Extract.Value then
-			Extract()
+			Extract(1)
+			task.wait(UI.Flags.ExtractTime.Value)
 		end
-		task.wait(UI.Flags.ExtractTime.Value)
+		task.wait()
 	end
 end)
 task.spawn(function()
 	while true do
 		if UI.Flags.TimeBased.Value then
 			Rebirth()
+			task.wait(UI.Flags.RebithTime.Value)
 		end
-		task.wait(UI.Flags.RebithTime.Value)
+		task.wait()
 	end
 end)
 task.spawn(function()
