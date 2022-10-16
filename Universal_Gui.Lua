@@ -74,7 +74,7 @@ function CreateBypass(Obj, Proporty, ReturnValue, DISSABLE)
 end
 ------
 
-local Window = UI:MakeWindow({Name = "universal Gui", HidePremium = false, SaveConfig = true, ConfigFolder = "BloxainHub\Saves", IntroEnabled = Libary.PlayInto, IntroText = Libary.IntroName})
+local Window = UI:MakeWindow({Name = "Universal Gui", HidePremium = false, SaveConfig = true, ConfigFolder = "BloxainHub/Saves", IntroEnabled = Libary.PlayInto, IntroText = Libary.IntroName})
 
 local Main = Window:MakeTab({Name = "Main", Icon = "", PremiumOnly = false})
 
@@ -457,5 +457,4 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function(Char)
 	ScriptRunning = true
 end)
 
-UI:Init()
 Start = true

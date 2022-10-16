@@ -1,23 +1,10 @@
-local Version = "0.5.0.6"
-local Github = "https://github.com/bloxain/Roblox/raw/main/Games/"
-local file = ""
-function Run()
-	loadstring(readfile("BloxainHub/Modules/GameFinder.Lua"))()
-end
-if isfolder then
-	if isfolder("BloxainHub") and isfolder("BloxainHub/Modules") then
-		if readfile("BloxainHub/Modules/Versoin.lua") == Version then
-			Run()
+_G.versoin = {'0.5.1.0', 'https://github.com/bloxain/Roblox/raw/main/'}
+if pcall(function() 	
+		if readfile("BloxainHub/Modules/Versoin.lua") == _G.versoin[1] then
+			loadstring(readfile("BloxainHub/Modules/GameFinder.Lua"))()
 		else
-			loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Updater.Lua"))()
-			writefile("BloxainHub/Modules/Versoin.lua", Version)
-			Run()
-		end
-	else
-		makefolder("BloxainHub") makefolder("BloxainHub/Modules")
-		writefile("BloxainHub/Modules/Versoin.lua", Version)
-		loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/modules/Updater.Lua"))()
-		writefile("BloxainHub/Modules/Versoin.lua", Version)
-		Run()
-	end
+			loadstring(game:HttpGet(_G.versoin[2].."modules/Updater.Lua"))()
+		end end) == false then
+	loadstring(game:HttpGet(_G.versoin[2].."modules/Updater.Lua"))()
 end
+loadstring(readfile("BloxainHub/Modules/GameFinder.Lua"))()
