@@ -138,7 +138,7 @@ Main:AddBind({Name = "Hide UI", Flag = "Hide UI Key", Default = Enum.KeyCode.F4,
 
 Main:AddSlider({Name = "Player Speed", Flag = "PlayerSpeed", Min = 16, Max = 300, Default = 16, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Player Speed", Callback = function(Value) Libary.GetChar().Humanoid.WalkSpeed = Value end})
 
-Main:AddSlider({Name = "Player jumpPower", Flag = "PlayerJump", Min = jumpPower, Max = 300, Default = jumpPower, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Player jumpPower", Callback = function(Value) Libary.GetChar().Humanoid.JumpPower = Value end})
+Main:AddSlider({Name = "Player jumpPower", Flag = "PlayerJump", Min = 50, Max = 300, Default = jumpPower, Color = Color3.fromRGB(255,255,255), Increment = 1, ValueName = "Player jumpPower", Callback = function(Value) Libary.GetChar().Humanoid.JumpPower = Value end})
 
 
 GameAd:AddTextbox({Name = "Player", Default = "", TextDisappear = true, Callback = function(Value) Selectedplayer = FindPlayer(Value) end})
