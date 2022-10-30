@@ -281,7 +281,12 @@ function UI:MakeWindow(Table)
 	local function Update(dt)
 		if not (startPos) then return end;
 		if not (dragging) and (lastGoalPos) then
-			gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, lastGoalPos.X.Offset, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, lastGoalPos.Y.Offset, dt * DRAG_SPEED))
+			if Table.FastDrag then
+				gui.Position = UDim2.fromOffset(lastMousePos.X + (lastMousePos.X - mouse.X), lastMousePos.Y + (lastMousePos.Y - mouse.Y))
+				print('as')
+			else
+				gui.Position = UDim2.new(startPos.X.Scale, Lerp(gui.Position.X.Offset, lastGoalPos.X.Offset, dt * DRAG_SPEED), startPos.Y.Scale, Lerp(gui.Position.Y.Offset, lastGoalPos.Y.Offset, dt * DRAG_SPEED))
+			end
 			return 
 		end;
 		local delta = (lastMousePos - UserInputService:GetMouseLocation())
@@ -328,9 +333,9 @@ function UI:MakeWindow(Table)
 			local mousepos = mouse.Y
 			local mousepos2 = mouse.X
 			local check = Window.Position.Y.Offset + Window.Size.Y.Offset
-			local check2 = Window.Position.Y.Offset
-			local check3 = Window.Position.Y.Offset + Window.Size.X.Offset
-			if mousepos >= check - 10 and mousepos <= check + 10 and mousepos2 >= check3 and check3 and not dragging then
+			local check2 = Window.Position.X.Offset
+			local check3 = Window.Position.X.Offset + Window.Size.X.Offset
+			if mousepos >= check - 10 and mousepos <= check + 10 and check3 >= mousepos2 and mousepos2 >= check2 and not dragging then
 				if UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
 					local temp = mouse.Y
 					local oldSizeY = Window.Size.Y.Offset
@@ -456,7 +461,7 @@ function UI:MakeWindow(Table)
 			local Clickable = Instance.new("TextButton")
 
 			Button.Name = Table.Name
-			Button.Parent = Page
+			Button.Parent = Table.Parent or Page
 			Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			Button.Size = UDim2.new(0, 358, 0, 32)
 
@@ -522,7 +527,13 @@ function UI:MakeWindow(Table)
 				Toggled = Data.Value
 			end
 			FlagTable = {}
-
+			local TempColor
+			if Table.Locked then
+				TempColor = Color3.fromRGB(191, 191, 191)
+			else 
+				TempColor = Color3.fromRGB(255, 255, 255) 
+			end local Locked = Table.Locked
+			
 			local Toggle = Instance.new("Frame")
 			local Color = Instance.new("Frame")
 			local Clickable = Instance.new("TextButton")
@@ -530,7 +541,7 @@ function UI:MakeWindow(Table)
 			local Slider = Instance.new("Frame")
 
 			Toggle.Name = Table.Name
-			Toggle.Parent = Page
+			Toggle.Parent = Table.Parent or Page
 			Toggle.BackgroundColor3 = UI.Theme.Boarder
 			Toggle.Size = UDim2.new(0, 358, 0, 32)
 
@@ -540,7 +551,7 @@ function UI:MakeWindow(Table)
 			Color.BorderColor3 = Color3.fromRGB(27, 42, 53)
 			Color.Position = UDim2.new(0, pixelwith, 0, pixelwith)
 			Color.Size = UDim2.new(0, 358 - pixelwith * 2, 0, 32 - pixelwith * 2)
-
+			
 			Clickable.Name = "Clickable"
 			Clickable.Parent = Color
 			Clickable.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
@@ -548,9 +559,10 @@ function UI:MakeWindow(Table)
 			Clickable.Size = UDim2.new(0, 348, 0, 28)
 			Clickable.Font = Enum.Font.SourceSans
 			Clickable.Text =  Table.Name
-			Clickable.TextColor3 = Color3.fromRGB(255, 255, 255)
+			Clickable.TextColor3 = TempColor
 			Clickable.TextSize = 20.000
 			Clickable.TextWrapped = true
+			Clickable.Selectable = Locked or false
 			Clickable.TextXAlignment = Enum.TextXAlignment.Left
 
 			Holder.Parent = Color
@@ -559,7 +571,7 @@ function UI:MakeWindow(Table)
 			Holder.Size = UDim2.new(0, 54, 0, 22)
 
 			Slider.Parent = Holder
-			Slider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+			Slider.BackgroundColor3 = TempColor
 			Slider.Size = UDim2.new(0, 30, 0, 22)
 			if Toggled then
 				Slider.Position = UDim2.new(0, 24, 0, 0)
@@ -575,6 +587,9 @@ function UI:MakeWindow(Table)
 			SetCanvasSize(Page)
 
 			local function toggle()
+				if Locked then
+					return
+				end
 				if Toggled then
 					Toggled = false
 					Tweem:Create(Slider, ANIMSPEED, {Position = UDim2.fromOffset(0, 0)}):Play()
@@ -601,6 +616,17 @@ function UI:MakeWindow(Table)
 				if Table.Value ~= nil then
 					Toggled = not Table.Value
 					toggle()
+				end
+				if Table.Locked then
+					Locked = true
+					Slider.BackgroundColor3 = Color3.fromRGB(191, 191, 191)
+					Clickable.TextColor3 = Color3.fromRGB(191, 191, 191)
+					Clickable.Selectable = false
+				else 
+					Locked = false
+					Slider.BackgroundColor3 = Color3.fromRGB(255, 255, 255) 
+					Clickable.TextColor3 = Color3.fromRGB(255, 255, 255) 
+					Clickable.Selectable = true
 				end
 			end
 			function functions:Delete()
@@ -641,7 +667,7 @@ function UI:MakeWindow(Table)
 			--Properties:
 
 			TextBox.Name = Table.Name
-			TextBox.Parent = Page
+			TextBox.Parent = Table.Parent or Page
 			TextBox.BackgroundColor3 = UI.Theme.Boarder
 			TextBox.Size = UDim2.new(0, 358, 0, 32)
 
@@ -732,8 +758,7 @@ function UI:MakeWindow(Table)
 			local Key = Instance.new("TextLabel")
 			local Trigger = nil
 			local PickNewKey = 1
-			if not Table.Hold then
-			end if not Table.Default then
+			if not Table.Default then
 				Table.Default = 'None'
 			else
 				Trigger = Table.Default
@@ -768,7 +793,7 @@ function UI:MakeWindow(Table)
 			FlagTable = {}
 
 			KeyBind.Name = Table.Name
-			KeyBind.Parent = Page
+			KeyBind.Parent = Table.Parent or Page
 			KeyBind.BackgroundColor3 = UI.Theme.Boarder
 			KeyBind.Size = UDim2.new(0, 358, 0, 32)
 
@@ -810,10 +835,8 @@ function UI:MakeWindow(Table)
 
 			game:GetService('UserInputService').InputBegan:Connect(function(key, gameProcessedEvent)
 				key = key.KeyCode
-				if key == Trigger then
-					if Table.Callback then
-						Table.Callback()
-					end
+				if key == Trigger and not gameProcessedEvent and Table.Callback then
+					Table.Callback()
 				end
 				if PickNewKey == 3 then
 					Trigger = key
@@ -879,7 +902,7 @@ function UI:MakeWindow(Table)
 			end
 			
 			Label.Name = Name
-			Label.Parent = Page
+			Label.Parent = Table.Parent or Page
 			Label.BackgroundColor3 = UI.Theme.Boarder
 			Label.Size = UDim2.new(0, 358, 0, 32)
 
@@ -932,7 +955,7 @@ function UI:MakeWindow(Table)
 			local text2 = Table.Content or Table
 
 			Paragraph.Name = text2
-			Paragraph.Parent = Page
+			Paragraph.Parent = Table.Parent or Page
 			Paragraph.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			Paragraph.Size = UDim2.new(0, 358, 0, 32)
 
@@ -984,7 +1007,7 @@ function UI:MakeWindow(Table)
 
 		function Tab:AddSlider(Table)
 			local FlagTable = {
-				Value = Table.Default,
+				Value = Table.Default or Table.Min,
 				Save = false
 			}
 
@@ -1021,7 +1044,7 @@ function UI:MakeWindow(Table)
 			local Input = Instance.new("TextBox")
 
 			Slider.Name = Table.Name
-			Slider.Parent =	Page
+			Slider.Parent =	Table.Parent or Page
 			Slider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			Slider.Position = UDim2.new(0, 0, 0, 0)
 			Slider.Size = UDim2.new(0, 358, 0, 45)
@@ -1086,7 +1109,12 @@ function UI:MakeWindow(Table)
 			end
 			SetCanvasSize(Page)
 			local function SetValues(num)
-				num = Round(num, Table.Increment)
+				if math.floor(Table.Increment) == 0 then
+					num = num * Table.Increment
+				else
+					num = Round(num, Table.Increment)
+				end
+				Input.Text = tostring(num)
 				if Table.Callback then
 					Table.Callback(num)
 				end
@@ -1102,13 +1130,14 @@ function UI:MakeWindow(Table)
 				if value then
 					percent = (value - Table.Min) / (Table.Max - Table.Min)
 				end
-
+				
 				percent = math.clamp(percent, 0, 1)
 				value = value or math.floor(Table.Min + (Table.Max - Table.Min) * percent)
 				value = Round(value, Table.Increment)
-				Input.Text = value
-				if not change  then 
-					SetValues(value) 
+				if not change and then 
+					print('\n CALLING FUNC')
+					SetValues(value)
+					print('CALLED FUNC\n')
 					SaveData(UI.Flags)
 				end
 				Tweem:Create(Fill, ANIMSPEED, {Size = UDim2.new(percent, 0, 0, 4)}):Play()
@@ -1123,7 +1152,7 @@ function UI:MakeWindow(Table)
 
 			Slider.InputBegan:Connect(function(userinput)
 				if userinput.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
-				repeat UpdateSlider() task.wait() until not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
+				repeat UpdateSlider() task.wait(.1) until not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
 				UpdateSlider()
 			end)
 
@@ -1144,7 +1173,7 @@ function UI:MakeWindow(Table)
 			return functions
 		end
 
-		function Tab:AddDropdown(Table)
+		function Tab:AddSection(Table)
 			local FlagTable = {
 				Value = Table.Default,
 				Save = false
@@ -1174,7 +1203,7 @@ function UI:MakeWindow(Table)
 			local UIListLayout = Instance.new("UIListLayout")
 
 			DropDown.Name = Table.Name
-			DropDown.Parent = Page
+			DropDown.Parent = Table.Parent or Page
 			DropDown.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			DropDown.Size = UDim2.new(0, 358, 0, 32)
 
@@ -1205,7 +1234,7 @@ function UI:MakeWindow(Table)
 			Input.Position = UDim2.new(0, 231, 0, 4)
 			Input.Selectable = false
 			Input.Size = UDim2.new(0, 85, 0, 22)
-			Input.PlaceholderText = ""
+			Input.PlaceholderText = "Search"
 			Input.Text = Table.Default or ""
 			Input.TextColor3 = Color3.fromRGB(255, 255, 255)
 			Input.TextSize = 10.000
@@ -1218,7 +1247,193 @@ function UI:MakeWindow(Table)
 			Arrow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			Arrow.BackgroundTransparency = 1.000
 			Arrow.Position = UDim2.new(0, 327, 0, 4)
-			Arrow.Rotation = 90.000
+			Arrow.Rotation = 270
+			Arrow.Size = UDim2.new(0, 20, 0, 20)
+			Arrow.Font = Enum.Font.SourceSans
+			Arrow.Text = ">"
+			Arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
+			Arrow.TextSize = 25.000
+
+			ScrollingFrame.Parent = Color
+			ScrollingFrame.Active = true
+			ScrollingFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+			ScrollingFrame.Position = UDim2.new(0, 0, 0, 35)
+			ScrollingFrame.Size = UDim2.new(0, 367, 0, 208)
+			ScrollingFrame.ScrollBarThickness = 0
+
+			UIListLayout.Parent = ScrollingFrame
+			UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+			SetCanvasSize(Page)
+			Instance.new('UICorner', DropDown)
+			Instance.new('UICorner', Color)
+			Instance.new('UICorner', Input)
+			if game.TextService:GetTextSize(Clickable.Text, 15, Enum.Font.Legacy, Vector2.new(1000000000, 100000)).X > 358 then
+				Clickable.TextScaled = true
+			end
+			local Selected = Table.Default or ''
+			local Open = false
+			local function Opendrop(Openn)
+				Open = Openn
+				if Openn then
+					Tweem:Create(DropDown, ANIMSPEED, {Size = UDim2.fromOffset(358, 250)}):Play()
+					Tweem:Create(Color, ANIMSPEED, {Size = UDim2.fromOffset(358 - pixelwith * 2, 250 - pixelwith * 2)}):Play()
+					Tweem:Create(Arrow, ANIMSPEED, {Rotation = 90}):Play()
+					task.wait(0.1)
+					SetCanvasSize(Page)
+				else
+					Input.Text = Selected
+					Tweem:Create(DropDown, ANIMSPEED, {Size = UDim2.fromOffset(358, 32)}):Play()
+					Tweem:Create(Color, ANIMSPEED, {Size = UDim2.fromOffset(358 - pixelwith * 2, 32 - pixelwith * 2)}):Play()
+					Tweem:Create(Arrow, ANIMSPEED, {Rotation = 270}):Play()
+					SearchElement('', ScrollingFrame)
+					task.wait(0.1)
+					SetCanvasSize(Page)
+				end
+			end
+
+			Clickable.MouseButton1Click:Connect(function()
+				if Open then
+					Opendrop(false)
+				else
+					Opendrop(true)
+				end
+			end)
+
+			Input.Focused:Connect(function()
+				Input.Text = ''
+				Opendrop(true)
+			end)
+
+			Input.Changed:Connect(function(istext)
+				if Input[istext] == Input.Text then
+					SearchElement(Input.Text, ScrollingFrame)
+				end
+			end)
+
+			local functions = {Element = DropDown}
+			function functions:Set(changes)
+				if changes.Name then
+					Clickable.Text = changes.Name
+					DropDown.Name = changes.Name
+				end
+				if changes.Open then
+					Opendrop(changes.Open)
+					Open = changes.Open
+				end
+			end
+			
+			function functions:AddLabel(NAME)
+				local temp = Tab:AddLabel(NAME, ScrollingFrame)
+				SetCanvasSize(ScrollingFrame)
+				return temp
+			end
+			function functions:AddButton(TABLE)
+				TABLE['Parent'] = ScrollingFrame
+				local temp = Tab:AddButton(TABLE)
+				SetCanvasSize(ScrollingFrame)
+				return temp
+			end
+			function functions:AddToggle(TABLE)
+				TABLE['Parent'] = ScrollingFrame
+				local temp = Tab:AddToggle(TABLE)
+				SetCanvasSize(ScrollingFrame)
+				return temp
+			end
+			function functions:AddSlider(TABLE)
+				TABLE['Parent'] = ScrollingFrame
+				local temp = Tab:AddSlider(TABLE)
+				SetCanvasSize(ScrollingFrame)
+				return temp
+			end
+			function functions:AddDropdown(TABLE)
+				TABLE['Parent'] = ScrollingFrame
+				local temp = Tab:AddDropdown(TABLE)
+				SetCanvasSize(ScrollingFrame)
+				return temp
+			end
+			function functions:AddBind(TABLE)
+				TABLE['Parent'] = ScrollingFrame
+				local temp = Tab:AddBind(TABLE)
+				SetCanvasSize(ScrollingFrame)
+				return temp
+			end
+			function functions:AddParagraph(TABLE)
+				TABLE['Parent'] = ScrollingFrame
+				local temp = Tab:AddParagraph(TABLE)
+				SetCanvasSize(ScrollingFrame)
+				return temp
+			end
+			function functions:AddTextbox(TABLE)
+				TABLE['Parent'] = ScrollingFrame
+				local temp = Tab:AddTextbox(TABLE)
+				SetCanvasSize(ScrollingFrame)
+				return temp
+			end
+			function functions:Delete()
+				DropDown:Destroy()
+				SetCanvasSize(Page)
+				SetCanvasSize(ScrollingFrame)
+				return temp
+			end
+			
+			return functions
+		end
+		
+		function Tab:AddDropdown(Table)
+			local DropDown = Instance.new("Frame")
+			local Color = Instance.new("Frame")
+			local Clickable = Instance.new("TextButton")
+			local Input = Instance.new("TextBox")
+			local Arrow = Instance.new("TextLabel")
+			local ScrollingFrame = Instance.new("ScrollingFrame")
+			local UIListLayout = Instance.new("UIListLayout")
+
+			DropDown.Name = Table.Name
+			DropDown.Parent = Table.Parent or Page
+			DropDown.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+			DropDown.Size = UDim2.new(0, 358, 0, 32)
+
+			Color.Name = "Color"
+			Color.Parent = DropDown
+			Color.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+			Color.BorderColor3 = Color3.fromRGB(27, 42, 53)
+			Color.Position = UDim2.new(0, pixelwith, 0, pixelwith)
+			Color.Size = UDim2.new(0, 358 - pixelwith * 2, 0, 32 - pixelwith * 2)
+			Color.ClipsDescendants = true
+
+			Clickable.Name = "Clickable"
+			Clickable.Parent = Color
+			Clickable.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+			Clickable.Position = UDim2.new(0, 7, 0, 1)
+			Clickable.Size = UDim2.new(0, 348, 0, 28)
+			Clickable.AutoButtonColor = false
+			Clickable.Font = Enum.Font.SourceSans
+			Clickable.Text = Table.Name
+			Clickable.TextColor3 = Color3.fromRGB(255, 255, 255)
+			Clickable.TextSize = 20.000
+			Clickable.TextXAlignment = Enum.TextXAlignment.Left
+
+			Input.Name = "Input"
+			Input.Parent = Color
+			Input.Active = false
+			Input.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+			Input.Position = UDim2.new(0, 231, 0, 4)
+			Input.Selectable = false
+			Input.Size = UDim2.new(0, 85, 0, 22)
+			Input.PlaceholderText = "Select"
+			Input.Text = Table.Default or ""
+			Input.TextColor3 = Color3.fromRGB(255, 255, 255)
+			Input.TextSize = 10.000
+			Input.TextWrapped = true
+			Input.TextXAlignment = Enum.TextXAlignment.Right
+			Input.ClearTextOnFocus = false
+
+			Arrow.Name = "Arrow"
+			Arrow.Parent = Color
+			Arrow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+			Arrow.BackgroundTransparency = 1.000
+			Arrow.Position = UDim2.new(0, 327, 0, 4)
+			Arrow.Rotation = 270
 			Arrow.Size = UDim2.new(0, 20, 0, 20)
 			Arrow.Font = Enum.Font.SourceSans
 			Arrow.Text = ">"
