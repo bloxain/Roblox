@@ -2,7 +2,6 @@
 -----
 -- Version: 2.0.
 -- Made by chrisopdemobiel.
-_G.versoin = {'0.5.1.1', 'https://github.com/bloxain/Roblox/raw/main/'}
 -- Instances:
 local LoaderV2 = Instance.new("ScreenGui")
 local Basic_Loader = Instance.new("Frame")
