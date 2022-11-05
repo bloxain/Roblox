@@ -159,20 +159,13 @@ function CreateScript(scripttt, Name, Descc)
 end
 
 local Games = {
-	["911750776"] = {false, false, "Broken Bonesl", "A script for Broken Bones with inf money(thats all i use it for) once pressed end the round", "https://pastebin.com/raw/bFu2yg8n"},
-	["210851291"] = {false, false, "BABFT", "This Script has autofarm teamchanging godmode and more its better than anything i could do so i put it here", "https://raw.githubusercontent.com/RegularVynixu/Vynixius/main/Build%20A%20Boat%20For%20Treasure/BABFT"},
-	["110181652"] = {false, false, "Epic MiniGames", "this script can cheat almost all the minigames and it very usefull becuse it is not a cheaply Gui and had some fetures(works with universal Gui For Extra Fetures", "https://raw.githubusercontent.com/SlamminPig/rblxgames/main/Epic%20Minigames/EpicMinigamesGUI"},
-	["279565647"] = {false, false, "Lucky Blocks", "Very good script has many combat fetures amd the ablity to crash the server you Can also open many blocks very fast to find a spicfic iteml", "https://pastebin.com/raw/JbWJ7R7i"},
-	["601130232"] = {false, false, "Bee Swarm Simulator", "Sent by someone idk what it dose", "https://raw.githubusercontent.com/Boxking776/kocmoc/main/kocmoc-remastered.lua"},
-	["1659645941"] = {false, false, "Ilands", "PACKED with feture teleports autofarm crop farming building bow aimbot selling buying clearing junk and is overall packed with fetures", "http://void-scripts.com/Scripts/islands_new.lua"},
-	["540856839"] = {false, false, "Trueser Hunt", "idk sent by someone", "https://drive.google.com/uc?export=download&id=1xeauG47nspgBlMKxXP304-NZHYwhIa53"},
-	["73885730"] = {false, false, "Prison Life Gui", "Gun modding, anti arrest, anti tase, anti(everything basicly), kill all and more", "https://pastebin.com/raw/mHfK0Xk4"},
-	["2035583477"] = {true, true, "Tower Simulator", "MADE BY ME (bad update speed) auto build, inf jump and more", "Tower_Simulator.Lua"},
-	["781563604"] = {true, true, "Destruction Simulator", "MADE BY ME inf coins, instant rocket, spam bombs and rockets, get levels, noclip, inf jump, more", "Destruction_Simulator.Lua"},
-	["703124385"] = {true, true, "Tower Of Hell", "MADE BY ME autofarm, Tp to top, Tp player, infjump, give all gears, no clip, stop time, anti all bad mutators and more", "Tower_Of_Hell.Lua"},
-	["668582985"] = {true, true, "Egg Farm Simulator", "MADE BY ME", "everything my script have plus autofarm get daimonds faster kill and more", "Egg_Farm_Simulator.Lua"},
-	["65241"] = {true, true, "Natural Disaster Survival", "autofarm anti anoyying screens no cloud FE script", "Natural_Disaster_Survival.Lua"},
-	["-1"] = {true, false, "Universal Gui", "i make all script with this as a base so it has many bloxain funcs", "Universal_Gui.Lua"}
+	["2035583477"] = {'T/Tower_Simulator.Lua', 'BloxainHub/Tower_Simulator.Lua'},
+	["781563604"] = {'D/Destruction_Simulator.Lua', 'BloxainHub/Destruction_Simulator.Lua'},
+	["703124385"] = {'T/Tower_Of_Hell.Lua', 'BloxainHub/Tower_Of_Hell.Lua'},
+	["668582985"] = {'E/Egg_Farm_Simulator.Lua', 'BloxainHub/Egg_Farm_Simulator.Lua'},
+	["65241"] = {'N/Natural%20Disaster%20Survival.Lua', 'BloxainHub/Natural_Disaster_Survival.Lua'},
+	["2891148074"] = {'C/cart_ride_around_used_car_battery.Lua', 'BloxainHub/cart_ride_around_used_car_battery.Lua'},
+	["3321455016"] = {'T/Tapping_Legends_X.Lua', 'BloxainHub/Tapping_Legends_X.Lua'}
 }
 
 local GamesArrary = {
@@ -194,7 +187,10 @@ local GamesArrary = {
 	--	{3321455016, false, false, "Tapping Legends X", "auto farm, auto egg, all with a nice UI made by CPU_Accelerator", "https://pastebin.com/raw/vADzHCsB"},
 	{73885730, false, false, "Prison Life Gui", "Gun modding, anti arrest, anti tase, anti(everything basicly), kill all and more", "https://pastebin.com/raw/mHfK0Xk4"}
 }
-
+local GameToRun = Games[tostring(game.GameId)]
+if GameToRun and not isfile(GameToRun[2]) then
+	loadstring(game:HttpGet(_G.versoin[2].."modules/Updater.Lua"))()
+end
 
 function Run()
 	for i = 1, #GamesArrary do
