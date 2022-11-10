@@ -218,7 +218,7 @@ end
 
 local Window = UI:MakeWindow({Name = 'Tapping Legends X', ConfigFolder = 'BloxainHub/Saves'})
 local Home = Window:MakeTab({Name = 'Home'})
-Home:AddParagraph({Content = 'Credit to Bloxain and Legoned king...\n lets talk man you hate for no reason bruh\n anyway this was made for me to beat him'})
+Home:AddParagraph({Content = 'Credit to Bloxain and lagend king...\n this was our inspiration'})
 Home:AddToggle({Name = 'AutoTap', Flag = 'AutoTap', Default = true, Save = true})
 Home:AddToggle({Name = 'AntiAFK', Flag = 'AntiAfk', Default = true, Save = true})
 Home:AddToggle({Name = 'Dissable Popups', Flag = 'DissablePopups', Default = false, Save = true})
