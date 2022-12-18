@@ -1,4 +1,4 @@
-_G.versoin = {'0.5.2.2', 'https://github.com/bloxain/Roblox/raw/main/'}
+_G.versoin = {'0.5.3', 'https://github.com/bloxain/Roblox/raw/main/'}
 if pcall(function() 	
 		if readfile("BloxainHub/Modules/Versoin.lua") == _G.versoin[1] then
 			loadstring(readfile("BloxainHub/Modules/GameFinder.Lua"))()
