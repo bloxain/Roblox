@@ -168,6 +168,10 @@ Tower:AddToggle({Name = "Anti bunny jump", Flag = "AntiB", Default = false, Save
 
 Tower:AddToggle({Name = "Anti Kill", Flag = "AntiK", Default = false, Save = true})
 
+Tower:AddToggle({Name = "Anti Low Gravity", Flag = "AntiLow", Default = false, Save = true})
+
+Tower:AddToggle({Name = "Anti Walk Speed", Flag = "AntiSpeed", Default = false, Save = true})
+
 Tower:AddToggle({Name = "Anti Fog", Flag = "AntiF", Default = false, Save = true, Callback = function(Value) if Value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("fog") then game.Lighting.FogEnd = 50 end end end})
 
 Tower:AddToggle({Name = "Anti invisible", Flag = "AntiI", Default = false, Save = true, Callback = function(Value) if Value == false then if game.Players.LocalPlayer.PlayerGui.timer.mutators:FindFirstChild("invisibility") then for i, v in  pairs(game.Players:GetChildren()) do DissableINV(v.Character, 1) end end end end})
@@ -425,25 +429,32 @@ runservice.Stepped:connect(function()
 	if UI.Flags["AutoFarm"].Value then
 		if game.Players.LocalPlayer.PlayerGui.timer.timeLeft.Text == "5:00" then
 			if UI.Flags["SpeedTower"].Value == true then
-					local endzone = workspace.tower.sections.finish.FinishGlow.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone
-				else
-					local endzone = workspace.tower.sections.finish.exit.ParticleBrick.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone
-				end
+				local endzone = workspace.tower.sections.finish.FinishGlow.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone
+			else
+				local endzone = workspace.tower.sections.finish.exit.ParticleBrick.CFrame local player = game.Players.LocalPlayer.Character player.HumanoidRootPart.CFrame = endzone
+			end
 		end
 	end
-	
+
 	if UI.Flags["AntiF"].Value then
 		game.Lighting.FogEnd = 1200
+	end
+	
+	if UI.Flags["AntiSpeed"].Value then
+		Libary.GetChar().Humanoid.WalkSpeed = 16
 	end
 
 	if UI.Flags["AntiB"].Value then
 		game.Players.LocalPlayer.Character.bunnyJump.Disabled = true
 	end
-	
+
 	if UI.Flags["AntiN"].Value then
 		game:GetService("Lighting").Negative.Enabled = false
 	end
-	
+	if UI.Flags["AntiLow"].Value then
+		workspace.Gravity = 196.2
+	end
+
 	Libary.GetChar().KillScript.Disabled = UI.Flags["AntiK"].Value
 
 	if UI.Flags["Hide Players"].Value then
@@ -454,7 +465,7 @@ runservice.Stepped:connect(function()
 			end
 		end
 	end
-	
+
 	if workspace:FindFirstChild(game.Players.LocalPlayer.Name) then
 		if UI.Flags["AntiI"].Value then
 			if UI.Flags["AntiII"].Value then
@@ -467,7 +478,7 @@ runservice.Stepped:connect(function()
 		end
 	end
 
-	
+
 	if UI.Flags["Noclip"].Value then
 		for _, child in pairs(Libary.GetChar():GetDescendants()) do
 			if child:IsA("BasePart") and child.CanCollide == true then
@@ -544,5 +555,3 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function(Char)
 	CharLoaded(Char)
 	ScriptRunning = true
 end)
-
-UI:Init()
