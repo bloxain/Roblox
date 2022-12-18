@@ -301,7 +301,7 @@ elseif isfolder then
 	makefolder("BloxainHub/Modules")
 else
 	return
-	-- When Run works we will add this
+		-- When Run works we will add this
 end
 
 local Games = {
@@ -311,7 +311,8 @@ local Games = {
 	["668582985"] = {'E/Egg_Farm_Simulator.Lua', 'BloxainHub/Egg_Farm_Simulator.Lua'},
 	["65241"] = {'N/Natural%20Disaster%20Survival.Lua', 'BloxainHub/Natural_Disaster_Survival.Lua'},
 	["2891148074"] = {'C/cart_ride_around_used_car_battery.Lua', 'BloxainHub/cart_ride_around_used_car_battery.Lua'},
-	["3321455016"] = {'T/Tapping_Legends_X.Lua', 'BloxainHub/Tapping_Legends_X.Lua'}
+	["3321455016"] = {'T/Tapping_Legends_X.Lua', 'BloxainHub/Tapping_Legends_X.Lua'},
+	["2327642508"] = {'L/Laundry_Simulator.Lua', 'BloxainHub/Laundry_Simulator.Lua'}
 }
 
 local Modules = {
@@ -349,11 +350,19 @@ local function Show(Number)
 	return Funcs
 end
 
+local function GetTableLen(Table)
+	local max = 0
+	for i, _ in next, Table do
+		max = i
+	end
+	return max
+end
+
 local function Update()
 	local content = game.HttpService:JSONDecode(readfile('BloxainHub/Saves/Gobal.txt'))
 	local Github = _G.versoin[2]..'Games/'
 	if content['Install_All'] then
-		local ProgressUI = Show(11)
+		local ProgressUI = Show(GetTableLen(Games) + GetTableLen(Modules))
 		for _, v in next, Games do
 			writefile(v[2], game:HttpGet(Github..v[1]))
 			ProgressUI:Update()
@@ -373,7 +382,7 @@ local function Update()
 				ProgressUI:Update()
 			end
 		else
-			local ProgressUI = Show(6)
+			local ProgressUI = Show(GetTableLen(Modules) + 1)
 			for _, v in next, Modules do
 				writefile(v[2], game:HttpGet(_G.versoin[2]..v[1]))
 				ProgressUI:Update()
