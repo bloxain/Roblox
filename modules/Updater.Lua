@@ -353,7 +353,7 @@ end
 local function GetTableLen(Table)
 	local max = 0
 	for i, _ in next, Table do
-		max = i
+		max += 1
 	end
 	return max
 end
@@ -362,7 +362,7 @@ local function Update()
 	local content = game.HttpService:JSONDecode(readfile('BloxainHub/Saves/Gobal.txt'))
 	local Github = _G.versoin[2]..'Games/'
 	if content['Install_All'] then
-		local ProgressUI = Show(GetTableLen(Games) + GetTableLen(Modules))
+		local ProgressUI = Show((GetTableLen(Games) + GetTableLen(Modules)))
 		for _, v in next, Games do
 			writefile(v[2], game:HttpGet(Github..v[1]))
 			ProgressUI:Update()
