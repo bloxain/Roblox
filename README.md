@@ -20,12 +20,13 @@ supported executors like krnl, trigon, synapse x ect -- as of march 16 It Is Req
 suported games:
 Games | Support
 ----- | -------
-tower of hell | ok
+tower of hell | great
 destuction simulator | Ok
 tower simulator | poor
 Natral Disaster | Ok
-egg farm | ok
-Cart RIde | Great
+egg farm | poor
+Cart RIde | ok
+Landry simulator | ok
 
 # Universal
 Scripts | Support
