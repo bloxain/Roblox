@@ -1,5 +1,5 @@
 --[[
- 2022 - 2022 Bloxain Team(only mel)
+ 2022 - 2023 Bloxain Team
  INTENTES / why we created this?
  
  its like orain(prob misspelled it)  but it has a few probloms
@@ -20,6 +20,11 @@ local SaveFolder;
 local NotificationsOffset = -.063
 local ANIMSPEED = TweenInfo.new(0.1)
 local Selections = {}
+local Colors = {
+	Enabled = Color3.fromRGB(57, 229, 0),
+	Idle = Color3.fromRGB(170, 170, 0),
+	Dissabled = Color3.fromRGB(255, 100, 4),
+}
 
 local function GetCanvasSize(Frame)
 	local YSize = 0
@@ -189,6 +194,16 @@ function UI:MakeWindow(Table)
 	local Divider_2 = Instance.new("Frame")
 	local Storage = Instance.new('Folder')
 
+	local ScreenGui = Instance.new("ScreenGui")
+	local RightClick_Menu = Instance.new("Frame")
+	local Command1 = Instance.new("Frame")
+	local Command1_Button = Instance.new("TextButton")
+	local Edit_KeyBind = Instance.new("Frame")
+	local Titile = Instance.new("TextLabel")
+	local Exit = Instance.new("TextLabel")
+	local Text = Instance.new("TextLabel")
+	local Key = Instance.new("TextLabel")
+
 	local SelectedPage = nil
 	if syn and syn.protect_gui then
 		syn.protect_gui(UIScreen)
@@ -265,6 +280,153 @@ function UI:MakeWindow(Table)
 	Divider_2.Position = UDim2.new(0, 0, 0, 40)
 	Divider_2.Size = UDim2.new(1, 0, 0, 1)
 
+	--------------------------
+	--------------------------
+	--------------------------
+
+	RightClick_Menu.Name = "RightClick_Menu"
+	RightClick_Menu.Parent = ScreenGui
+	RightClick_Menu.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	RightClick_Menu.Position = UDim2.new(0.315545946, 0, 0.353873253, 0)
+	RightClick_Menu.Size = UDim2.new(0, 180, 0, 30)
+	RightClick_Menu.Visible = false
+
+	Command1.Name = "Command-1"
+	Command1.Parent = RightClick_Menu
+	Command1.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+	Command1.Position = UDim2.new(0, 2, 0, 2)
+	Command1.Size = UDim2.new(0, 176, 0, 26)
+
+	Command1_Button.Name = "Command-1_Button"
+	Command1_Button.Parent = Command1
+	Command1_Button.Active = false
+	Command1_Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Command1_Button.BackgroundTransparency = 1.000
+	Command1_Button.Position = UDim2.new(0.0397727266, 0, 0, 0)
+	Command1_Button.Size = UDim2.new(0, 171, 0, 26)
+	Command1_Button.Font = Enum.Font.SourceSans
+	Command1_Button.Text = "Set Key bind"
+	Command1_Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Command1_Button.TextSize = 20.000
+	Command1_Button.TextXAlignment = Enum.TextXAlignment.Left
+
+	Edit_KeyBind.Name = "Exit"
+	Edit_KeyBind.Parent = ScreenGui
+	Edit_KeyBind.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+	Edit_KeyBind.Position = UDim2.new(0, 1505, 0, 813)
+	Edit_KeyBind.Size = UDim2.new(0, 232, 0, 77)
+	Edit_KeyBind.Visible = false
+
+	Titile.Name = "Titile"
+	Titile.Parent = Edit_KeyBind
+	Titile.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Titile.BackgroundTransparency = 1.000
+	Titile.Size = UDim2.new(0, 202, 0, 35)
+	Titile.Font = Enum.Font.SourceSans
+	Titile.Text = "Editing: "
+	Titile.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Titile.TextSize = 20.000
+
+	Exit.Name = "Edit_KeyBind"
+	Exit.Parent = Edit_KeyBind
+	Exit.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+	Exit.Position = UDim2.new(0, 200, 0, 2)
+	Exit.Size = UDim2.new(0, 30, 0, 30)
+	Exit.Text = "x"
+	Exit.TextSize = 22.000
+
+	Text.Name = "Text"
+	Text.Parent = Edit_KeyBind
+	Text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Text.BackgroundTransparency = 1.000
+	Text.Position = UDim2.new(0, 7, 0, 42)
+	Text.Size = UDim2.new(0, 127, 0, 35)
+	Text.Font = Enum.Font.SourceSans
+	Text.Text = "Current KeyBind:"
+	Text.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Text.TextSize = 20.000
+
+	Key.Name = "Key"
+	Key.Parent = Edit_KeyBind
+	Key.BackgroundColor3 = Color3.fromRGB(52, 52, 52)
+	Key.Position = UDim2.new(0, 144, 0, 48)
+	Key.Size = UDim2.new(0, 45, 0, 22)
+	Key.Text = "F3"
+	Key.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Key.TextSize = 10.000
+	Key.TextWrapped = true
+
+	Instance.new('UICorner', RightClick_Menu)
+	Instance.new('UICorner', Command1)
+	Instance.new('UICorner', Command1_Button)
+	Instance.new('UICorner', Edit_KeyBind)
+	Instance.new('UICorner', Exit)
+	Instance.new('UICorner', Key)
+
+	--------------------------
+
+	local function OpenRightClickMenu(Flag)
+		CurrentFlag = Flag
+		RightClick_Menu.Position = UDim2.fromOffset(mouse.X, mouse.Y)
+		RightClick_Menu.Visible = true
+		local Toggle = false
+		local Temp = game:GetService('UserInputService').InputBegan:Connect(function(key)
+			if key.UserInputType == Enum.UserInputType.MouseButton1 or key.UserInputType == Enum.UserInputType.MouseButton2 or key.UserInputType == Enum.UserInputType.MouseButton3 then
+				RightClick_Menu.Visible = false
+				Toggle = true
+			end
+		end)
+		repeat task.wait() until Toggle == true
+		Temp:Disconnect()
+		Temp = nil;
+	end
+
+	local function KeyChangeLogic()
+		local function SetSize()
+			local temp = game.TextService:GetTextSize(Key.Text, 10, Enum.Font.Legacy, Vector2.new(1000000000, 100000))
+			Tweem:Create(Key, ANIMSPEED, {Size = UDim2.fromOffset(temp.X + 15, 22), Position = UDim2.fromOffset(348 - temp.X - 15, 5)}):Play()
+		end
+		if UI.Flags[CurrentFlag].KeyBind == 'None' then
+			Key.Text = '...' SetSize()
+			local temp = game:GetService('UserInputService').InputBegan:Connect(function(key)
+				if key.UserInputType == Enum.UserInputType.Keyboard then
+					UI.Flags[CurrentFlag].KeyBind = key
+					Key.Text = key.KeyCode.Name SetSize()
+				end
+			end)
+			repeat task.wait() until UI.Flags[CurrentFlag].KeyBind ~= 'None'
+			temp:Disconnect()
+			temp = nil;
+		else
+			Key.Text = 'None' SetSize()
+			UI.Flags[CurrentFlag].KeyBind = 'None'
+		end
+	end
+
+	Exit.InputBegan:Connect(function(key)
+		if key.UserInputType == Enum.UserInputType.MouseButton1 then
+			Edit_KeyBind.Visible = false
+		end
+	end)
+
+	Key.InputBegan:Connect(function(key)
+		if key.UserInputType == Enum.UserInputType.MouseButton1 then
+			KeyChangeLogic()
+		end
+	end)
+
+	UserInputService.InputBegan:Connect(function(key)
+		if key.UserInputType == Enum.UserInputType.Keyboard then
+			for _, v in next, UI.Flags do
+				if v.KeyBind and v.KeyBind ~= 'None' and v.KeyBind.KeyCode == key.KeyCode then
+					v.Funcs.Set({Value = not v.Value})
+				end
+			end
+		end
+	end)
+
+	------------------------
+
 	Storage.Name = 'Pages'
 	Instance.new('UICorner', Window)
 	Instance.new('UICorner', Search)
@@ -320,7 +482,6 @@ function UI:MakeWindow(Table)
 					SearchElement('', Window.Page)
 				end
 				Window.Page.Parent = Storage
-				SelectedPage.Page.Parent = Window
 				for _, v in next, Selections do
 					v.Open(false)
 				end
@@ -329,6 +490,7 @@ function UI:MakeWindow(Table)
 				end
 				if SelectedPage and SelectedPage.Page then
 					SelectedPage.Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+					SelectedPage.Page.Parent = Window
 				end
 			end
 		end
@@ -374,7 +536,7 @@ function UI:MakeWindow(Table)
 		local MouseDown = InputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
 		Asset.Position = UDim2.fromOffset(X - 13.5, Y - 13.5)
 
-		if X > WindowEndX + With - 10 and X < WindowEndX + With + 10 then
+		if X > WindowEndX + With - 10 and X < WindowEndX + With + 10 and UI.Open then
 			if Y > WindowEndY + With - 10 and Y < WindowEndY + With + 10 and UI.Settings.Scaleing.XY_Enabled then
 				Asset.Rotation = 315
 				InputService.MouseIconEnabled = false
@@ -390,7 +552,7 @@ function UI:MakeWindow(Table)
 				return
 			end
 		end
-		if Y > WindowEndY + With - 10 and Y < WindowEndY + With + 10 and X > Window.Position.X.Offset and X < WindowEndX and UI.Settings.Scaleing.Y_Enabled then
+		if Y > WindowEndY + With - 10 and Y < WindowEndY + With + 10 and X > Window.Position.X.Offset and X < WindowEndX and UI.Settings.Scaleing.Y_Enabled and UI.Open then
 			Asset.Rotation = 0 
 			InputService.MouseIconEnabled = false
 			Asset.Visible = 1
@@ -403,7 +565,7 @@ function UI:MakeWindow(Table)
 	end)
 
 	InputService.InputBegan:Connect(function(key)
-		if key.UserInputType == Enum.UserInputType.MouseButton1 and Scaleing ~= '' then
+		if key.UserInputType == Enum.UserInputType.MouseButton1 and Scaleing ~= '' and UI.Open then
 			local X, Y = Mouse.X, Mouse.Y
 			local LockedScaleing = Scaleing
 			local ScaleingAct = game["Run Service"].Stepped:Connect(function()
@@ -427,7 +589,7 @@ function UI:MakeWindow(Table)
 			ScaleingAct:Disconnect() ScaleingAct = nil; -- Kill
 		end
 	end)
-	
+
 	TopBar.InputBegan:Connect(function(key)
 		if key.UserInputType == Enum.UserInputType.MouseButton1 and UI.Settings.Movement.MoveEnabled and not UI.Settings.Movement.SmallScreen then
 			local function Lerp(udim2)
@@ -518,7 +680,7 @@ function UI:MakeWindow(Table)
 	if not Table.Image then
 		Table.Image = ''
 	end
-	
+
 	function WindowReturn:Toggle()
 		if UI.Open then
 			UI.SavedWindowSize = Window.Size.Y.Offset
@@ -533,6 +695,9 @@ function UI:MakeWindow(Table)
 		end
 
 	end UI.Open = true
+
+
+
 
 	function WindowReturn:MakeTab(Table)
 		local Page = Instance.new("ScrollingFrame")
@@ -578,7 +743,7 @@ function UI:MakeWindow(Table)
 		PageButtonValue.Name = 'Page'
 		PageButtonValue.Parent = Page
 		PageButtonValue.Value = PageButton
-		
+
 		Savecolor.Name = 'PageColorsave'
 		Savecolor.Parent = PageButton
 		Savecolor.Value = false
@@ -601,6 +766,9 @@ function UI:MakeWindow(Table)
 			end
 			SelectedPage = {Page = Page, Button = PageButton}
 		end)
+
+
+
 
 		local Tab = {element = SelectedPage}
 		function Tab:AddButton(Table)
@@ -663,7 +831,9 @@ function UI:MakeWindow(Table)
 			end
 			local FlagTable = {
 				Value = Toggled,
-				Save = false
+				Save = false,
+				KeyBind = 'None',
+				Funcs = {}
 			}
 			if Table.Flag and not UI.Flags[Table.Flag] or Table.Flag and UI.Flags[Table.Flag].Save == false then
 				if Table.Save then
@@ -671,8 +841,7 @@ function UI:MakeWindow(Table)
 				end
 				UI.Flags[Table.Flag] = FlagTable
 			elseif UI.Flags[Table.Flag] and UI.Flags[Table.Flag].Save then
-				Data = UI.Flags[Table.Flag]
-				Toggled = Data.Value
+				Toggled = UI.Flags[Table.Flag].Value
 			end
 			FlagTable = {}
 			local TempColor
@@ -681,7 +850,7 @@ function UI:MakeWindow(Table)
 			else 
 				TempColor = Color3.fromRGB(255, 255, 255) 
 			end local Locked = Table.Locked
-			
+
 			local Toggle = Instance.new("Frame")
 			local Color = Instance.new("Frame")
 			local Clickable = Instance.new("TextButton")
@@ -699,7 +868,7 @@ function UI:MakeWindow(Table)
 			Color.BorderColor3 = Color3.fromRGB(27, 42, 53)
 			Color.Position = UDim2.new(0, pixelwith, 0, pixelwith)
 			Color.Size = UDim2.new(0, 358 - pixelwith * 2, 0, 32 - pixelwith * 2)
-			
+
 			Clickable.Name = "Clickable"
 			Clickable.Parent = Color
 			Clickable.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
@@ -719,10 +888,11 @@ function UI:MakeWindow(Table)
 			Holder.Size = UDim2.new(0, 54, 0, 22)
 
 			Slider.Parent = Holder
-			Slider.BackgroundColor3 = TempColor
+			Slider.BackgroundColor3 = Colors.Dissabled
 			Slider.Size = UDim2.new(0, 30, 0, 22)
 			if Toggled then
 				Slider.Position = UDim2.new(0, 24, 0, 0)
+				Slider.BackgroundColor3 = Colors.Enabled
 			end if game.TextService:GetTextSize(Clickable.Text, 15, Enum.Font.Legacy, Vector2.new(1000000000, 100000)).X > 358 then
 				Clickable.TextScaled = true
 			end
@@ -740,10 +910,10 @@ function UI:MakeWindow(Table)
 				end
 				if Toggled then
 					Toggled = false
-					Tweem:Create(Slider, ANIMSPEED, {Position = UDim2.fromOffset(0, 0)}):Play()
+					Tweem:Create(Slider, ANIMSPEED, {Position = UDim2.fromOffset(0, 0), BackgroundColor3 = Colors.Dissabled}):Play()
 				else
 					Toggled = true
-					Tweem:Create(Slider, ANIMSPEED, {Position = UDim2.fromOffset(24, 0)}):Play()
+					Tweem:Create(Slider, ANIMSPEED, {Position = UDim2.fromOffset(24, 0), BackgroundColor3 = Colors.Enabled}):Play()
 				end
 				if Table.Flag then
 					UI.Flags[Table.Flag].Value = Toggled
@@ -754,6 +924,7 @@ function UI:MakeWindow(Table)
 			end
 
 			Clickable.MouseButton1Click:Connect(toggle)
+			Clickable.MouseButton2Click:Connect(function() OpenRightClickMenu(Table.Flag) end)
 
 			local functions = {Element = Toggle}
 			function functions:Set(Table)
@@ -781,8 +952,158 @@ function UI:MakeWindow(Table)
 				Toggle:Destroy()
 				SetCanvasSize(Page)
 			end
+			if Table.Flag then
+				UI.Flags[Table.Flag].Funcs = functions
+			end
 			return functions
 		end
+		
+		
+		
+		
+		function Tab:AddMutiToggle(Table)
+			local Toggled = 0
+			if Table.Default then
+				Toggled = Table.Default
+			end
+			local FlagTable = {
+				Value = Toggled,
+				Save = false,
+				KeyBind = 'None',
+				Funcs = {}
+			}
+			if Table.Flag and not UI.Flags[Table.Flag] or Table.Flag and UI.Flags[Table.Flag].Save == false then
+				if Table.Save then
+					FlagTable.Save = true
+				end
+				UI.Flags[Table.Flag] = FlagTable
+			elseif UI.Flags[Table.Flag] and UI.Flags[Table.Flag].Save then
+				Toggled = UI.Flags[Table.Flag].Value
+			end
+			FlagTable = {}
+			local TempColor
+			if Table.Locked then
+				TempColor = Color3.fromRGB(191, 191, 191)
+			else 
+				TempColor = Color3.fromRGB(255, 255, 255) 
+			end local Locked = Table.Locked
+
+			local Toggle = Instance.new("Frame")
+			local Color = Instance.new("Frame")
+			local Clickable = Instance.new("TextButton")
+			local Holder = Instance.new("Frame")
+			local Slider = Instance.new("Frame")
+
+			Toggle.Name = Table.Name
+			Toggle.Parent = Table.Parent or Page
+			Toggle.BackgroundColor3 = UI.Theme.Boarder
+			Toggle.Size = UDim2.new(0, 358, 0, 32)
+
+			Color.Name = "ButtonColor"
+			Color.Parent = Toggle
+			Color.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+			Color.BorderColor3 = Color3.fromRGB(27, 42, 53)
+			Color.Position = UDim2.new(0, pixelwith, 0, pixelwith)
+			Color.Size = UDim2.new(0, 358 - pixelwith * 2, 0, 32 - pixelwith * 2)
+
+			Clickable.Name = "Clickable"
+			Clickable.Parent = Color
+			Clickable.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+			Clickable.Position = UDim2.new(0, 7, 0, 1)
+			Clickable.Size = UDim2.new(0, 348, 0, 28)
+			Clickable.Font = Enum.Font.SourceSans
+			Clickable.Text =  Table.Name
+			Clickable.TextColor3 = TempColor
+			Clickable.TextSize = 20.000
+			Clickable.TextWrapped = true
+			Clickable.Selectable = Locked or false
+			Clickable.TextXAlignment = Enum.TextXAlignment.Left
+
+			Holder.Parent = Color
+			Holder.BackgroundColor3 = Color3.fromRGB(52, 52, 52)
+			Holder.Position = UDim2.new(0, 292, 0, 4)
+			Holder.Size = UDim2.new(0, 54, 0, 22)
+
+			Slider.Parent = Holder
+			Slider.BackgroundColor3 = Colors.Dissabled
+			Slider.Size = UDim2.new(0, 30, 0, 22)
+			if Toggled == 2 then
+				Slider.Position = UDim2.new(0, 24, 0, 0)
+				Slider.BackgroundColor3 = Colors.Enabled
+			elseif Toggled == 1 then
+				Slider.Position = UDim2.new(0, 12, 0, 0)
+				Slider.BackgroundColor3 = Colors.Idle
+				
+			end if game.TextService:GetTextSize(Clickable.Text, 15, Enum.Font.Legacy, Vector2.new(1000000000, 100000)).X > 358 then
+				Clickable.TextScaled = true
+			end
+
+			Instance.new('UICorner', Toggle)
+			Instance.new('UICorner', Color)
+			Instance.new('UICorner', Clickable)
+			Instance.new('UICorner', Holder)
+			Instance.new('UICorner', Slider)
+			SetCanvasSize(Page)
+
+			local function toggle()
+				if Locked then
+					return
+				end
+				if Toggled == 2 then
+					Toggled = 0
+					Tweem:Create(Slider, ANIMSPEED, {Position = UDim2.fromOffset(0, 0), BackgroundColor3 = Colors.Dissabled}):Play()
+				elseif Toggled == 1 then
+					Toggled = 2
+					Tweem:Create(Slider, ANIMSPEED, {Position = UDim2.fromOffset(24, 0), BackgroundColor3 = Colors.Enabled}):Play()
+				else
+					Toggled = 1
+					Tweem:Create(Slider, ANIMSPEED, {Position = UDim2.fromOffset(12, 0), BackgroundColor3 = Colors.Idle}):Play()
+				end
+				
+				if Table.Flag then
+					UI.Flags[Table.Flag].Value = Toggled
+				end if Table.Callback then
+					Table.Callback(Toggled)
+				end
+				SaveData(UI.Flags)
+			end
+
+			Clickable.MouseButton1Click:Connect(toggle)
+			Clickable.MouseButton2Click:Connect(function() OpenRightClickMenu(Table.Flag) end)
+
+			local functions = {Element = Toggle}
+			function functions:Set(Table)
+				if Table.Name then
+					Clickable.Text = Table.Name
+					Toggle.Name = Table.Name
+				end
+				if Table.Value ~= nil then
+					toggle()
+				end
+				if Table.Locked then
+					Locked = true
+					Slider.BackgroundColor3 = Color3.fromRGB(191, 191, 191)
+					Clickable.TextColor3 = Color3.fromRGB(191, 191, 191)
+					Clickable.Selectable = false
+				else 
+					Locked = false
+					Slider.BackgroundColor3 = Color3.fromRGB(255, 255, 255) 
+					Clickable.TextColor3 = Color3.fromRGB(255, 255, 255) 
+					Clickable.Selectable = true
+				end
+			end
+			function functions:Delete()
+				Toggle:Destroy()
+				SetCanvasSize(Page)
+			end
+			if Table.Flag then
+				UI.Flags[Table.Flag].Funcs = functions
+			end
+			return functions
+		end
+
+
+
 
 		function Tab:AddTextbox(Table)
 			local TextBox = Instance.new("Frame")
@@ -898,6 +1219,9 @@ function UI:MakeWindow(Table)
 			end
 			return functions
 		end
+
+
+
 
 		function Tab:AddBind(Table)
 			local KeyBind = Instance.new("Frame")
@@ -1038,6 +1362,9 @@ function UI:MakeWindow(Table)
 			return functions
 		end
 
+
+
+
 		function Tab:AddLabel(Name)
 			local Label = Instance.new("Frame")
 			local Color = Instance.new("Frame")
@@ -1045,7 +1372,7 @@ function UI:MakeWindow(Table)
 			if not Name then
 				Name = 'nil'
 			end
-			
+
 			Label.Name = Name
 			Label.Parent = Table.Parent or Page
 			Label.BackgroundColor3 = UI.Theme.Boarder
@@ -1149,6 +1476,9 @@ function UI:MakeWindow(Table)
 				SetCanvasSize(Page)
 			end
 		end
+
+
+
 
 		function Tab:AddSlider(Table)
 			local FlagTable = {
@@ -1263,7 +1593,7 @@ function UI:MakeWindow(Table)
 					UI.Flags[Table.Flag].Value = num
 				end
 			end
-			
+
 			local function UpdateSlider(value, change)
 				local bar = Bar
 				local percent = (mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X
@@ -1271,7 +1601,7 @@ function UI:MakeWindow(Table)
 				if value then
 					percent = (value - Table.Min) / (Table.Max - Table.Min)
 				end
-				
+
 				percent = math.clamp(percent, 0, 1)
 				value = value or math.floor(Table.Min + (Table.Max - Table.Min) * percent)
 				value = Round(value, Table.Increment)
@@ -1316,6 +1646,9 @@ function UI:MakeWindow(Table)
 			end
 			return functions
 		end
+
+
+
 
 		function Tab:AddSection(Table)
 			local DropDown = Instance.new("Frame")
@@ -1451,7 +1784,7 @@ function UI:MakeWindow(Table)
 					Open = changes.Open
 				end
 			end
-			
+
 			function functions:AddLabel(NAME)
 				local temp = Tab:AddLabel(NAME, ScrollingFrame)
 				SetCanvasSize(ScrollingFrame)
@@ -1466,6 +1799,12 @@ function UI:MakeWindow(Table)
 			function functions:AddToggle(TABLE)
 				TABLE['Parent'] = ScrollingFrame
 				local temp = Tab:AddToggle(TABLE)
+				SetCanvasSize(ScrollingFrame)
+				return temp
+			end
+			function functions:AddMutiToggle(TABLE)
+				TABLE['Parent'] = ScrollingFrame
+				local temp = Tab:AddMutiToggle(TABLE)
 				SetCanvasSize(ScrollingFrame)
 				return temp
 			end
@@ -1504,10 +1843,13 @@ function UI:MakeWindow(Table)
 				SetCanvasSize(Page)
 				SetCanvasSize(ScrollingFrame)
 			end
-			
+
 			return functions
 		end
-		
+
+
+
+
 		function Tab:AddDropdown(Table)
 			local FlagTable = {
 				Value = Table.Default,
@@ -1528,7 +1870,7 @@ function UI:MakeWindow(Table)
 			if not Table.Options then
 				Table.Options = {nil, nil}
 			end
-			
+
 			local DropDown = Instance.new("Frame")
 			local Color = Instance.new("Frame")
 			local Clickable = Instance.new("TextButton")
@@ -1759,7 +2101,7 @@ function UI:MakeWindow(Table)
 			return functions
 		end
 
-
+		-- EMD PF TAB
 		SetCanvasSize(Pages)
 		return Tab
 	end
