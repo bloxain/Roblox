@@ -453,10 +453,10 @@ local function UpdateMutators()
 		game.ReplicatedStorage.globalSpeed.Value = Flag('Walk')
 		ChangeMutator('speed', false)
 	elseif Flag('High Speed') == 1 and CheckMutator('speed') then
-		game.ReplicatedStorage.globalSpeed.Value = 25
+		game.ReplicatedStorage.globalSpeed.Value = 20
 		ChangeMutator('speed', true)
 	elseif Flag('High Speed') == 2 then
-		game.ReplicatedStorage.globalSpeed.Value = 25
+		game.ReplicatedStorage.globalSpeed.Value = 20
 		ChangeMutator('speed', true)
 	end
 	
@@ -633,7 +633,7 @@ local Credit = Window:MakeTab({Name = 'Credits'})
 Movment:AddLabel('Basic')
 Movment:AddSlider({Name = 'Walkspeed', Min = 16, Max = 100, Flag = 'Walk', Callback = SetValues, Save = true})
 Movment:AddSlider({Name = 'JumpPower', Min = 50, Max = 200, Flag = 'Jump', Save = true, Callback = SetValues})
-Movment:AddLabel('Standerd')
+Movment:AddLabel('Standard')
 Movment:AddToggle({Name = 'Inf Jump', Flag = 'InfJump', Save = true})
 Movment:AddToggle({Name = "NoClip", Flag = "Noclip", Save = true, Default = false, Callback = HandelNoClip})
 Movment:AddBind({Name = 'ClickTp', Flag = 'ClickTp', Save = true})
