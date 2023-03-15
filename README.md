@@ -1,56 +1,58 @@
-# execute code here
+## Bloxhub Lua Executor
+
+Execute code by loading it as a string using `loadstring()` with the following URL: 
 
 ```lua
 loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Bloxhub.Lua"))()
 ```
-note Please keep this up i have seen a lot of project deletes and if i broke TOS please tell me.
 
-this is where loadstrings are downloaded and executed feel free off learn of it!
 
-discord: https://discord.gg/PPFYacGb2b
+Note: Please keep this up. I have seen a lot of projects get deleted and if I broke TOS, please tell me.
 
-YouTube: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
+This is where loadstrings are downloaded and executed. Feel free to learn from it!
 
-i have got synapse x to make this project better -- use <kbd>f3</kbd> to open and close the GUI
+- Discord: https://discord.gg/PPFYacGb2b
+- YouTube: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
 
-if you want to make a video about this you can just give credits: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
+I have used Synapse X to make this project better. Use <kbd>F3</kbd> to open and close the GUI.
 
-supported executors like krnl, trigon, synapse x ect -- as of march 16 It Is Reqiured that file funcs are on your executors
+If you want to make a video about this, you can just give credits to https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
 
-suported games:
+## Supported Games
+
 Games | Support
 ----- | -------
-tower of hell | great
-destuction simulator | Ok
-tower simulator | poor
-Natral Disaster | Ok
-egg farm | poor
-Cart RIde | ok
-Landry simulator | ok
+Tower of Hell | Great
+Destruction Simulator | Ok
+Tower Simulator | Poor
+Natural Disaster | Ok
+Egg Farm | Poor
+Cart Ride | Ok
+Landry Simulator | Ok
 
-# Universal
+## Universal Scripts
+
 Scripts | Support
------ | -------
+------- | -------
 Universal GUI | Great
 Executor | Poor
-bot control | Ok
+Bot Control | Ok
 
-Third party(made by other people)
+## Third Party Scripts
+
+These scripts were made by other people.
 
 1. Epic Minigames
-2. Build a boat for tresure
+2. Build a Boat for Treasure
 3. Lucky Blocks
-4. Ilands
+4. Islands
 
-# How to make your own GUI
+## How to Make Your Own GUI
 
-TO HELP / MANUAL UPDATE
+To help or to manually update, make a pull request or send a message in Discord. I will test it and add/not add it to the main branch.
 
-make a pull or send in discord ill test it and add / not add to main branch
+The GUI is part of another Github repository: https://github.com/shlexware/Orion
 
-the GUI is part of another github https://github.com/shlexware/Orion
+To use it, copy and execute the Universal GUI, and check its compatibility. Remove things that don't work or get flagged by the anti-cheat.
 
-to use copy and execute the universal GUI and check its compatable with and remove things that dont work or get flaged by the anti cheat
-
-why use this?
-it has a lot of working premade things for games the tower of hell and destuction simulator script where made from the universal GUI
+Why use this? It has a lot of working premade things for games. The Tower of Hell and Destruction Simulator scripts were made from the Universal GUI.
