@@ -312,7 +312,8 @@ local Games = {
 	["65241"] = {'N/Natural%20Disaster%20Survival.Lua', 'BloxainHub/Natural_Disaster_Survival.Lua'},
 	["2891148074"] = {'C/cart_ride_around_used_car_battery.Lua', 'BloxainHub/cart_ride_around_used_car_battery.Lua'},
 	["3321455016"] = {'T/Tapping_Legends_X.Lua', 'BloxainHub/Tapping_Legends_X.Lua'},
-	["2327642508"] = {'L/Laundry_Simulator.Lua', 'BloxainHub/Laundry_Simulator.Lua'}
+	["2327642508"] = {'L/Laundry_Simulator.Lua', 'BloxainHub/Laundry_Simulator.Lua'},
+	["1294246302"] = {'B/Boxing_League.lua', 'BloxainHub/Boxing_League.lua'},
 }
 
 local Modules = {
