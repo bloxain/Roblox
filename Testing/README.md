@@ -1,13 +1,15 @@
-# NOTE
-this is by bloxain / robloxain pro(YT)
+# Bloxain UI
 
-all of this is free to use give credit tho
+Bloxain UI is the ui used in the Bloxain Script hub
 
+## Getting Started
 
-# github
-PLEASE DONT DELETE idk why you deleteing roblox exploit(unless roblox told you)
+Incude this libary
+```lua
+-- add later
+```
 
-it you do want to delete please let me accses a download of my project so i can move platforms thxs
+# Docs
 
-
-thats just in case
+## MakeWindow(Name: String)
+makes a window
