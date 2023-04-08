@@ -179,7 +179,7 @@ local GamesArrary = {
 	{2891148074, true, true, "cart ride around used car battery", "Trolling GUI good for speeding carts or just winning the game its a fun GUI to use and has every func yull ever need!", "cart_ride_around_used_car_battery.Lua"},
 	{3321455016, true, true, "Tapping Legends X", "A Great Script for FULLY AUTOMATIC autofarming not to replace a human but do some stuff", "Tapping_Legends_X.Lua"},
 	{2327642508, true, true, "Laundry Simulator", "Another FULLY AUTOMATIC autofarming script can replace human but not for buying", "Laundry_Simulator.Lua"},
-	{1294246302, true, true, "Boxing League", "Best autofarm and overall script compared to the other ones for this game supports Class C, B", "Boxing_League.lua"},
+	{1294246302, true, true, "Boxing League", "Best autofarm and overall script compared to the other ones for this game supports Class C, B", "ClassLoader.lua"},
 	{911750776, false, false, "Broken Bonesl", "A script for Broken Bones with inf money(thats all i use it for) once pressed end the round", "https://pastebin.com/raw/bFu2yg8n"},
 	{210851291, false, false, "BABFT", "This Script has autofarm teamchanging godmode and more its better than anything i could do so i put it here", "https://raw.githubusercontent.com/RegularVynixu/Vynixius/main/Build%20A%20Boat%20For%20Treasure/BABFT"},
 	{110181652, false, false, "Epic MiniGames", "this script can cheat almost all the minigames and it very usefull becuse it is not a cheaply Gui and had some fetures(works with universal Gui For Extra Fetures", "https://raw.githubusercontent.com/SlamminPig/rblxgames/main/Epic%20Minigames/EpicMinigamesGUI"},
