@@ -1,9 +1,3 @@
--- GUI to Lua
------
--- Version: 2.0.
--- Made by chrisopdemobiel.
--- Instances:
-_G.versoin = {'0.5.3', 'https://github.com/bloxain/Roblox/raw/main/'}
 local LoaderV2 = Instance.new("ScreenGui")
 local Basic_Loader = Instance.new("Frame")
 local Title = Instance.new("TextLabel")
@@ -156,7 +150,7 @@ end
 
 local function Update()
 	local Success = false pcall(function() -- Get Web Data
-		DownloadedFiles = syn.request({Url = WebAddress..'UpdatedFiles', Method = "GET"})
+		DownloadedFiles = syn.request({Url = WebAddress..MainDir..'/UpdatedFiles', Method = "GET"})
 		Success = DownloadedFiles.Success
 	end) if not Success then warn('COULD NOT GET DATA SCRIPT IS NOT UPDATED!') return end
 	local MainFolder = _G.BloxainSettings.Path
