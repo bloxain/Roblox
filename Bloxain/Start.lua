@@ -1,4 +1,4 @@
-_G.BloxainSettings = {Path = 'Bloxain', Games = 'Bloxain/Games', Modules = 'Bloxain/Modules', WebAddress = 'http://192.168.254.77/'}
+_G.BloxainSettings = {Path = 'Bloxain', Games = 'Bloxain/Games', Modules = 'Bloxain/Modules', WebAddress = 'https://github.com/bloxain/Roblox/raw/Beta/Bloxain/'}
 local Modules = _G.BloxainSettings.Modules
 local WebAddress = _G.BloxainSettings.WebAddress
 syn.request({Url = WebAddress, Body = 'Started', Method = "POST"})
