@@ -1,9 +1,3 @@
--- GUI to Lua
------
--- Version: 2.0.
--- Made by chrisopdemobiel.
--- Instances:
-_G.versoin = {'0.5.3', 'https://github.com/bloxain/Roblox/raw/main/'}
 local LoaderV2 = Instance.new("ScreenGui")
 local Basic_Loader = Instance.new("Frame")
 local Title = Instance.new("TextLabel")
