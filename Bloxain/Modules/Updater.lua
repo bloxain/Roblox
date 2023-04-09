@@ -1,3 +1,9 @@
+-- GUI to Lua
+-----
+-- Version: 2.0.
+-- Made by chrisopdemobiel.
+-- Instances:
+_G.versoin = {'0.5.3', 'https://github.com/bloxain/Roblox/raw/main/'}
 local LoaderV2 = Instance.new("ScreenGui")
 local Basic_Loader = Instance.new("Frame")
 local Title = Instance.new("TextLabel")
@@ -50,7 +56,7 @@ Versoin.BackgroundTransparency = 1.000
 Versoin.Position = UDim2.new(0.300000012, 0, 0.337837845, 0)
 Versoin.Size = UDim2.new(0, 200, 0, 25)
 Versoin.Font = Enum.Font.Roboto
-Versoin.Text = 'Loading Installer...'
+Versoin.Text = 'Gathering file info.../'
 Versoin.TextColor3 = Color3.fromRGB(255, 255, 255)
 Versoin.TextScaled = true
 Versoin.TextSize = 14.000
@@ -119,10 +125,9 @@ local function GetTableLen(Table)
 	return max
 end
 local WebAddress = _G.BloxainSettings.WebAddress
-local function Download()
-	Versoin.Text = 'Gathering file info...'
-	local UpdatedFiles = game.HttpService:JSONDecode(syn.request({Url = WebAddress..'UpdatedFiles', Method = "GET"}).Body)
-	
+
+local function Download(NewestFiles)
+	local UpdatedFiles = game.HttpService:JSONDecode(NewestFiles.Body)
 	local UpdateUI = Show(GetTableLen(UpdatedFiles))
 	Versoin.Text = 'Marking files for install'
 	for file, datechanged in next, UpdatedFiles do
@@ -145,14 +150,52 @@ local function Download()
 			Versoin.Text = 'Downloaded'..file..'!'
 		end)
 	end
+	writefile(_G.BloxainSettings.OldUpdate, NewestFiles.Body)
 end
-Download()
 
 
-TweenSevice:Create(Basic_Loader, TweenInfo.new(.2, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Position = UDim2.fromScale(0.424, 1)}):Play()
-task.wait(.2)
-LoaderV2:Destroy()
-
-while StartLoad do -- Stops the script from tring to load when changeing settings
-	task.wait(.3)
+local function Update()
+	local Success = false pcall(function() -- Get Web Data
+		DownloadedFiles = syn.request({Url = WebAddress..'UpdatedFiles', Method = "GET"})
+		Success = DownloadedFiles.Success
+	end) if not Success then warn('COULD NOT GET DATA SCRIPT IS NOT UPDATED!') return end
+	local MainFolder = _G.BloxainSettings.Path
+	local OldUpdate = _G.BloxainSettings.OldUpdate
+	local UpdatedFiles = game.HttpService:JSONDecode(DownloadedFiles.Body)
+	if isfolder(_G.BloxainSettings.Path) and isfile(_G.BloxainSettings.OldUpdate) then OldUpdatedFiles = game.HttpService:JSONDecode(readfile(_G.BloxainSettings.OldUpdate)) else Download(DownloadedFiles) return end
+	-- Create Folders
+	for file, datechanged in next, UpdatedFiles do
+		local Folders = file:split('/')
+		table.remove(Folders, #Folders) -- Delete last item since we dont want to create the file as a folder.
+		local Dir = ''
+		for _, Folder in next, Folders do
+			if not isfolder(Dir..'/'..Folder) then
+				makefolder(Dir..'/'..Folder)
+			end
+			Dir = Dir..Folder..'/'
+		end
+	end
+	-- Mark Files For Update
+	local ToUpdate = {}
+	for file, datechanged in next, UpdatedFiles do
+		if OldUpdatedFiles[file] ~= datechanged then
+			table.insert(ToUpdate, file)
+		end
+	end
+	for _, file in next, ToUpdate do
+		spawn(function()
+			print('Downloading '..file..'...')
+			writefile(file, syn.request({Url = WebAddress..file, Method = "GET"}).Body)
+			print('Downloaded '..file..'!')
+		end)
+	end
+	writefile(OldUpdate, DownloadedFiles.Body)
 end
+Update()
+
+-- Dont waste time
+spawn(function()
+	TweenSevice:Create(Basic_Loader, TweenInfo.new(.2, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Position = UDim2.fromScale(0.424, 1)}):Play()
+	task.wait(0.2)
+	LoaderV2:Destroy()
+end)
