@@ -161,7 +161,7 @@ local function Update()
 	for file, datechanged in next, UpdatedFiles do
 		local Folders = file:split('/')
 		table.remove(Folders, #Folders) -- Delete last item since we dont want to create the file as a folder.
-		local Dir = ''
+		local Dir = _G.BloxainSettings.Path
 		for _, Folder in next, Folders do
 			if not isfolder(Dir..'/'..Folder) then
 				makefolder(Dir..'/'..Folder)
