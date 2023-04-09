@@ -150,7 +150,7 @@ end
 
 local function Update()
 	local Success = false pcall(function() -- Get Web Data
-		DownloadedFiles = syn.request({Url = WebAddress..MainDir..'/UpdatedFiles', Method = "GET"})
+		DownloadedFiles = syn.request({Url = _G.BloxainSettings.FullAdress..'UpdatedFiles', Method = "GET"})
 		Success = DownloadedFiles.Success
 	end) if not Success then warn('COULD NOT GET DATA SCRIPT IS NOT UPDATED!') return end
 	local MainFolder = _G.BloxainSettings.Path
