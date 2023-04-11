@@ -7,10 +7,10 @@ local Folders = {
 }
 
 local Files = {
-	{'Universal_Gui.lua', 1},
-	{'Modules/Updater.lua', 1},
-	{'Modules/UI.Lua', 1},
-	{'Modules/Game_Finder.Lua', 1}
+	{'/Universal_Gui.lua', 1},
+	{'/Modules/Updater.lua', 1},
+	{'/Modules/UI.Lua', 1},
+	{'/Modules/Game_Finder.Lua', 1}
 }
 
 local function Update()
@@ -23,7 +23,7 @@ local function Update()
 	
 	for _, file in next, Files do
 		spawn(function()
-			writefileasync(file[1], syn.request({Url = WebAddress..file[1]..tostring(game.GameId)..'.lua', Method = "GET"}).Body)
+			writefileasync(Path..file[1], syn.request({Url = WebAddress..file[1]..tostring(game.GameId)..'.lua', Method = "GET"}).Body)
 		end)
 	end
 	
