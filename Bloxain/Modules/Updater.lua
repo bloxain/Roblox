@@ -25,11 +25,11 @@ local function Update()
 	
 	for _, file in next, Files do
 		spawn(function()
-			writefileasync(Path..'/'..file[1], syn.request({Url = WebAddress..file[1], Method = "GET"}).Body)
+			writefile(Path..'/'..file[1], syn.request({Url = WebAddress..file[1], Method = "GET"}).Body)
 		end)
 	end
 print(WebAddress, Games)
-	local GameFile = writefileasync(Path..'/Games/'..tostring(game.GameId)..'.lua', syn.request({Url = Games..'/'..tostring(game.GameId)..'.lua', Method = "GET"}).Body)
+	local GameFile = writefile(Path..'/Games/'..tostring(game.GameId)..'.lua', syn.request({Url = Games..'/'..tostring(game.GameId)..'.lua', Method = "GET"}).Body)
 end
 
 Update()
