@@ -1,6 +1,7 @@
 local Path = _G.BloxainSettings.Path
-local WebAddress = _G.BloxainSettings.WebAddress
+local WebAddress = _G.BloxainSettings.WebAddress..Path..'/'
 local Modules = _G.BloxainSettings.Modules
+local Games = WebAddress.._G.BloxainSettings.Games
 
 local Folders = {
 	'/Games',
@@ -27,7 +28,7 @@ local function Update()
 			writefileasync(Path..'/'..file[1], syn.request({Url = WebAddress..file[1], Method = "GET"}).Body)
 		end)
 	end
-	local GameFile = writefileasync(Path..'/Games/'..tostring(game.GameId)..'.lua', syn.request({Url = WebAddress..'/Games/'..tostring(game.GameId)..'.lua', Method = "GET"}).Body)
+	local GameFile = writefileasync(Path..'/Games/'..tostring(game.GameId)..'.lua', syn.request({Url = Games..tostring(game.GameId)..'.lua', Method = "GET"}).Body)
 end
 
 Update()
