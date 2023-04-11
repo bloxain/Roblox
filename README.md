@@ -3,7 +3,7 @@
 Execute code by loading it as a string using `loadstring()` with the following URL: 
 
 ```lua
-loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Bloxhub.Lua"))()
+loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Bloxain/Start.lua"))()
 ```
 
 
