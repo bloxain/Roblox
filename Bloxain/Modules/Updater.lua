@@ -27,8 +27,7 @@ local function Update()
 			writefileasync(Path..'/'..file[1], syn.request({Url = WebAddress..file[1], Method = "GET"}).Body)
 		end)
 	end
-	
-	local GameFile = writefileasync(Path..'/Games/'..tostring(game.GameId)..'.lua', syn.request({Url = WebAddress..Modules..'Games/'..tostring(game.GameId)..'.lua', Method = "GET"}).Body)
+	local GameFile = writefileasync(Path..'/Games/'..tostring(game.GameId)..'.lua', syn.request({Url = WebAddress..'/Games/'..tostring(game.GameId)..'.lua', Method = "GET"}).Body)
 end
 
 Update()
