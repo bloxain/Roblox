@@ -23,6 +23,7 @@ If you want to make a video about this, you can just give credits to https://www
 Games | Support
 ----- | -------
 Tower of Hell | Great
+Boxing League | Ok
 Destruction Simulator | Ok
 Tower Simulator | Poor
 Natural Disaster | Ok
