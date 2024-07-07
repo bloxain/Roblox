@@ -6,15 +6,10 @@ Execute code by loading it as a string using `loadstring()` with the following U
 loadstring(game:HttpGet("https://github.com/bloxain/Roblox/raw/main/Bloxain/Start.lua"))()
 ```
 
-
-Note: Please keep this up. I have seen a lot of projects get deleted and if I broke TOS, please tell me.
-
 This is where loadstrings are downloaded and executed. Feel free to learn from it!
 
 - Discord: https://discord.gg/PPFYacGb2b
 - YouTube: https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
-
-I have used Synapse X to make this project better. Use <kbd>F3</kbd> to open and close the GUI.
 
 If you want to make a video about this, you can just give credits to https://www.youtube.com/channel/UC8gfw9LhBjGurH7RL5e46RQ
 
