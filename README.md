@@ -23,21 +23,21 @@ If you want to make a video about this, you can just give credits to https://www
 Games | Support
 ----- | -------
 Tower of Hell | Great
-Boxing League | Ok
-Destruction Simulator | Ok
-Tower Simulator | Poor
-Natural Disaster | Ok
-Egg Farm | Poor
-Cart Ride | Ok
-Landry Simulator | Ok
+Boxing League | ok 
+Destruction Simulator | discontinued 
+Tower Simulator | discontinued
+Natural Disaster | discontinued
+Egg Farm | discontinued
+Cart Ride | discontinued
+Landry Simulator | discontinued
 
 ## Universal Scripts
 
 Scripts | Support
 ------- | -------
-Universal GUI | Great
-Executor | Poor
-Bot Control | Ok
+Universal GUI | WIP
+Executor | idk
+Bot Control | poor
 
 ## Third Party Scripts
 
